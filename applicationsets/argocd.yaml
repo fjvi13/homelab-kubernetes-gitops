@@ -22,8 +22,8 @@ spec:
           - clusters:
               selector:
                 matchLabels:
-                  name: central-cluster
-                  environment: lab
+                  cluster: central-cluster
+                  env: lab
               values:
                 chartVersion: 9.5.11 
   template:
@@ -46,9 +46,9 @@ spec:
         name: '{{ .name }}'
         namespace: argocd
       syncPolicy:
-        automated:
-          prune: true
-          selfHeal: true
+        # automated:
+        #   prune: true
+        #   selfHeal: true
         syncOptions:
         - CreateNamespace=true
         - ServerSideApply=true
