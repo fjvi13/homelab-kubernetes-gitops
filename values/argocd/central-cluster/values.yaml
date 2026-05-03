@@ -5,10 +5,16 @@ global:
 
   image:
     repository: quay.io/argoproj/argocd
-    tag: ""
+    tag: v3.3.9
     imagePullPolicy: IfNotPresent
     # -- Timeout to discover if a new manifests version got published to the repository
     timeout.reconciliation: 180s
+
+  # Default logging options used by all components
+  logging:
+    format: json
+    # -- Set the global logging level. One of: `debug`, `info`, `warn` or `error`
+    level: info
 
 configs:
   params:
@@ -24,7 +30,7 @@ controller:
   # Additional replicas will cause sharding of managed clusters across number of replicas.
   ## With dynamic cluster distribution turned on, sharding of the clusters will gracefully
   ## rebalance if the number of replica's changes or one becomes unhealthy. (alpha)
-  replicas: 2
+  replicas: 1
 
   # -- Maximum number of controller revisions that will be maintained in StatefulSet history
   revisionHistoryLimit: 1
