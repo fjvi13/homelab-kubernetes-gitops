@@ -1,0 +1,348 @@
+
+global:
+  domain: argocd.lab
+  revisionHistoryLimit: 2
+
+  image:
+    repository: quay.io/argoproj/argocd
+    tag: ""
+    imagePullPolicy: IfNotPresent
+    # -- Timeout to discover if a new manifests version got published to the repository
+    timeout.reconciliation: 180s
+
+configs:
+  params:
+    # Run server without TLS
+    server.insecure: true
+
+## Application controller
+controller:
+  # -- Application controller name string
+  name: application-controller
+
+  # -- The number of application controller pods to run.
+  # Additional replicas will cause sharding of managed clusters across number of replicas.
+  ## With dynamic cluster distribution turned on, sharding of the clusters will gracefully
+  ## rebalance if the number of replica's changes or one becomes unhealthy. (alpha)
+  replicas: 2
+
+  # -- Maximum number of controller revisions that will be maintained in StatefulSet history
+  revisionHistoryLimit: 1
+
+  # -- Resource limits and requests for the application controller pods
+  resources: {}
+  #  limits:
+  #    cpu: 500m
+  #    memory: 512Mi
+  #  requests:
+  #    cpu: 250m
+  #    memory: 256Mi
+
+  # Application controller container ports
+  containerPorts:
+    # -- Metrics container port
+    metrics: 8082
+
+  # -- Host Network for application controller pods
+  hostNetwork: false
+
+  # -- [DNS configuration]
+  dnsConfig: {}
+  # -- Alternative DNS policy for application controller pods
+  dnsPolicy: "ClusterFirst"
+
+## Dex
+dex:
+  # -- Enable dex
+  enabled: true
+  # -- Dex name
+  name: dex-server
+
+  # -- Additional command line arguments to pass to the Dex server
+  extraArgs: []
+
+  # -- Runtime class name for Dex
+  # @default -- `""` (defaults to global.runtimeClassName)
+  runtimeClassName: ""
+
+  metrics:
+    # -- Deploy metrics service
+    enabled: false
+    service:
+      # -- Metrics service annotations
+      annotations: {}
+      # -- Metrics service labels
+      labels: {}
+      # -- Metrics service port name
+      portName: http-metrics
+    serviceMonitor:
+      # -- Enable a prometheus ServiceMonitor
+      enabled: false
+      # -- Prometheus ServiceMonitor interval
+      interval: 30s
+      # -- When true, honorLabels preserves the metric’s labels when they collide with the target’s labels.
+      honorLabels: false
+      # -- Prometheus [RelabelConfigs] to apply to samples before scraping
+      relabelings: []
+      # -- Prometheus [MetricRelabelConfigs] to apply to samples before ingestion
+      metricRelabelings: []
+      # -- Prometheus ServiceMonitor selector
+      selector: {}
+        # prometheus: kube-prometheus
+
+      # -- Prometheus ServiceMonitor scheme
+      scheme: ""
+      # -- Prometheus ServiceMonitor tlsConfig
+      tlsConfig: {}
+      # -- Prometheus ServiceMonitor namespace
+      namespace: "" # "monitoring"
+      # -- Prometheus ServiceMonitor labels
+      additionalLabels: {}
+      # -- Prometheus ServiceMonitor annotations
+      annotations: {}
+
+  ## Dex image
+  image:
+    # -- Dex image repository
+    repository: ghcr.io/dexidp/dex
+    # -- Dex image tag
+    tag: v2.45.1
+    # -- Dex imagePullPolicy
+    # @default -- `""` (defaults to global.image.imagePullPolicy)
+    imagePullPolicy: ""
+
+  # -- Secrets with credentials to pull images from a private registry
+  # @default -- `[]` (defaults to global.imagePullSecrets)
+  imagePullSecrets: []
+  # -- Resource limits and requests for dex
+  resources: {}
+  #  limits:
+  #    cpu: 50m
+  #    memory: 64Mi
+  #  requests:
+  #    cpu: 10m
+  #    memory: 32Mi
+
+  # Dex container ports
+  # NOTE: These ports are currently hardcoded and cannot be changed
+  containerPorts:
+    # -- HTTP container port
+    http: 5556
+    # -- gRPC container port
+    grpc: 5557
+    # -- Metrics container port
+    metrics: 5558
+
+  # -- [DNS configuration]
+  dnsConfig: {}
+  # -- Alternative DNS policy for Dex server pods
+  dnsPolicy: "ClusterFirst"
+
+## Redis
+redis:
+  # -- Enable redis
+  enabled: true
+  # -- Redis name
+  name: redis
+
+  # -- Runtime class name for redis
+  # @default -- `""` (defaults to global.runtimeClassName)
+  runtimeClassName: ""
+
+  ## Redis image
+  image:
+    # -- Redis repository
+    repository: ecr-public.aws.com/docker/library/redis
+    # -- Redis tag
+    ## Do not use 7.4.0 <= v < 8.0.0, otherwise you are no longer using an open source version of Redis
+    tag: 8.2.3-alpine
+    # -- Redis image pull policy
+    # @default -- `""` (defaults to global.image.imagePullPolicy)
+    imagePullPolicy: ""
+
+  ## Prometheus redis-exporter sidecar
+  exporter:
+    # -- Enable Prometheus redis-exporter sidecar
+    enabled: false
+    # -- Environment variables to pass to the Redis exporter
+    env: []
+    ## Prometheus redis-exporter image
+    image:
+      # -- Repository to use for the redis-exporter
+      repository: ghcr.io/oliver006/redis_exporter
+      # -- Tag to use for the redis-exporter
+      tag: v1.83.0
+      # -- Image pull policy for the redis-exporter
+      # @default -- `""` (defaults to global.image.imagePullPolicy)
+      imagePullPolicy: ""
+
+    # -- Resource limits and requests for redis-exporter sidecar
+    resources: {}
+      # limits:
+      #   cpu: 50m
+      #   memory: 64Mi
+      # requests:
+      #   cpu: 10m
+      #   memory: 32Mi
+
+  # -- Secrets with credentials to pull images from a private registry
+  # @default -- `[]` (defaults to global.imagePullSecrets)
+  imagePullSecrets: []
+
+  # -- Resource limits and requests for redis
+  resources: {}
+  #  limits:
+  #    cpu: 200m
+  #    memory: 128Mi
+  #  requests:
+  #    cpu: 100m
+  #    memory: 64Mi
+
+## Server
+server:
+  # -- Argo CD server name
+  name: server
+
+  # -- The number of server pods to run
+  replicas: 1
+  ## Argo CD server image
+  image:
+    # -- Repository to use for the Argo CD server
+    # @default -- `""` (defaults to global.image.repository)
+    repository: "" # defaults to global.image.repository
+    # -- Tag to use for the Argo CD server
+    # @default -- `""` (defaults to global.image.tag)
+    tag: "" # defaults to global.image.tag
+    # -- Image pull policy for the Argo CD server
+    # @default -- `""` (defaults to global.image.imagePullPolicy)
+    imagePullPolicy: "" # IfNotPresent
+
+  # -- Secrets with credentials to pull images from a private registry
+  # @default -- `[]` (defaults to global.imagePullSecrets)
+  imagePullSecrets: []
+
+  # Gateway API HTTPRoute configuration
+  # NOTE: Gateway API support is in EXPERIMENTAL status
+  # Support depends on your Gateway controller implementation
+  # Some controllers may require additional configuration (e.g., BackendTLSPolicy for HTTPS backends)
+  # Refer to https://gateway-api.sigs.k8s.io/implementations/ for controller-specific details
+  httproute:
+    # -- Enable HTTPRoute resource for Argo CD server (Gateway API)
+    enabled: true
+    # -- Additional HTTPRoute labels
+    labels: {}
+    # -- Additional HTTPRoute annotations
+    annotations: {}
+    # -- Gateway API parentRefs for the HTTPRoute
+    ## Must reference an existing Gateway
+    # @default -- `[]` (See [values.yaml])
+    parentRefs:
+      - group: gateway.networking.k8s.io
+        kind: Gateway
+        name: lab-gateway
+        namespace: istio-system
+        sectionName: http
+    # -- List of hostnames for the HTTPRoute
+    # @default -- `[]` (See [values.yaml])
+    hostnames:
+      - argocd.lab
+
+    # -- HTTPRoute rules configuration
+    # @default -- `[]` (See [values.yaml])
+    rules:
+      - matches:
+          - path:
+              type: PathPrefix
+              value: /
+        # filters: []
+        #   - type: RequestHeaderModifier
+        #     requestHeaderModifier:
+        #       add:
+        #         - name: X-Custom-Header
+        #           value: custom-value
+        # timeouts:
+        #   request: 10s
+        #   backendRequest: 2s
+
+  # Gateway API BackendTLSPolicy configuration
+  # NOTE: BackendTLSPolicy support is in EXPERIMENTAL status
+  # Required for HTTPS backends when using Gateway API
+  # Not all Gateway controllers support this resource (e.g., Cilium does not support it yet)
+  backendTLSPolicy:
+    # -- Enable BackendTLSPolicy resource for Argo CD server (Gateway API)
+    enabled: false
+    # -- Additional BackendTLSPolicy labels
+    labels: {}
+    # -- Additional BackendTLSPolicy annotations
+    annotations: {}
+    # -- Target references for the BackendTLSPolicy
+    # @default -- `[]` (See [values.yaml])
+    targetRefs: []
+      # - group: ""
+      #   kind: Service
+      #   name: argocd-server
+      #   sectionName: https
+    # -- TLS validation configuration
+    # @default -- `{}` (See [values.yaml])
+    validation: {}
+      # hostname: argocd-server.argocd.svc.cluster.local
+      # caCertificateRefs:
+      #   - name: example-ca-cert
+      #     group: ""
+      #     kind: ConfigMap
+      # wellKnownCACertificates: System
+
+  ## Enable this and set the rules: to whatever custom rules you want for the Cluster Role resource.
+  ## Defaults to off
+  clusterRoleRules:
+    # -- Enable custom rules for the server's ClusterRole resource
+    enabled: false
+    # -- List of custom rules for the server's ClusterRole resource
+    rules: []
+
+  # Default ArgoCD Server's network policy
+  networkPolicy:
+    # -- Default network policy rules used by ArgoCD Server
+    # @default -- `false` (defaults to global.networkPolicy.create)
+    create: false
+
+## Repo Server
+repoServer:
+  # -- Repo server name
+  name: repo-server
+
+  # -- The number of repo server pods to run
+  replicas: 1
+  # -- Resource limits and requests for the repo server pods
+  resources: {}
+  #  limits:
+  #    cpu: 50m
+  #    memory: 128Mi
+  #  requests:
+  #    cpu: 10m
+  #    memory: 64Mi
+
+## ApplicationSet controller
+applicationSet:
+  # -- ApplicationSet controller name string
+  name: applicationset-controller
+
+  # -- The number of ApplicationSet controller pods to run
+  replicas: 1
+
+  # -- Resource limits and requests for the ApplicationSet controller pods.
+  resources: {}
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
+
+## Notifications controller
+notifications:
+  # -- Enable notifications controller
+  enabled: true
+
+  # -- Notifications controller name string
+  name: notifications-controller
