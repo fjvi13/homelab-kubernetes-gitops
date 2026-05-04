@@ -1,0 +1,46 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: topolvm
+  namespace: argocd
+spec:
+  goTemplate: true
+  generators:
+    - merge:
+        mergeKeys:
+          - server
+        generators:
+          - clusters:
+              values:
+                chart: topolvm
+                chartRepository: https://topolvm.github.io/topolvm/
+          - clusters:
+              selector:
+                matchLabels:
+                  cluster: central-cluster
+                  env: lab
+              values:
+                chartVersion: 16.0.1
+  template:
+    metadata:
+      name: "topolvm-{{.name}}"
+    spec:
+      project: default
+      sources:
+        - repoURL: '{{ .values.chartRepository}}'
+          targetRevision: '{{ .values.chartVersion}}'
+          chart: '{{ .values.chart}}'
+          helm:
+            releaseName: topolvm
+            valueFiles:
+              - $repo/values/topolvm/{{ .name }}/values.yaml
+        - repoURL: https://github.com/fjvi13/homelab-kubernetes-gitops.git
+          targetRevision: HEAD
+          ref: repo
+      destination:
+        name: '{{ .name }}'
+        namespace: argocd
+      syncPolicy:
+        syncOptions:
+        - CreateNamespace=true
+        - ServerSideApply=true
