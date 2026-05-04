@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: bootstrap
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-3"
+spec:
+  goTemplate: true
+  generators:
+    - git:
+        repoURL: https://github.com/fjvi13/homelab-kubernetes-gitops.git
+        revision: HEAD
+        directories:
+          - path: applicationsets/*
+  template:
+    metadata:
+      name: '{{.path.basename}}'
+    spec:
+      project: default
+      sources:
+        - repoURL: https://github.com/fjvi13/homelab-kubernetes-gitops.git
+          targetRevision: HEAD
+          path: '{{.path.path}}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: argocd
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - ServerSideApply=true
