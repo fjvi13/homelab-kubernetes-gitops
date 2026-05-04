@@ -1,0 +1,39 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: projects
+  namespace: argocd
+  labels:
+    app_type: applicationset
+  annotations:
+    argocd.argoproj.io/sync-wave: "-2"
+spec:
+  goTemplate: true
+  syncPolicy:
+    preserveResourcesOnDeletion: false
+  generators:
+    - clusters:
+        selector:
+          matchLabels:
+            projects: "true"
+  template:
+    metadata:
+      name: 'projects-{{ .name }}'
+      labels:
+        app_type: projects
+    spec:
+      project: default
+      sources:
+        - repoURL: https://github.com/fjvi13/homelab-kubernetes-gitops.git
+          targetRevision: HEAD
+          path: projects
+      destination:
+        name: '{{ .name }}'
+        namespace: argocd
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+        - ServerSideApply=true
+        - ApplyOutOfSyncOnly=true
