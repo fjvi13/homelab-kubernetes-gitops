@@ -39,7 +39,7 @@ spec:
           ref: repo
       destination:
         name: '{{ .name }}'
-        namespace: argocd
+        namespace: topolvm-system
       syncPolicy:
         syncOptions:
         - CreateNamespace=true
