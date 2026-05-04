@@ -25,7 +25,7 @@ spec:
     metadata:
       name: "topolvm-{{.name}}"
     spec:
-      project: default
+      project: addons
       sources:
         - repoURL: '{{ .values.chartRepository}}'
           targetRevision: '{{ .values.chartVersion}}'
