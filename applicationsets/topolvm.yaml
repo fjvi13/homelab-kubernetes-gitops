@@ -11,6 +11,11 @@ spec:
           - server
         generators:
           - clusters:
+              selector:
+                matchExpressions:
+                  - key: enable_topolvm
+                    operator: In
+                    values: ['true']
               values:
                 chart: topolvm
                 chartRepository: https://topolvm.github.io/topolvm/

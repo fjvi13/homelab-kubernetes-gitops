@@ -11,21 +11,21 @@ spec:
           - server
         generators:
           - clusters:
+              selector:
+                matchExpressions:
+                  - key: enable_argocd
+                    operator: In
+                    values: ['true']
               values:
                 chart: argo-cd
                 chartRepository: https://argoproj.github.io/argo-helm
-              # selector:
-              #   matchExpressions:
-              #     - key: enable_argocd
-              #       operator: In
-              #       values: ['true']
           - clusters:
               selector:
                 matchLabels:
                   cluster: central-cluster
                   env: lab
               values:
-                chartVersion: 9.5.11 
+                chartVersion: 9.5.11
   template:
     metadata:
       name: "argocd-{{.values.chartVersion}}-{{.name}}"
