@@ -1,7 +1,7 @@
 
 global:
   domain: argocd.lab
-  revisionHistoryLimit: 2
+  revisionHistoryLimit: 1
 
   image:
     repository: quay.io/argoproj/argocd
@@ -58,8 +58,6 @@ controller:
   # -- Application controller heartbeat time
   # Ref: https://argo-cd.readthedocs.io/en/stable/operator-manual/dynamic-cluster-distribution/#working-of-dynamic-distribution
   heartbeatTime: 10
-
-  revisionHistoryLimit: 1
   
   resources: {}
   #  limits:
@@ -289,8 +287,6 @@ server:
     minReplicas: 2
     maxReplicas: 3
 
-  revisionHistoryLimit: 1
-
   ## Argo CD server image
   image:
     # -- Repository to use for the Argo CD server
@@ -405,8 +401,6 @@ repoServer:
     minReplicas: 2
     maxReplicas: 3
 
-  revisionHistoryLimit: 1
-
   resources: {}
   #  limits:
   #    cpu: 50m
@@ -422,8 +416,6 @@ applicationSet:
 
   # -- The number of ApplicationSet controller pods to run
   replicas: 2
-
-  revisionHistoryLimit: 1
 
   # -- Resource limits and requests for the ApplicationSet controller pods.
   resources: {}
