@@ -17,7 +17,11 @@ global:
     level: info
 
 configs:
+  # Argo CD configuration parameters
+  ## Ref: https://github.com/argoproj/argo-cd/blob/master/docs/operator-manual/argocd-cmd-params-cm.yaml
   params:
+    # Sharding algorithm used to balance clusters across application controller shards (default "legacy")
+    controller.sharding.algorithm: round-robin
     # Run server without TLS
     server.insecure: true
 
@@ -30,12 +34,22 @@ controller:
   # Additional replicas will cause sharding of managed clusters across number of replicas.
   ## With dynamic cluster distribution turned on, sharding of the clusters will gracefully
   ## rebalance if the number of replica's changes or one becomes unhealthy. (alpha)
-  replicas: 1
+  replicas: 2
 
-  # -- Maximum number of controller revisions that will be maintained in StatefulSet history
+  # -- Enable dynamic cluster distribution (alpha)
+  # Ref: https://argo-cd.readthedocs.io/en/stable/operator-manual/dynamic-cluster-distribution
+  ## This is done using a deployment instead of a statefulSet
+  ## When replicas are added or removed, the sharding algorithm is re-run to ensure that the
+  ## clusters are distributed according to the algorithm. If the algorithm is well-balanced,
+  ## like round-robin, then the shards will be well-balanced.
+  dynamicClusterDistribution: false
+
+  # -- Application controller heartbeat time
+  # Ref: https://argo-cd.readthedocs.io/en/stable/operator-manual/dynamic-cluster-distribution/#working-of-dynamic-distribution
+  heartbeatTime: 10
+
   revisionHistoryLimit: 1
-
-  # -- Resource limits and requests for the application controller pods
+  
   resources: {}
   #  limits:
   #    cpu: 500m
@@ -204,13 +218,66 @@ redis:
   #    cpu: 100m
   #    memory: 64Mi
 
+## Redis-HA subchart replaces custom redis deployment when `redis-ha.enabled=true`
+# Ref: https://github.com/DandyDeveloper/charts/blob/master/charts/redis-ha/values.yaml
+redis-ha:
+  # -- Enables the Redis HA subchart and disables the custom Redis single node deployment
+  enabled: true
+  ## Redis image
+  image:
+    # -- Redis repository
+    repository: ecr-public.aws.com/docker/library/redis
+    # -- Redis tag
+    ## Do not upgrade to >= 7.4.0, otherwise you are no longer using an open source version of Redis
+    tag: 8.2.3-alpine
+  ## Prometheus redis-exporter sidecar
+  exporter:
+    # -- Enable Prometheus redis-exporter sidecar
+    enabled: false
+    # -- Repository to use for the redis-exporter
+    image: ghcr.io/oliver006/redis_exporter
+    # -- Tag to use for the redis-exporter
+    tag: v1.75.0
+  persistentVolume:
+    # -- Configures persistence on Redis nodes
+    enabled: false
+  ## Redis specific configuration options
+  redis:
+    # -- Redis convention for naming the cluster group: must match `^[\\w-\\.]+$` and can be templated
+    masterGroupName: argocd
+    # -- Any valid redis config options in this section will be applied to each server (see `redis-ha` chart)
+    # @default -- See [values.yaml]
+    config:
+      # -- Will save the DB if both the given number of seconds and the given number of write operations against the DB occurred. `""`  is disabled
+      # @default -- `'""'`
+      save: '""'
+  ## Enables a HA Proxy for better LoadBalancing / Sentinel Master support. Automatically proxies to Redis master.
+  haproxy:
+    # -- Enabled HAProxy LoadBalancing/Proxy
+    enabled: true
+    # --  Custom labels for the haproxy pod. This is relevant for Argo CD CLI.
+    labels:
+      app.kubernetes.io/name: argocd-redis-ha-haproxy
+    image:
+      # -- HAProxy Image Repository
+      repository: ecr-public.aws.com/docker/library/haproxy
+    metrics:
+      # -- HAProxy enable prometheus metric scraping
+      enabled: true
+
 ## Server
 server:
-  # -- Argo CD server name
   name: server
 
-  # -- The number of server pods to run
-  replicas: 1
+  # # -- The number of server pods to run
+  # replicas: 1
+
+  ## Repo server Horizontal Pod Autoscaler
+  autoscaling:
+    enabled: false
+    minReplicas: 2
+    maxReplicas: 3
+
   ## Argo CD server image
   image:
     # -- Repository to use for the Argo CD server
@@ -317,9 +384,14 @@ repoServer:
   # -- Repo server name
   name: repo-server
 
-  # -- The number of repo server pods to run
-  replicas: 1
-  # -- Resource limits and requests for the repo server pods
+  # # -- The number of repo server pods to run
+  # replicas: 1
+
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 2
+
   resources: {}
   #  limits:
   #    cpu: 50m
@@ -334,7 +406,7 @@ applicationSet:
   name: applicationset-controller
 
   # -- The number of ApplicationSet controller pods to run
-  replicas: 1
+  replicas: 2
 
   # -- Resource limits and requests for the ApplicationSet controller pods.
   resources: {}
