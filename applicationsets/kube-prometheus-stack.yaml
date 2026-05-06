@@ -36,9 +36,6 @@ spec:
           chart: '{{ .values.chart}}'
           helm:
             releaseName: prometheus
-            parameters:
-              - name: cluster_name
-                value: '{{ .name }}'
             valueFiles:
               - $helm/kube-prometheus-stack/{{ .name }}/values.yaml
         - repoURL: https://github.com/fjvi13/homelab-kubernetes-gitops.git
