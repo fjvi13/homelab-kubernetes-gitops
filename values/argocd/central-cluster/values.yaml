@@ -82,6 +82,8 @@ controller:
     enabled: true
     serviceMonitor:
       enabled: true
+      additionalLabels:
+        release: prometheus
 
 ## Dex
 dex:
@@ -101,6 +103,8 @@ dex:
     enabled: true
     serviceMonitor:
       enabled: true
+      additionalLabels:
+        release: prometheus
 
   ## Dex image
   image:
@@ -305,6 +309,8 @@ server:
     enabled: true
     serviceMonitor:
       enabled: true
+      additionalLabels:
+        release: prometheus
 
 ## Repo Server
 repoServer:
@@ -331,6 +337,8 @@ repoServer:
     enabled: true
     serviceMonitor:
       enabled: true
+      additionalLabels:
+        release: prometheus
 
 ## ApplicationSet controller
 applicationSet:
@@ -353,6 +361,8 @@ applicationSet:
     enabled: true
     serviceMonitor:
       enabled: true
+      additionalLabels:
+        release: prometheus
 
 ## Notifications controller
 notifications:
