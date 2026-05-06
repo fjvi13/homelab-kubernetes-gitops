@@ -209,13 +209,6 @@ redis-ha:
     ## Do not upgrade to >= 7.4.0, otherwise you are no longer using an open source version of Redis
     tag: 8.2.3-alpine
 
-  metrics:
-    enabled: true
-    serviceMonitor:
-      enabled: true
-      additionalLabels:
-        release: prometheus
-
   persistentVolume:
     # -- Configures persistence on Redis nodes
     enabled: false
