@@ -129,72 +129,72 @@ dex:
   #    memory: 32Mi
 
 
-## Redis
-redis:
-  # -- Enable redis
-  enabled: true
-  # -- Redis name
-  name: redis
+# ## Redis
+# redis:
+#   # -- Enable redis
+#   enabled: true
+#   # -- Redis name
+#   name: redis
 
-  # -- Runtime class name for redis
-  # @default -- `""` (defaults to global.runtimeClassName)
-  runtimeClassName: ""
+#   # -- Runtime class name for redis
+#   # @default -- `""` (defaults to global.runtimeClassName)
+#   runtimeClassName: ""
 
-  ## Redis image
-  image:
-    # -- Redis repository
-    repository: ecr-public.aws.com/docker/library/redis
-    # -- Redis tag
-    ## Do not use 7.4.0 <= v < 8.0.0, otherwise you are no longer using an open source version of Redis
-    tag: 8.2.3-alpine
-    # -- Redis image pull policy
-    # @default -- `""` (defaults to global.image.imagePullPolicy)
-    imagePullPolicy: ""
+#   ## Redis image
+#   image:
+#     # -- Redis repository
+#     repository: ecr-public.aws.com/docker/library/redis
+#     # -- Redis tag
+#     ## Do not use 7.4.0 <= v < 8.0.0, otherwise you are no longer using an open source version of Redis
+#     tag: 8.2.3-alpine
+#     # -- Redis image pull policy
+#     # @default -- `""` (defaults to global.image.imagePullPolicy)
+#     imagePullPolicy: ""
 
-  ## Prometheus redis-exporter sidecar
-  exporter:
-    # -- Enable Prometheus redis-exporter sidecar
-    enabled: false
-    # -- Environment variables to pass to the Redis exporter
-    env: []
-    ## Prometheus redis-exporter image
-    image:
-      # -- Repository to use for the redis-exporter
-      repository: ghcr.io/oliver006/redis_exporter
-      # -- Tag to use for the redis-exporter
-      tag: v1.83.0
-      # -- Image pull policy for the redis-exporter
-      # @default -- `""` (defaults to global.image.imagePullPolicy)
-      imagePullPolicy: ""
+#   ## Prometheus redis-exporter sidecar
+#   exporter:
+#     # -- Enable Prometheus redis-exporter sidecar
+#     enabled: false
+#     # -- Environment variables to pass to the Redis exporter
+#     env: []
+#     ## Prometheus redis-exporter image
+#     image:
+#       # -- Repository to use for the redis-exporter
+#       repository: ghcr.io/oliver006/redis_exporter
+#       # -- Tag to use for the redis-exporter
+#       tag: v1.83.0
+#       # -- Image pull policy for the redis-exporter
+#       # @default -- `""` (defaults to global.image.imagePullPolicy)
+#       imagePullPolicy: ""
 
-    # -- Resource limits and requests for redis-exporter sidecar
-    resources: {}
-      # limits:
-      #   cpu: 50m
-      #   memory: 64Mi
-      # requests:
-      #   cpu: 10m
-      #   memory: 32Mi
+#     # -- Resource limits and requests for redis-exporter sidecar
+#     resources: {}
+#       # limits:
+#       #   cpu: 50m
+#       #   memory: 64Mi
+#       # requests:
+#       #   cpu: 10m
+#       #   memory: 32Mi
 
-    metrics:
-      enabled: true
-      serviceMonitor:
-        enabled: true
-        additionalLabels:
-          release: prometheus
+#     metrics:
+#       enabled: true
+#       serviceMonitor:
+#         enabled: true
+#         additionalLabels:
+#           release: prometheus
 
-  # -- Secrets with credentials to pull images from a private registry
-  # @default -- `[]` (defaults to global.imagePullSecrets)
-  imagePullSecrets: []
+#   # -- Secrets with credentials to pull images from a private registry
+#   # @default -- `[]` (defaults to global.imagePullSecrets)
+#   imagePullSecrets: []
 
-  # -- Resource limits and requests for redis
-  resources: {}
-  #  limits:
-  #    cpu: 200m
-  #    memory: 128Mi
-  #  requests:
-  #    cpu: 100m
-  #    memory: 64Mi
+#   # -- Resource limits and requests for redis
+#   resources: {}
+#   #  limits:
+#   #    cpu: 200m
+#   #    memory: 128Mi
+#   #  requests:
+#   #    cpu: 100m
+#   #    memory: 64Mi
 
 ## Redis-HA subchart replaces custom redis deployment when `redis-ha.enabled=true`
 # Ref: https://github.com/DandyDeveloper/charts/blob/master/charts/redis-ha/values.yaml
