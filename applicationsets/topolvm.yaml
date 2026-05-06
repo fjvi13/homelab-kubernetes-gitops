@@ -28,8 +28,6 @@ spec:
   template:
     metadata:
       name: "topolvm-{{.name}}"
-      annotations:
-        argocd.argoproj.io/manifest-generate-paths: "./values/topolvm/{{ .name }}"
     spec:
       project: addons
       sources:

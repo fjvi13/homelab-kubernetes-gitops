@@ -19,8 +19,6 @@ spec:
   template:
     metadata:
       name: 'projects-{{ .name }}'
-      annotations:
-        argocd.argoproj.io/manifest-generate-paths: "./projects"
       labels:
         app_type: projects
     spec:
