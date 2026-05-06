@@ -64,7 +64,7 @@ controller:
   ## When replicas are added or removed, the sharding algorithm is re-run to ensure that the
   ## clusters are distributed according to the algorithm. If the algorithm is well-balanced,
   ## like round-robin, then the shards will be well-balanced.
-  dynamicClusterDistribution: true
+  dynamicClusterDistribution: false
 
   # -- Application controller heartbeat time
   # Ref: https://argo-cd.readthedocs.io/en/stable/operator-manual/dynamic-cluster-distribution/#working-of-dynamic-distribution
