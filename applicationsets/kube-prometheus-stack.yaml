@@ -37,10 +37,10 @@ spec:
           helm:
             releaseName: prometheus
             valueFiles:
-              - $helm/kube-prometheus-stack/{{ .name }}/values.yaml
+              - $repo/kube-prometheus-stack/{{ .name }}/values.yaml
         - repoURL: https://github.com/fjvi13/homelab-kubernetes-gitops.git
           targetRevision: HEAD
-          ref: helm
+          ref: repo
       destination:
         name: '{{ .name }}'
         namespace: monitoring
