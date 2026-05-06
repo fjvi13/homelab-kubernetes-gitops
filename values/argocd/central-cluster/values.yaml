@@ -32,9 +32,20 @@ configs:
     # Number of application operation processors (default 10)
     controller.operation.processors: "10"
     # Sharding algorithm used to balance clusters across application controller shards (default "legacy")
-    controller.sharding.algorithm: round-robin
+    controller.sharding.algorithm: consistent-hashing
     # Run server without TLS
     server.insecure: true
+    # Limit on number of concurrent manifests generate requests. Any value less the 1 means no limit.
+    reposerver.parallelism.limit: "1"
+    # Enables profile endpoint on the internal metrics port
+    controller.profile.enabled: "true"
+    # Enables profile endpoint on the internal metrics port
+    server.profile.enabled: "true"
+    # Enables profile endpoint on the internal metrics port
+    reposerver.profile.enabled: "true"
+    # Enables profile endpoint on the internal metrics port
+    applicationsetcontroller.profile.enabled: "true"  
+
 
 ## Application controller
 controller:
@@ -67,18 +78,12 @@ controller:
   #    cpu: 250m
   #    memory: 256Mi
 
-  # Application controller container ports
-  containerPorts:
-    # -- Metrics container port
-    metrics: 8082
-
-  # -- Host Network for application controller pods
-  hostNetwork: false
-
-  # -- [DNS configuration]
-  dnsConfig: {}
-  # -- Alternative DNS policy for application controller pods
-  dnsPolicy: "ClusterFirst"
+  metrics:
+    enabled: false
+    serviceMonitor:
+      enabled: false
+      additionalLabels:
+        release: prometheus
 
 ## Dex
 dex:
@@ -95,40 +100,11 @@ dex:
   runtimeClassName: ""
 
   metrics:
-    # -- Deploy metrics service
     enabled: false
-    service:
-      # -- Metrics service annotations
-      annotations: {}
-      # -- Metrics service labels
-      labels: {}
-      # -- Metrics service port name
-      portName: http-metrics
     serviceMonitor:
-      # -- Enable a prometheus ServiceMonitor
       enabled: false
-      # -- Prometheus ServiceMonitor interval
-      interval: 30s
-      # -- When true, honorLabels preserves the metric’s labels when they collide with the target’s labels.
-      honorLabels: false
-      # -- Prometheus [RelabelConfigs] to apply to samples before scraping
-      relabelings: []
-      # -- Prometheus [MetricRelabelConfigs] to apply to samples before ingestion
-      metricRelabelings: []
-      # -- Prometheus ServiceMonitor selector
-      selector: {}
-        # prometheus: kube-prometheus
-
-      # -- Prometheus ServiceMonitor scheme
-      scheme: ""
-      # -- Prometheus ServiceMonitor tlsConfig
-      tlsConfig: {}
-      # -- Prometheus ServiceMonitor namespace
-      namespace: "" # "monitoring"
-      # -- Prometheus ServiceMonitor labels
-      additionalLabels: {}
-      # -- Prometheus ServiceMonitor annotations
-      annotations: {}
+      additionalLabels:
+        release: prometheus
 
   ## Dex image
   image:
@@ -152,20 +128,6 @@ dex:
   #    cpu: 10m
   #    memory: 32Mi
 
-  # Dex container ports
-  # NOTE: These ports are currently hardcoded and cannot be changed
-  containerPorts:
-    # -- HTTP container port
-    http: 5556
-    # -- gRPC container port
-    grpc: 5557
-    # -- Metrics container port
-    metrics: 5558
-
-  # -- [DNS configuration]
-  dnsConfig: {}
-  # -- Alternative DNS policy for Dex server pods
-  dnsPolicy: "ClusterFirst"
 
 ## Redis
 redis:
@@ -213,6 +175,13 @@ redis:
       # requests:
       #   cpu: 10m
       #   memory: 32Mi
+
+    metrics:
+      enabled: false
+      serviceMonitor:
+        enabled: false
+        additionalLabels:
+          release: prometheus
 
   # -- Secrets with credentials to pull images from a private registry
   # @default -- `[]` (defaults to global.imagePullSecrets)
@@ -271,8 +240,11 @@ redis-ha:
       # -- HAProxy Image Repository
       repository: ecr-public.aws.com/docker/library/haproxy
     metrics:
-      # -- HAProxy enable prometheus metric scraping
-      enabled: true
+      enabled: false
+      serviceMonitor:
+        enabled: false
+        additionalLabels:
+          release: prometheus
 
 ## Server
 server:
@@ -345,48 +317,13 @@ server:
         # timeouts:
         #   request: 10s
         #   backendRequest: 2s
-
-  # Gateway API BackendTLSPolicy configuration
-  # NOTE: BackendTLSPolicy support is in EXPERIMENTAL status
-  # Required for HTTPS backends when using Gateway API
-  # Not all Gateway controllers support this resource (e.g., Cilium does not support it yet)
-  backendTLSPolicy:
-    # -- Enable BackendTLSPolicy resource for Argo CD server (Gateway API)
+    
+  metrics:
     enabled: false
-    # -- Additional BackendTLSPolicy labels
-    labels: {}
-    # -- Additional BackendTLSPolicy annotations
-    annotations: {}
-    # -- Target references for the BackendTLSPolicy
-    # @default -- `[]` (See [values.yaml])
-    targetRefs: []
-      # - group: ""
-      #   kind: Service
-      #   name: argocd-server
-      #   sectionName: https
-    # -- TLS validation configuration
-    # @default -- `{}` (See [values.yaml])
-    validation: {}
-      # hostname: argocd-server.argocd.svc.cluster.local
-      # caCertificateRefs:
-      #   - name: example-ca-cert
-      #     group: ""
-      #     kind: ConfigMap
-      # wellKnownCACertificates: System
-
-  ## Enable this and set the rules: to whatever custom rules you want for the Cluster Role resource.
-  ## Defaults to off
-  clusterRoleRules:
-    # -- Enable custom rules for the server's ClusterRole resource
-    enabled: false
-    # -- List of custom rules for the server's ClusterRole resource
-    rules: []
-
-  # Default ArgoCD Server's network policy
-  networkPolicy:
-    # -- Default network policy rules used by ArgoCD Server
-    # @default -- `false` (defaults to global.networkPolicy.create)
-    create: false
+    serviceMonitor:
+      enabled: false
+      additionalLabels:
+        release: prometheus
 
 ## Repo Server
 repoServer:
@@ -409,6 +346,13 @@ repoServer:
   #    cpu: 10m
   #    memory: 64Mi
 
+  metrics:
+    enabled: false
+    serviceMonitor:
+      enabled: false
+      additionalLabels:
+        release: prometheus
+
 ## ApplicationSet controller
 applicationSet:
   # -- ApplicationSet controller name string
@@ -425,6 +369,13 @@ applicationSet:
     # requests:
     #   cpu: 100m
     #   memory: 128Mi
+
+  metrics:
+    enabled: false
+    serviceMonitor:
+      enabled: false
+      additionalLabels:
+        release: prometheus
 
 ## Notifications controller
 notifications:
