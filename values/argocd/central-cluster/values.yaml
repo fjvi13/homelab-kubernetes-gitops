@@ -79,9 +79,9 @@ controller:
   #    memory: 256Mi
 
   metrics:
-    enabled: false
+    enabled: true
     serviceMonitor:
-      enabled: false
+      enabled: true
       additionalLabels:
         release: prometheus
 
@@ -100,9 +100,9 @@ dex:
   runtimeClassName: ""
 
   metrics:
-    enabled: false
+    enabled: true
     serviceMonitor:
-      enabled: false
+      enabled: true
       additionalLabels:
         release: prometheus
 
@@ -177,9 +177,9 @@ redis:
       #   memory: 32Mi
 
     metrics:
-      enabled: false
+      enabled: true
       serviceMonitor:
-        enabled: false
+        enabled: true
         additionalLabels:
           release: prometheus
 
@@ -240,9 +240,9 @@ redis-ha:
       # -- HAProxy Image Repository
       repository: ecr-public.aws.com/docker/library/haproxy
     metrics:
-      enabled: false
+      enabled: true
       serviceMonitor:
-        enabled: false
+        enabled: true
         additionalLabels:
           release: prometheus
 
@@ -319,9 +319,9 @@ server:
         #   backendRequest: 2s
     
   metrics:
-    enabled: false
+    enabled: true
     serviceMonitor:
-      enabled: false
+      enabled: true
       additionalLabels:
         release: prometheus
 
@@ -347,9 +347,9 @@ repoServer:
   #    memory: 64Mi
 
   metrics:
-    enabled: false
+    enabled: true
     serviceMonitor:
-      enabled: false
+      enabled: true
       additionalLabels:
         release: prometheus
 
@@ -371,9 +371,9 @@ applicationSet:
     #   memory: 128Mi
 
   metrics:
-    enabled: false
+    enabled: true
     serviceMonitor:
-      enabled: false
+      enabled: true
       additionalLabels:
         release: prometheus
 
