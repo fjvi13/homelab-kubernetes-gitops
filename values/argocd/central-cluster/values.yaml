@@ -208,14 +208,14 @@ redis-ha:
     # -- Redis tag
     ## Do not upgrade to >= 7.4.0, otherwise you are no longer using an open source version of Redis
     tag: 8.2.3-alpine
-  ## Prometheus redis-exporter sidecar
-  exporter:
-    # -- Enable Prometheus redis-exporter sidecar
-    enabled: false
-    # -- Repository to use for the redis-exporter
-    image: ghcr.io/oliver006/redis_exporter
-    # -- Tag to use for the redis-exporter
-    tag: v1.75.0
+
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: prometheus
+
   persistentVolume:
     # -- Configures persistence on Redis nodes
     enabled: false
@@ -239,12 +239,6 @@ redis-ha:
     image:
       # -- HAProxy Image Repository
       repository: ecr-public.aws.com/docker/library/haproxy
-    metrics:
-      enabled: true
-      serviceMonitor:
-        enabled: true
-        additionalLabels:
-          release: prometheus
 
 ## Server
 server:
