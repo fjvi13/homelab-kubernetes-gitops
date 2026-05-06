@@ -1,0 +1,56 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: addon-kube-prometheus-stack
+  namespace: argocd
+spec:
+  goTemplate: true
+  generators:
+    - merge:
+        mergeKeys:
+          - server
+        generators:
+          - clusters:
+              selector:
+                matchExpressions:
+                  - key: enable_prometheus
+                    operator: In
+                    values: ['true']
+              values:
+                chart: kube-prometheus-stack
+                chartVersion: 78.5.0
+                chartRepository: https://prometheus-community.github.io/helm-charts
+          - clusters:
+              selector:
+                matchLabels:
+                  env: lab
+              values:
+                chartVersion: 78.5.0
+  template:
+    metadata:
+      name: "prometheus-{{.name}}"
+    spec:
+      project: addons
+      sources:
+        - repoURL: '{{ .values.chartRepository}}'
+          targetRevision: '{{ .values.chartVersion}}'
+          chart: '{{ .values.chart}}'
+          helm:
+            releaseName: prometheus
+            parameters:
+              - name: cluster_name
+                value: '{{ .name }}'
+            valueFiles:
+              - $helm/kube-prometheus-stack/{{ .name }}/values.yaml
+        - repoURL: https://github.com/fjvi13/homelab-kubernetes-gitops.git
+          targetRevision: HEAD
+          ref: helm
+      destination:
+        name: '{{ .name }}'
+        namespace: monitoring
+      syncPolicy:
+        automated:
+          selfHeal: true
+        syncOptions:
+        - CreateNamespace=true
+        - ServerSideApply=true

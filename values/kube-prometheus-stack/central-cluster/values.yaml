@@ -1,0 +1,186 @@
+crds:
+  enabled: true
+
+defaultRules:
+  create: false
+
+alertmanager:
+  enabled: true
+  fullnameOverride: "alertmanager"
+  service:
+    enabled: true
+    port: 9093
+    type: ClusterIP
+  serviceMonitor:
+    selfMonitor: true
+    interval: ""
+  alertmanagerSpec:
+    image:
+      registry: quay.io
+      repository: prometheus/alertmanager
+      tag: v0.28.1
+      sha: ""
+      pullPolicy: IfNotPresent
+    replicas: 1
+    ## Time duration Alertmanager shall retain data for. Default is '120h', and must match the regular expression
+    ## [0-9]+(ms|s|m|h) (milliseconds seconds minutes hours).
+    ##
+    retention: 120h
+    resources: {}
+
+grafana:
+  enabled: false
+  adminUser: labuser
+  adminPassword: labpassword
+  ingress:
+    enabled: true
+    hosts: 
+      - grafana2.local
+  sidecar:
+    datasources:
+      enabled: true
+      defaultDatasourceEnabled: true
+      isDefaultDatasource: true
+      name: Prometheus
+      uid: prometheus
+      url: http://thanos-query-frontend.monitoring.svc.cluster.local:9090
+
+kubelet:
+  enabled: true
+  namespace: kube-system
+  serviceMonitor:
+    interval: "30s"
+
+kube-state-metrics:
+  fullnameOverride: "kube-state-metrics"
+  prometheus:
+    monitor:
+      enabled: true
+      interval: ""
+
+nodeExporter:
+  enabled: true
+prometheus-node-exporter:
+  fullnameOverride: "node-exporter"
+  prometheus:
+    monitor:
+      enabled: true
+      interval: "30s"
+
+prometheusOperator:
+  fullnameOverride: "prometheus-operator"
+
+  resources:
+    limits:
+      cpu: 400m
+      memory: 600Mi
+    requests:
+      cpu: 200m
+      memory: 300Mi
+
+  ## Create Endpoints objects for kubelet targets.
+  kubeletEndpointsEnabled: false
+  ## Create EndpointSlice objects for kubelet targets.
+  kubeletEndpointSliceEnabled: true
+
+  prometheusConfigReloader:
+    resources:
+      requests:
+        cpu: 200m
+        memory: 50Mi
+      limits:
+        cpu: 200m
+        memory: 50Mi
+
+# prometheus:
+#   fullnameOverride: "prometheus-server"
+#   agentMode: false
+#   serviceMonitor:
+#     selfMonitor: true
+#   prometheusSpec:
+#     scrapeInterval: "60s"
+#     replicas: 2
+#     retention: 2h
+#     externalLabels:
+#       cluster: "central-cluster-dev"
+#     replicaExternalLabelName: "prometheus_replica"
+#     ruleSelector:
+#       matchExpressions:
+#         - key: release
+#           operator: In
+#           values:
+#             - thanos
+#     serviceMonitorSelector:
+#       matchExpressions:
+#         - key: release
+#           operator: In
+#           values:
+#             - thanos
+#             - kube-prometheus-stack
+#     remoteWrite:
+#     - url: http://thanos-receive.monitoring.svc.cluster.local:10908/api/v1/receive
+#       # headers:
+#       #   THANOS-TENANT: "central-cluster-dev"
+#       queueConfig:
+#         capacity: 10000
+#         maxShards: 50
+#         minShards: 1
+#         maxSamplesPerSend: 5000
+#         batchSendDeadline: 5s
+#         minBackoff: 30ms
+#         maxBackoff: 5s
+#       # Aumentar timeout para evitar "context deadline exceeded"
+#       remoteTimeout: 30s
+#       sendExemplars: false
+#     serviceDiscoveryRole: "EndpointSlice"
+#     resources:
+#       limits:
+#         cpu: 1
+#         memory: 1Gi
+#       requests:
+#         cpu: 500m
+#         memory: 512Mi
+
+
+
+
+prometheus:
+  fullnameOverride: "prometheus-agent"
+  agentMode: true
+  prometheusSpec:
+    scrapeInterval: "60s"
+    replicas: 1
+    replicaExternalLabelName: "prometheus_replica"
+    serviceMonitorSelector:
+      matchExpressions:
+        - key: release
+          operator: In
+          values:
+            - thanos
+            - prometheus
+    externalLabels:
+      cluster: "central-cluster"
+    remoteWrite:
+    - url: http://thanos-receive.monitoring.svc.cluster.local:10908/api/v1/receive
+      # headers:
+      #   THANOS-TENANT: "central-cluster-dev"
+      queueConfig:
+        capacity: 10000
+        maxShards: 50
+        minShards: 1
+        maxSamplesPerSend: 5000
+        batchSendDeadline: 5s
+        minBackoff: 30ms
+        maxBackoff: 5s
+      # Aumentar timeout para evitar "context deadline exceeded"
+      remoteTimeout: 30s
+      sendExemplars: false
+    serviceDiscoveryRole: "EndpointSlice"
+    resources: {}
+      # limits:
+      #   cpu: 1
+      #   memory: 1Gi
+      # requests:
+      #   cpu: 500m
+      #   memory: 512Mi
+
