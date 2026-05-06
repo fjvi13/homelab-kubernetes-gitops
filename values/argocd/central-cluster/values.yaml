@@ -32,7 +32,7 @@ configs:
     # Number of application operation processors (default 10)
     controller.operation.processors: "10"
     # Sharding algorithm used to balance clusters across application controller shards (default "legacy")
-    controller.sharding.algorithm: consistent-hashing
+    controller.sharding.algorithm: round-robin
     # Run server without TLS
     server.insecure: true
     # Limit on number of concurrent manifests generate requests. Any value less the 1 means no limit.
@@ -64,7 +64,7 @@ controller:
   ## When replicas are added or removed, the sharding algorithm is re-run to ensure that the
   ## clusters are distributed according to the algorithm. If the algorithm is well-balanced,
   ## like round-robin, then the shards will be well-balanced.
-  dynamicClusterDistribution: false
+  dynamicClusterDistribution: true
 
   # -- Application controller heartbeat time
   # Ref: https://argo-cd.readthedocs.io/en/stable/operator-manual/dynamic-cluster-distribution/#working-of-dynamic-distribution
