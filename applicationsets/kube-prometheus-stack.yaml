@@ -45,8 +45,6 @@ spec:
         name: '{{ .name }}'
         namespace: monitoring
       syncPolicy:
-        automated:
-          selfHeal: true
         syncOptions:
         - CreateNamespace=true
         - ServerSideApply=true
