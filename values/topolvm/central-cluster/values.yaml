@@ -247,7 +247,7 @@ lvmd:
   prometheus:
     podMonitor:
       # lvmd.prometheus.podMonitor.enabled -- Set this to `true` to create PodMonitor for Prometheus operator.
-      enabled: false
+      enabled: true
 
       # lvmd.prometheus.podMonitor.additionalLabels -- Additional labels that can be used so PodMonitor will be discovered by Prometheus.
       additionalLabels: {}
