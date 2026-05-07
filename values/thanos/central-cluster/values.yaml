@@ -296,7 +296,7 @@ ruler:
     - http://alertmanager-operated.monitoring.svc.cluster.local:9093
   evalInterval: 1m
   ruleFile: "/conf/rules/*.yml"
-  clusterName: "central-cluster-dev"
+  clusterName: "central-cluster"
   extraFlags:
     - --remote-write.config-file=/conf/remote-write.yaml
   extraVolumes:
@@ -307,7 +307,7 @@ ruler:
     - name: remote-write-config
       mountPath: /conf/remote-write.yaml
       subPath: remote-write.yaml
-  existingConfigmap: thanos-ruler
+  # existingConfigmap: thanos-ruler
   # config: |-
   #   groups:
   #   - name: metamonitoring
