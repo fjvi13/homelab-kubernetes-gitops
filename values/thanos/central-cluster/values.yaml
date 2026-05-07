@@ -372,13 +372,13 @@ receive:
       algorithm: "ketama"
   replicaLabel: receive_replica
   replicaCount: 2
-  resources: {}
-    # requests:
-    #   cpu: 500m
-    #   memory: 1Gi
-    # limits:
-    #   cpu: 2
-    #   memory: 2Gi
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 2
+      memory: 2Gi
   updateStrategy:
     type: RollingUpdate
   containerPorts:
