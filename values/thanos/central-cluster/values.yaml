@@ -418,7 +418,7 @@ receiveDistributor:
       cpu: 500m
       memory: 500Mi
   autoscaling:
-    enabled: false
+    enabled: true
     minReplicas: 1
     maxReplicas: 3
     targetCPU: 70
