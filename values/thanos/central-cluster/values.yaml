@@ -106,6 +106,7 @@ query:
   ingress:
     enabled: true
     hostname: query.lab
+    ingressClassName: istio
     # path: /querier
     # pathType: Prefix
     # annotations:
@@ -159,6 +160,7 @@ queryFrontend:
   ingress:
     enabled: true
     hostname: query-frontend.lab
+    ingressClassName: istio
 
 bucketweb:
   enabled: false
@@ -166,6 +168,7 @@ bucketweb:
   ingress:
     enabled: true
     hostname: bucket-web.lab
+    ingressClassName: istio
 
 compactor:
   enabled: true
@@ -227,6 +230,7 @@ compactor:
   ingress:
     enabled: true
     hostname: compactor.lab
+    ingressClassName: istio
     # pathType: Prefix
     # annotations:
     #   traefik.ingress.kubernetes.io/router.middlewares: monitoring-thanos-compactor-stripprefix@kubernetescrd
@@ -284,6 +288,7 @@ storegateway:
   ingress:
     enabled: true
     hostname: store-gateway.lab
+    ingressClassName: istio
 
 ruler:
   enabled: false
@@ -403,7 +408,8 @@ receive:
   ingress:
     enabled: true
     hostname: receiver.lab
-
+    ingressClassName: istio
+    
 receiveDistributor:
   enabled: true
   logLevel: info
