@@ -286,7 +286,7 @@ storegateway:
     hostname: store-gateway.lab
 
 ruler:
-  enabled: true
+  enabled: false
   logLevel: info
   logFormat: logfmt
   replicaCount: 1
