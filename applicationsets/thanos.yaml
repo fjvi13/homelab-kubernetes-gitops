@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: kube-prometheus-stack
+  name: thanos
   namespace: argocd
 spec:
   goTemplate: true
@@ -13,21 +13,21 @@ spec:
           - clusters:
               selector:
                 matchExpressions:
-                  - key: enable_prometheus
+                  - key: enable_thanos
                     operator: In
                     values: ['true']
               values:
-                chart: kube-prometheus-stack
-                chartRepository: https://prometheus-community.github.io/helm-charts
+                chart: thanos
+                chartRepository: https://charts.bitnami.com/bitnami
           - clusters:
               selector:
                 matchLabels:
                   env: lab
               values:
-                chartVersion: 78.5.0
+                chartVersion: 17.3.1
   template:
     metadata:
-      name: "prometheus-{{.name}}"
+      name: "thanos-{{.name}}"
     spec:
       project: addons
       sources:
@@ -35,9 +35,9 @@ spec:
           targetRevision: '{{ .values.chartVersion}}'
           chart: '{{ .values.chart}}'
           helm:
-            releaseName: prometheus
+            releaseName: thanos
             valueFiles:
-              - $repo/values/kube-prometheus-stack/{{ .name }}/values.yaml
+              - $repo/values/thanos/{{ .name }}/values.yaml
         - repoURL: https://github.com/fjvi13/homelab-kubernetes-gitops.git
           targetRevision: HEAD
           ref: repo

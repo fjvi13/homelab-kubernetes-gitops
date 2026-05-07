@@ -35,7 +35,7 @@ grafana:
   ingress:
     enabled: true
     hosts: 
-      - grafana2.local
+      - grafana2.lab
   sidecar:
     datasources:
       enabled: true

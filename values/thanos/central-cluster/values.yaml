@@ -1,0 +1,461 @@
+﻿global:
+  security:
+    allowInsecureImages: true
+
+extraDeploy: 
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: thanos-ruler-remote-write-config
+    data:
+      remote-write.yaml: |
+        remote_write:
+        - url: http://thanos-receive.monitoring.svc.cluster.local:10908/api/v1/receive
+          queue_config:
+            capacity: 500
+            max_shards: 30
+            max_samples_per_send: 200
+  # - apiVersion: v1
+  #   kind: ConfigMap
+  #   metadata:
+  #     name: compactor-relabel-config
+  #   data:
+  #     relabel-config.yaml: |
+  #       - action: drop
+  #         regex: thanos-receive-3
+  #         source_labels: [receive_replica]
+  #       - action: keep
+  #         regex: thanos-receive-0|thanos-receive-1|thanos-receive-2
+  #         source_labels: [receive_replica]
+
+  # - apiVersion: networking.k8s.io/v1
+  #   kind: NetworkPolicy
+  #   metadata:
+  #     name: cut-all-ingress-to-thanos-receive
+  #     namespace: monitoring
+  #   spec:
+  #     podSelector:
+  #       matchLabels:
+  #         app.kubernetes.io/component: thanos-receive
+  #     policyTypes: [Ingress]
+  #     ingress: []
+
+image:
+  registry: quay.io
+  repository: thanos/thanos
+  tag: v0.39.2
+  digest: ""
+  pullPolicy: IfNotPresent
+
+objstoreConfig: |-
+  type: S3
+  config:
+    bucket: thanos-metrics
+    endpoint: "minio.minio:9000"
+    insecure: true
+    access_key: "0TEdqNcp14VPw7Mw"
+    secret_key: "Ho3svPHKqFnIFNBqR8V6RzUMwceUkI4k"
+existingObjstoreSecret: ""
+
+query:
+  containerPorts:
+    http: 10902
+    grpc: 10901
+  enabled: true
+  logLevel: info
+  replicaLabel: [prometheus_replica, receive_replica, ruler_replica]
+  stores: []
+  replicaCount: 1
+  resources: {}
+    # requests:
+    #   cpu: 250m
+    #   memory: 256Mi
+    # limits:
+    #   cpu: 375m
+    #   memory: 384Mi
+  service:
+    type: ClusterIP
+    ports:
+      http: 9090
+  serviceGrpc:
+    type: ClusterIP
+    ports:
+      grpc: 10901
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 2
+    targetCPU: 70
+    targetMemory: 80
+    behavior:
+      scaleUp:
+        stabilizationWindowSeconds: 30
+        policies:
+          - type: Percent
+            value: 100
+            periodSeconds: 30
+      scaleDown:
+        stabilizationWindowSeconds: 100
+        policies:
+          - type: Percent
+            value: 50
+            periodSeconds: 60
+  pdb:
+    create: false
+    minAvailable: 1
+  ingress:
+    enabled: true
+    hostname: query.lab
+    # path: /querier
+    # pathType: Prefix
+    # annotations:
+    #   traefik.ingress.kubernetes.io/router.middlewares: monitoring-thanos-querier-stripprefix@kubernetescrd
+
+queryFrontend:
+  enabled: true
+  logLevel: info
+  config: |
+    type: IN-MEMORY
+    config:
+      max_size: 256MB
+      max_size_items: 1000
+      validity: 24h
+  extraFlags:
+    - --query-range.split-interval=24h
+    - --query-range.max-retries-per-request=5
+  resources: {}
+    # requests:
+    #   cpu: 250m
+    #   memory: 256Mi
+    # limits:
+    #   cpu: 375m
+    #   memory: 384Mi
+  service:
+    type: ClusterIP
+    ports:
+      http: 9090
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 2
+    targetCPU: 70
+    targetMemory: 80
+    behavior:
+      scaleUp:
+        stabilizationWindowSeconds: 30
+        policies:
+          - type: Percent
+            value: 100
+            periodSeconds: 30
+      scaleDown:
+        stabilizationWindowSeconds: 100
+        policies:
+          - type: Percent
+            value: 50
+            periodSeconds: 60
+  pdb:
+    create: false
+    minAvailable: 1
+  ingress:
+    enabled: true
+    hostname: query-frontend.lab
+
+bucketweb:
+  enabled: false
+  logLevel: info
+  ingress:
+    enabled: true
+    hostname: bucket-web.lab
+
+compactor:
+  enabled: true
+  logLevel: info
+  dataDir: /data
+  retentionResolutionRaw: 8d
+  retentionResolution5m: 15d
+  retentionResolution1h: 30d
+  ## @param compactor.concurrency Number of goroutines to use when compacting groups.
+  concurrency: 1
+  ## @param compactor.consistencyDelay Minimum age of fresh (non-compacted) blocks before they are being processed
+  ##
+  consistencyDelay: 30m
+  extraFlags:
+    - --compact.enable-vertical-compaction
+    - --delete-delay=30m
+    - --deduplication.func=penalty
+    - --deduplication.replica-label=prometheus_replica
+    # - --selector.relabel-config-file=/relabel-config/relabel-config.yaml
+  resources: {}
+    # requests:
+    #   cpu: 250m
+    #   memory: 512Mi
+    # limits:
+    #   cpu: 1
+    #   memory: 2Gi
+  containerPorts:
+    http: 10902
+  # extraVolumes:
+  #   - name: relabel-config
+  #     configMap:
+  #       name: compactor-relabel-config
+  # extraVolumeMounts:
+  #   - name: relabel-config
+  #     mountPath: /relabel-config/relabel-config.yaml
+  #     subPath: relabel-config.yaml
+  service:
+    type: ClusterIP
+    ports:
+      http: 9090
+  persistence:
+    enabled: true
+    storageClass: topolvm-provisioner
+    accessModes:
+      - ReadWriteOnce
+    size: 10Gi
+  # sharded:
+  #   enabled: true
+  #   relabelingConfigs:
+  #     - action: keep
+  #       source_labels: [receive_replica]
+  #       regex: thanos-receive-0
+  #     - action: keep
+  #       source_labels: [receive_replica]
+  #       regex: thanos-receive-1
+  #     - action: keep
+  #       source_labels: [receive_replica]
+  #       regex: thanos-receive-2
+  ingress:
+    enabled: true
+    hostname: compactor.lab
+    # pathType: Prefix
+    # annotations:
+    #   traefik.ingress.kubernetes.io/router.middlewares: monitoring-thanos-compactor-stripprefix@kubernetescrd
+
+storegateway:
+  enabled: true
+  logLevel: info
+  useEndpointGroup: true
+  config: |
+    type: IN-MEMORY
+    config:
+      max_size: 512MB
+      max_item_size: 50MB
+  replicaCount: 1
+  extraFlags:
+    - --store.caching-bucket.config-file=/conf/cache/config.yml
+  updateStrategy:
+    type: RollingUpdate
+  containerPorts:
+    http: 10902
+    grpc: 10901
+  resources: {}
+    # requests:
+    #   cpu: 125m
+    #   memory: 256Mi
+    # limits:
+    #   cpu: 250m
+    #   memory: 512Mi
+  service:
+    type: ClusterIP
+    ports:
+      http: 9090
+      grpc: 10901
+  persistence:
+    enabled: true
+    storageClass: topolvm-provisioner
+    accessModes:
+      - ReadWriteOnce
+    size: 300Mi
+  sharded:
+    enabled: false
+    hashPartitioning:
+      shards: 2
+    # timePartitioning:
+    #   # Shard 0: Bloques de históricos antiguos
+    #   - min: ""  # Sin mínimo = desde el inicio del tiempo
+    #     max: "-100h"  # Hasta hace 100 horas (aprox. 4 días)
+    #   # Shard 1: Bloques de históricos recientes
+    #   - min: "-100h"
+    #     max: "-48h" 
+    #   # Shard 2: Bloques de últimos 2 días datos recientes
+    #   - min: "-48h"
+    #     max: ""  # Sin máximo = hasta ahora
+
+  ingress:
+    enabled: true
+    hostname: store-gateway.lab
+
+ruler:
+  enabled: true
+  logLevel: info
+  logFormat: logfmt
+  replicaCount: 1
+  replicaLabel: ruler_replica
+  queryURL: thanos-query.monitoring.svc.cluster.local:9090
+  alertmanagers: 
+    - http://alertmanager-operated.monitoring.svc.cluster.local:9093
+  evalInterval: 1m
+  ruleFile: "/conf/rules/*.yml"
+  clusterName: "central-cluster-dev"
+  extraFlags:
+    - --remote-write.config-file=/conf/remote-write.yaml
+  extraVolumes:
+    - name: remote-write-config
+      configMap:
+        name: thanos-ruler-remote-write-config
+  extraVolumeMounts:
+    - name: remote-write-config
+      mountPath: /conf/remote-write.yaml
+      subPath: remote-write.yaml
+  existingConfigmap: thanos-ruler
+  # config: |-
+  #   groups:
+  #   - name: metamonitoring
+  #     rules:
+  #     - alert: PrometheusReplicaDown
+  #       annotations:
+  #         message: Prometheus replica in cluster has disappeared from Prometheus target discovery.
+  #       expr: |
+  #         sum(up{instance=~".*:9090", job="kube-prometheus-stack-prometheus"}) by (job) < 3
+  #       for: 15s
+  #       labels:
+  #         severity: critical
+  containerPorts:
+    http: 10902
+  service:
+    type: ClusterIP
+    ports:
+      http: 9090
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 2
+    targetCPU: 70
+    targetMemory: 80
+    behavior:
+      scaleUp:
+        stabilizationWindowSeconds: 30
+        policies:
+          - type: Percent
+            value: 100
+            periodSeconds: 30
+      scaleDown:
+        stabilizationWindowSeconds: 100
+        policies:
+          - type: Percent
+            value: 50
+            periodSeconds: 60
+  pdb:
+    create: true
+    minAvailable: 1
+  persistence:
+    enabled: false
+
+receive:
+  enabled: true
+  mode: dual-mode
+  logLevel: info
+  tsdbRetention: 2h
+  networkPolicy:
+    enabled: false
+  # replicationProtocol: capnproto
+  extraFlags:
+    - --tsdb.out-of-order.time-window=5m
+  config:
+    - endpoints:
+      - address: "thanos-receive-0.thanos-receive-headless.monitoring.svc.cluster.local:10907"
+        capnproto_address: "thanos-receive-0.thanos-receive-headless.monitoring.svc.cluster.local:19391"
+      - address: "thanos-receive-1.thanos-receive-headless.monitoring.svc.cluster.local:10907"
+        capnproto_address: "thanos-receive-1.thanos-receive-headless.monitoring.svc.cluster.local:19391"
+      # - address: "thanos-receive-2.thanos-receive-headless.monitoring.svc.cluster.local:10907"
+      #   capnproto_address: "thanos-receive-2.thanos-receive-headless.monitoring.svc.cluster.local:19391"
+      algorithm: "ketama"
+  replicaLabel: receive_replica
+  replicaCount: 2
+  resources: {}
+    # requests:
+    #   cpu: 500m
+    #   memory: 1Gi
+    # limits:
+    #   cpu: 2
+    #   memory: 2Gi
+  updateStrategy:
+    type: RollingUpdate
+  containerPorts:
+    http: 10909
+    grpc: 10907
+    remote: 10908
+    capnproto: 19391
+  service:
+    type: ClusterIP
+    ports:
+      http: 10909
+      grpc: 10907
+      remote: 10908
+      capnproto: 19391
+    additionalHeadless: true
+  persistence:
+    enabled: true
+    storageClass: topolvm-provisioner
+    accessModes:
+      - ReadWriteOnce
+    size: 4Gi
+  ingress:
+    enabled: true
+    hostname: receiver.lab
+
+receiveDistributor:
+  enabled: true
+  logLevel: info
+  replicationProtocol: capnproto
+  replicationFactor: 1
+  replicaLabel: distributor_replica
+  resources: {}
+    # requests:
+    #   cpu: 250m
+    #   memory: 128Mi
+    # limits:
+    #   cpu: 500m
+    #   memory: 500Mi
+  autoscaling:
+    enabled: false
+    minReplicas: 2
+    maxReplicas: 3
+    targetCPU: 70
+    targetMemory: 80
+    behavior:
+      scaleUp:
+        stabilizationWindowSeconds: 30
+        policies:
+          - type: Percent
+            value: 100
+            periodSeconds: 30
+      scaleDown:
+        stabilizationWindowSeconds: 300
+        policies:
+          - type: Percent
+            value: 50
+            periodSeconds: 60
+  pdb:
+    create: false
+    minAvailable: 1
+
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+    namespace: "monitoring"
+    labels: 
+      release: thanos
+  prometheusRule:
+    enabled: true
+    additionalLabels: 
+      release: thanos
+    default:
+      create: false
+      absent_rules: true
+      compaction: true
+      query: true
+      receive: true
+      ruler: true
+      store_gateway: true

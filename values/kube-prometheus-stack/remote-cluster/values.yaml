@@ -77,7 +77,7 @@ prometheus:
           values:
             - prometheus
     remoteWrite:
-    - url: http://receiver.local/api/v1/receive
+    - url: http://receiver.lab/api/v1/receive
       tlsConfig:
       #     caFile: /etc/prometheus/secrets/ca.crt
       #     certFile: /etc/prometheus/secrets/client.crt
