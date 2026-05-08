@@ -1,0 +1,50 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: grafana
+  namespace: argocd
+spec:
+  goTemplate: true
+  generators:
+    - merge:
+        mergeKeys:
+          - server
+        generators:
+          - clusters:
+              selector:
+                matchExpressions:
+                  - key: enable_grafana
+                    operator: In
+                    values: ['true']
+              values:
+                chart: grafana
+                chartRepository: https://grafana.github.io/helm-charts
+          - clusters:
+              selector:
+                matchLabels:
+                  env: lab
+              values:
+                chartVersion: 10.1.4
+  template:
+    metadata:
+      name: "grafana-{{.name}}"
+    spec:
+      project: addons
+      sources:
+        - repoURL: '{{ .values.chartRepository}}'
+          targetRevision: '{{ .values.chartVersion}}'
+          chart: '{{ .values.chart}}'
+          helm:
+            releaseName: grafana
+            valueFiles:
+              - $repo/values/grafana/{{ .name }}/values.yaml
+        - repoURL: https://github.com/fjvi13/homelab-kubernetes-gitops.git
+          targetRevision: HEAD
+          ref: repo
+      destination:
+        name: '{{ .name }}'
+        namespace: monitoring
+      syncPolicy:
+        syncOptions:
+        - CreateNamespace=true
+        - ServerSideApply=true
