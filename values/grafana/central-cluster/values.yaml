@@ -336,7 +336,7 @@ route:
     labels: {}
 
     hostnames:
-      - compactor.lab
+      - grafana.lab
     parentRefs:
       - group: gateway.networking.k8s.io
         kind: Gateway
