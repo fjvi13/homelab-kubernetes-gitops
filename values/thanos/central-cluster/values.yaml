@@ -120,6 +120,32 @@ extraDeploy:
             type: PathPrefix
             value: /
 
+  - apiVersion: gateway.networking.k8s.io/v1
+    kind: HTTPRoute
+    metadata:
+      name: thanos-compactor
+      namespace: monitoring
+    spec:
+      hostnames:
+      - compactor.lab
+      parentRefs:
+      - group: gateway.networking.k8s.io
+        kind: Gateway
+        name: lab-gateway
+        namespace: istio-system
+        sectionName: http
+      rules:
+      - backendRefs:
+        - group: ""
+          kind: Service
+          name: thanos-compactor
+          port: 9090
+          weight: 1
+        matches:
+        - path:
+            type: PathPrefix
+            value: /
+
   # - apiVersion: v1
   #   kind: ConfigMap
   #   metadata:
@@ -146,8 +172,8 @@ objstoreConfig: |-
     bucket: thanos-metrics
     endpoint: "minio.minio:9000"
     insecure: true
-    access_key: "0TEdqNcp14VPw7Mw"
-    secret_key: "Ho3svPHKqFnIFNBqR8V6RzUMwceUkI4k"
+    access_key: "X7UbZfd3hoLhqdLN"
+    secret_key: "mQRwzaRlofjvLeit6gCBfCMjjRYp7o3v"
 existingObjstoreSecret: ""
 
 query:

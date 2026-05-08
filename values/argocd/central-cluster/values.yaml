@@ -37,14 +37,14 @@ configs:
     server.insecure: true
     # Limit on number of concurrent manifests generate requests. Any value less the 1 means no limit.
     reposerver.parallelism.limit: "1"
-    # Enables profile endpoint on the internal metrics port
-    controller.profile.enabled: "true"
-    # Enables profile endpoint on the internal metrics port
-    server.profile.enabled: "true"
-    # Enables profile endpoint on the internal metrics port
-    reposerver.profile.enabled: "true"
-    # Enables profile endpoint on the internal metrics port
-    applicationsetcontroller.profile.enabled: "true"  
+    # # Enables profile endpoint on the internal metrics port
+    # controller.profile.enabled: "false"
+    # # Enables profile endpoint on the internal metrics port
+    # server.profile.enabled: "false"
+    # # Enables profile endpoint on the internal metrics port
+    # reposerver.profile.enabled: "false"
+    # # Enables profile endpoint on the internal metrics port
+    # applicationsetcontroller.profile.enabled: "false"  
 
 
 ## Application controller
