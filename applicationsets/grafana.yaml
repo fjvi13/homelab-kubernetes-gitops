@@ -28,6 +28,8 @@ spec:
   template:
     metadata:
       name: "grafana-{{.name}}"
+      annotations:
+        argocd.argoproj.io/manifest-generate-paths: "/values/grafana/{{ .name }}"
     spec:
       project: addons
       sources:
