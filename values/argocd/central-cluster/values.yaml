@@ -5,7 +5,7 @@ global:
 
   image:
     repository: quay.io/argoproj/argocd
-    tag: v3.3.9
+    tag: v3.4.1
     imagePullPolicy: IfNotPresent
 
   # Default logging options used by all components
@@ -245,22 +245,6 @@ server:
     enabled: true
     minReplicas: 2
     maxReplicas: 3
-
-  ## Argo CD server image
-  image:
-    # -- Repository to use for the Argo CD server
-    # @default -- `""` (defaults to global.image.repository)
-    repository: "" # defaults to global.image.repository
-    # -- Tag to use for the Argo CD server
-    # @default -- `""` (defaults to global.image.tag)
-    tag: "" # defaults to global.image.tag
-    # -- Image pull policy for the Argo CD server
-    # @default -- `""` (defaults to global.image.imagePullPolicy)
-    imagePullPolicy: "" # IfNotPresent
-
-  # -- Secrets with credentials to pull images from a private registry
-  # @default -- `[]` (defaults to global.imagePullSecrets)
-  imagePullSecrets: []
 
   # Gateway API HTTPRoute configuration
   # NOTE: Gateway API support is in EXPERIMENTAL status
