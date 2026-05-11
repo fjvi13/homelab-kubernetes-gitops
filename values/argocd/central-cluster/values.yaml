@@ -19,7 +19,7 @@ configs:
   ## Ref: https://github.com/argoproj/argo-cd/blob/master/docs/operator-manual/argocd-cm.yaml
   cm:
      # -- Timeout to discover if a new manifests version got published to the repository
-    timeout.reconciliation: 60s #180s
+    timeout.reconciliation: 3600s #180s
 
     # -- Maximum jitter added to the reconciliation timeout to spread out refreshes and reduce repo-server load
     timeout.reconciliation.jitter: 60s
