@@ -245,6 +245,12 @@ server:
     enabled: true
     minReplicas: 2
     maxReplicas: 3
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: prometheus
 
   # Gateway API HTTPRoute configuration
   # NOTE: Gateway API support is in EXPERIMENTAL status
@@ -287,14 +293,7 @@ server:
         #           value: custom-value
         # timeouts:
         #   request: 10s
-        #   backendRequest: 2s
-    
-  metrics:
-    enabled: true
-    serviceMonitor:
-      enabled: true
-      additionalLabels:
-        release: prometheus
+        #   backendRequest: 2s    
 
 ## Repo Server
 repoServer:
@@ -332,6 +331,12 @@ applicationSet:
   # -- The number of ApplicationSet controller pods to run
   replicas: 2
 
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: prometheus
   # -- Resource limits and requests for the ApplicationSet controller pods.
   resources: {}
     # limits:
@@ -340,13 +345,6 @@ applicationSet:
     # requests:
     #   cpu: 100m
     #   memory: 128Mi
-
-  metrics:
-    enabled: true
-    serviceMonitor:
-      enabled: true
-      additionalLabels:
-        release: prometheus
 
 ## Notifications controller
 notifications:
