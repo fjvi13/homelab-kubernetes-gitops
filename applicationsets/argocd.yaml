@@ -25,7 +25,7 @@ spec:
                   cluster: central-cluster
                   env: lab
               values:
-                chartVersion: 9.5.13
+                chartVersion: 9.5.11
   template:
     metadata:
       name: "argocd-{{.values.chartVersion}}-{{.name}}"
