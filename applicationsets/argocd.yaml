@@ -25,13 +25,6 @@ spec:
                   cluster: central-cluster
                   env: lab
               values:
-                chartVersion: 9.5.11
-          - clusters:
-              selector:
-                matchLabels:
-                  cluster: central-cluster
-                  env: lab
-              values:
                 chartVersion: 9.5.13
   template:
     metadata:
