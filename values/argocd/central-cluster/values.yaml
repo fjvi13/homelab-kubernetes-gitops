@@ -70,6 +70,10 @@ controller:
   # Ref: https://argo-cd.readthedocs.io/en/stable/operator-manual/dynamic-cluster-distribution/#working-of-dynamic-distribution
   heartbeatTime: 10
   
+  pdb:
+    enabled: true
+    minAvailable: 1
+
   resources: {}
   #  limits:
   #    cpu: 500m
@@ -245,6 +249,11 @@ server:
     enabled: true
     minReplicas: 2
     maxReplicas: 3
+
+  pdb:
+    enabled: true
+    minAvailable: 1
+
   metrics:
     enabled: true
     serviceMonitor:
@@ -308,6 +317,10 @@ repoServer:
     minReplicas: 2
     maxReplicas: 3
 
+  pdb:
+    enabled: true
+    minAvailable: 1
+    
   resources: {}
   #  limits:
   #    cpu: 50m
