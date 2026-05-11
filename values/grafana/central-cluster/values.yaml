@@ -1402,7 +1402,7 @@ namespaceOverride: ""
 
 ## Number of old ReplicaSets to retain
 ##
-revisionHistoryLimit: 1
+revisionHistoryLimit: 2
 
 ## Add a seperate remote image renderer deployment/service
 imageRenderer:
