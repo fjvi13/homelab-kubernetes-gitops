@@ -188,7 +188,7 @@ query:
   resources:
     requests:
       cpu: 10m
-      ephemeral-storage: 40Mi
+      ephemeral-storage: 50Mi
       memory: 50Mi
     limits:
       cpu: 375m
