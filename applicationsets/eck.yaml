@@ -17,32 +17,32 @@ spec:
                     operator: In
                     values: ['true']
               values:
-                chart-operator: eck-operator
-                chart-eck: eck-stack
+                chartOperator: eck-operator
+                chartECK: eck-stack
                 chartRepository: https://helm.elastic.co
           - clusters:
               selector:
                 matchLabels:
                   env: lab
               values:
-                operator-chartVersion: 3.4.0
-                stack-chartVersion: 0.19.0
+                operatorChartVersion: 3.4.0
+                stackChartVersion: 0.19.0
   template:
     metadata:
-      name: "eck-{{.values.operator-chartVersion}}-{{.name}}"
+      name: "eck-{{.values.operatorChartVersion}}-{{.name}}"
     spec:
       project: default
       sources:
         - repoURL: '{{ .values.chartRepository}}'
-          targetRevision: '{{ .values.operator-chartVersion}}'
-          chart: '{{ .values.chart-operator}}'
+          targetRevision: '{{ .values.operatorChartVersion}}'
+          chart: '{{ .values.chartOperator}}'
           helm:
             releaseName: eck-operator
             valueFiles:
               - $repo/values/eck/{{ .name }}/operator-values.yaml
         - repoURL: '{{ .values.chartRepository}}'
-          targetRevision: '{{ .values.stack-chartVersion}}'
-          chart: '{{ .values.chart-eck}}'
+          targetRevision: '{{ .values.stackChartVersion}}'
+          chart: '{{ .values.chartECK}}'
           helm:
             releaseName: eck-stack
             valueFiles:
