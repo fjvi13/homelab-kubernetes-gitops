@@ -73,4 +73,30 @@ eck-package-registry:
 #       namespace: {{ .Release.Namespace }}
 #     data:
 #       key: value
-extraObjects: []
+extraObjects:
+  - |
+    apiVersion: gateway.networking.k8s.io/v1
+    kind: HTTPRoute
+    metadata:
+      name: kibana
+      namespace: {{ .Release.Namespace }}
+    spec:
+      hostnames:
+        - kibana.lab
+      parentRefs:
+        - group: gateway.networking.k8s.io
+          kind: Gateway
+          name: lab-gateway
+          namespace: istio-system
+          sectionName: http
+      rules:
+        - backendRefs:
+            - group: ""
+              kind: Service
+              name: kibana-kb-http
+              port: 5601
+              weight: 1
+          matches:
+            - path:
+                type: PathPrefix
+                value: /
