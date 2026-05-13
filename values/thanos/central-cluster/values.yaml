@@ -185,13 +185,13 @@ query:
   replicaLabel: [prometheus_replica, receive_replica, ruler_replica]
   stores: []
   replicaCount: 1
-  resources: {}
-    # requests:
-    #   cpu: 250m
-    #   memory: 256Mi
-    # limits:
-    #   cpu: 375m
-    #   memory: 384Mi
+  resources:
+    requests:
+      cpu: 10m
+      memory: 50Mi
+    limits:
+      cpu: 375m
+      memory: 250Mi
   service:
     type: ClusterIP
     ports:
@@ -243,13 +243,13 @@ queryFrontend:
   extraFlags:
     - --query-range.split-interval=24h
     - --query-range.max-retries-per-request=5
-  resources: {}
-    # requests:
-    #   cpu: 250m
-    #   memory: 256Mi
-    # limits:
-    #   cpu: 375m
-    #   memory: 384Mi
+  resources:
+    requests:
+      cpu: 25m
+      memory: 100Mi
+    limits:
+      cpu: 150m
+      memory: 250Mi
   service:
     type: ClusterIP
     ports:
@@ -307,13 +307,13 @@ compactor:
     - --deduplication.func=penalty
     - --deduplication.replica-label=prometheus_replica
     # - --selector.relabel-config-file=/relabel-config/relabel-config.yaml
-  resources: {}
-    # requests:
-    #   cpu: 250m
-    #   memory: 512Mi
-    # limits:
-    #   cpu: 1
-    #   memory: 2Gi
+  resources:
+    requests:
+      cpu: 150m
+      memory: 150Mi
+    limits:
+      cpu: 1
+      memory: 1Gi
   containerPorts:
     http: 10902
   # extraVolumes:
@@ -371,13 +371,13 @@ storegateway:
   containerPorts:
     http: 10902
     grpc: 10901
-  resources: {}
-    # requests:
-    #   cpu: 125m
-    #   memory: 256Mi
-    # limits:
-    #   cpu: 250m
-    #   memory: 512Mi
+  resources:
+    requests:
+      cpu: 20m
+      memory: 40Mi
+    limits:
+      cpu: 100m
+      memory: 250Mi
   service:
     type: ClusterIP
     ports:
@@ -498,11 +498,11 @@ receive:
   replicaCount: 2
   resources:
     requests:
-      cpu: 500m
-      memory: 1Gi
+      cpu: 50m
+      memory: 250Mi
     limits:
       cpu: 2
-      memory: 2Gi
+      memory: 1Gi
   updateStrategy:
     type: RollingUpdate
   containerPorts:
@@ -537,8 +537,8 @@ receiveDistributor:
   replicaLabel: distributor_replica
   resources:
     requests:
-      cpu: 250m
-      memory: 128Mi
+      cpu: 100m
+      memory: 50Mi
     limits:
       cpu: 500m
       memory: 500Mi
