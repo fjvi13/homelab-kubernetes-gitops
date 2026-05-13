@@ -188,9 +188,11 @@ query:
   resources:
     requests:
       cpu: 10m
+      ephemeral-storage: 40Mi
       memory: 50Mi
     limits:
       cpu: 375m
+      ephemeral-storage: 1Gi
       memory: 250Mi
   service:
     type: ClusterIP
@@ -246,9 +248,11 @@ queryFrontend:
   resources:
     requests:
       cpu: 25m
+      ephemeral-storage: 50Mi
       memory: 100Mi
     limits:
       cpu: 150m
+      ephemeral-storage: 1Gi
       memory: 250Mi
   service:
     type: ClusterIP
@@ -374,9 +378,11 @@ storegateway:
   resources:
     requests:
       cpu: 20m
+      ephemeral-storage: 50Mi
       memory: 40Mi
     limits:
       cpu: 100m
+      ephemeral-storage: 1Gi
       memory: 250Mi
   service:
     type: ClusterIP
