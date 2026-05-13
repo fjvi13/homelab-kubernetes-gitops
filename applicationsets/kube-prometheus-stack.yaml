@@ -25,7 +25,7 @@ spec:
                   env: lab
               values:
                 chartVersion: 78.5.0
-                branchReference: develop
+                branchReference: HEAD
   template:
     metadata:
       name: "prometheus-{{.name}}"
