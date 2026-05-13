@@ -1,0 +1,60 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: eck
+  namespace: eck
+spec:
+  goTemplate: true
+  generators:
+    - merge:
+        mergeKeys:
+          - server
+        generators:
+          - clusters:
+              selector:
+                matchExpressions:
+                  - key: enable_eck
+                    operator: In
+                    values: ['true']
+              values:
+                chart-operator: eck-operator
+                chart-eck: eck-stack
+                chartRepository: https://helm.elastic.co
+          - clusters:
+              selector:
+                matchLabels:
+                  env: lab
+              values:
+                operator-chartVersion: 3.4.0
+                stack-chartVersion: 0.19.0
+  template:
+    metadata:
+      name: "eck-{{.values.operator-chartVersion}}-{{.name}}"
+    spec:
+      project: default
+      sources:
+        - repoURL: '{{ .values.chartRepository}}'
+          targetRevision: '{{ .values.operator-chartVersion}}'
+          chart: '{{ .values.chart-operator}}'
+          helm:
+            releaseName: eck-operator
+            valueFiles:
+              - $repo/values/eck/{{ .name }}/operator-values.yaml
+        - repoURL: '{{ .values.chartRepository}}'
+          targetRevision: '{{ .values.stack-chartVersion}}'
+          chart: '{{ .values.chart-eck}}'
+          helm:
+            releaseName: eck-stack
+            valueFiles:
+              - $repo/values/eck/{{ .name }}/stack-values.yaml
+        - repoURL: https://github.com/fjvi13/homelab-kubernetes-gitops.git
+          targetRevision: HEAD
+          ref: repo
+      destination:
+        name: '{{ .name }}'
+        namespace: elastic-system
+      syncPolicy:
+        syncOptions:
+        - CreateNamespace=true
+        - ServerSideApply=true
+        - SkipDryRunOnMissingResource=true
