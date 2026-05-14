@@ -10,10 +10,14 @@ eck-elasticsearch:
   version: 9.3.0
   nodeSets:
   - name: default
-    resources:
-      limits:
-        memory: 2Gi
-        cpu: 1000m
+    podTemplate:
+      spec:
+        containers:
+        - name: elasticsearch
+          resources:
+            limits:
+              memory: 2Gi
+              cpu: 1000m
     volumeClaimTemplates:
     - metadata:
         name: elasticsearch-data
