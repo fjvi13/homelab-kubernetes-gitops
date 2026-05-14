@@ -3,7 +3,7 @@
 # For advanced configuration options, refer to the [official OpenTelemetry Helm chart](https://github.com/open-telemetry/opentelemetry-helm-charts/blob/main/charts/opentelemetry-kube-stack/values.yaml)
 # This file has been tested together with opentelemetry-kube-stack helm chart version: 0.3.3
 opentelemetry-operator:
-  replicas: 1
+  replicaCount: 1
   manager:
     extraArgs:
       - --enable-go-instrumentation
