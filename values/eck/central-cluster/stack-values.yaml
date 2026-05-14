@@ -44,10 +44,18 @@ eck-kibana:
   elasticsearchRef:
     name: elasticsearch
   spec:
+    resources:
+      limits:
+        memory: 2Gi
+        cpu: 1000m
+      requests:
+        cpu: 500m
+        memory: 1Gi
     http:
       tls:
         selfSignedCertificate:
           disabled: true
+  
 
 # If enabled, will use the eck-agent chart and deploy an Elastic Agent instance.
 #
