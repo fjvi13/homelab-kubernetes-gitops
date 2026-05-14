@@ -46,7 +46,7 @@ spec:
           ref: repo
       destination:
         name: '{{ .name }}'
-        namespace: monitoring
+        namespace: otel-system
       syncPolicy:
         syncOptions:
         - CreateNamespace=true
