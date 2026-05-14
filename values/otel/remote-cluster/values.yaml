@@ -43,7 +43,7 @@ defaultCRConfig:
                 storage: 1Gi
   volumeMounts:
     - name: scratch
-      mountPath: /var/lib/otelcol
+      mountPath: /var/lib/otelcol-scratch
 clusterRole:
   rules:
     - apiGroups: [""]
