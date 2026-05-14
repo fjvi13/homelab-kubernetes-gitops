@@ -44,15 +44,16 @@ eck-kibana:
   elasticsearchRef:
     name: elasticsearch
   podTemplate:
-    containers:
-    - name: kibana
-      resources:
-        limits:
-          memory: 2Gi
-          cpu: 1000m
-        requests:
-          cpu: 500m
-          memory: 1Gi
+    spec:
+      containers:
+      - name: kibana
+        resources:
+          limits:
+            memory: 2Gi
+            cpu: 1000m
+          requests:
+            cpu: 500m
+            memory: 1Gi
   spec:
     http:
       tls:
