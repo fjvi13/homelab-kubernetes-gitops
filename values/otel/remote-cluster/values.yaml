@@ -5,6 +5,15 @@
 opentelemetry-operator:
   replicaCount: 1
   manager:
+    resources:
+      limits:
+        cpu: 500m
+        memory: 256Mi
+        ephemeral-storage: 256Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
+        ephemeral-storage: 128Mi
     extraArgs:
       - --enable-go-instrumentation
   admissionWebhooks:
@@ -44,9 +53,11 @@ collectors:
       limits:
         cpu: 1500m
         memory: 1500Mi
+        ephemeral-storage: 512Mi
       requests:
         cpu: 100m
         memory: 500Mi
+        ephemeral-storage: 256Mi
     env:
       - name: ELASTIC_AGENT_OTEL
         value: '"true"'
@@ -388,9 +399,11 @@ collectors:
       limits:
         cpu: 1500m
         memory: 1500Mi
+        ephemeral-storage: 512Mi
       requests:
         cpu: 100m
         memory: 500Mi
+        ephemeral-storage: 256Mi
     suffix: gateway
     replicas: 1
     enabled: true
