@@ -20,6 +20,11 @@ eck-kibana:
   # both the eck-elasticsearch and the eck-kibana chart work together by default in the eck-stack chart.
   elasticsearchRef:
     name: elasticsearch
+  spec:
+    http:
+      tls:
+        selfSignedCertificate:
+          disabled: true
 
 # If enabled, will use the eck-agent chart and deploy an Elastic Agent instance.
 #
