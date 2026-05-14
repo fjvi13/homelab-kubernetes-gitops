@@ -43,14 +43,17 @@ eck-kibana:
   # both the eck-elasticsearch and the eck-kibana chart work together by default in the eck-stack chart.
   elasticsearchRef:
     name: elasticsearch
+  podTemplate:
+    containers:
+    - name: kibana
+      resources:
+        limits:
+          memory: 2Gi
+          cpu: 1000m
+        requests:
+          cpu: 500m
+          memory: 1Gi
   spec:
-    resources:
-      limits:
-        memory: 2Gi
-        cpu: 1000m
-      requests:
-        cpu: 500m
-        memory: 1Gi
     http:
       tls:
         selfSignedCertificate:
