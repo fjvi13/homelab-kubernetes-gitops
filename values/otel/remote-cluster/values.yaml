@@ -3,6 +3,7 @@
 # For advanced configuration options, refer to the [official OpenTelemetry Helm chart](https://github.com/open-telemetry/opentelemetry-helm-charts/blob/main/charts/opentelemetry-kube-stack/values.yaml)
 # This file has been tested together with opentelemetry-kube-stack helm chart version: 0.3.3
 opentelemetry-operator:
+  replicas: 1
   manager:
     extraArgs:
       - --enable-go-instrumentation
@@ -39,6 +40,15 @@ collectors:
   #  Auto-instrumentation SDKs will use this endpoint.
   daemon:
     fullnameOverride: "opentelemetry-kube-stack-daemon"
+    replicas: 1
+    enabled: true
+    resources:
+      limits:
+        cpu: 1500m
+        memory: 1500Mi
+      requests:
+        cpu: 100m
+        memory: 500Mi
     env:
       - name: ELASTIC_AGENT_OTEL
         value: '"true"'
@@ -384,7 +394,7 @@ collectors:
         cpu: 100m
         memory: 500Mi
     suffix: gateway
-    replicas: 2
+    replicas: 1
     enabled: true
     env:
       - name: ELASTIC_AGENT_OTEL
