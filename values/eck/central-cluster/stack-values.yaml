@@ -8,6 +8,25 @@ eck-elasticsearch:
   enabled: true
   fullnameOverride: elasticsearch
   version: 9.3.0
+  spec:
+    nodeSets:
+      - name: default
+        resources:
+          limits:
+            memory: 2Gi
+            cpu: 1000m
+          requests:
+            cpu: 500m
+            memory: 2Gi
+        volumeClaimTemplates:
+        - metadata:
+            name: elasticsearch-data
+          spec:
+            accessModes:
+            - ReadWriteOnce
+            resources:
+              requests:
+                storage: 10Gi
 
 
 # If enabled, will use the eck-kibana chart and deploy a Kibana resource.
