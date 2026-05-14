@@ -28,6 +28,7 @@ eck-elasticsearch:
       spec:
         accessModes:
         - ReadWriteOnce
+        storageClassName: topolvm-provisioner
         resources:
           requests:
             storage: 10Gi
