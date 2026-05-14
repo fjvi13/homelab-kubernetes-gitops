@@ -31,7 +31,7 @@ spec:
     metadata:
       name: "eck-{{.values.operatorChartVersion}}-{{.name}}"
     spec:
-      project: default
+      project: addons
       sources:
         - repoURL: '{{ .values.chartRepository}}'
           targetRevision: '{{ .values.operatorChartVersion}}'
