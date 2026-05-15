@@ -61,7 +61,7 @@ collectors:
   #  node level and exposing an OTLP endpoint for data ingestion.
   #  Auto-instrumentation SDKs will use this endpoint.
   daemon:
-    enabled: false
+    enabled: true
     fullnameOverride: "opentelemetry-kube-stack-daemon"
     resources:
       limits:
