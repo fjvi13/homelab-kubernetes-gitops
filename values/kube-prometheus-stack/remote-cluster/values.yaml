@@ -101,3 +101,16 @@ prometheus:
       # requests:
       #   cpu: 500m
       #   memory: 512Mi
+    volumes:
+      - name: scratch
+        ephemeral:
+          volumeClaimTemplate:
+            spec:
+              accessModes: ["ReadWriteOnce"]
+              storageClassName: topolvm-provisioner
+              resources:
+                requests:
+                  storage: 2Gi
+    volumeMounts:
+      - name: scratch
+        mountPath: /prometheus
