@@ -341,9 +341,11 @@ collectors:
             - container.id
       extensions:
         cgroupruntime: {}
+        file_storage:
+          directory: /var/lib/otelcol-scratch
       # [Service Section](https://opentelemetry.io/docs/collector/configuration/#service)
       service:
-        extensions: [cgroupruntime]
+        extensions: [cgroupruntime, file_storage]
         pipelines:
           # Disable default non used kube-stack Helm Chart pipelines
           logs: null
@@ -473,8 +475,10 @@ collectors:
             mode: otel
       extensions:
         cgroupruntime: {}
+        file_storage:
+          directory: /var/lib/otelcol-scratch
       service:
-        extensions: [cgroupruntime]
+        extensions: [cgroupruntime, file_storage]
         pipelines:
           metrics:
             receivers: [otlp]
