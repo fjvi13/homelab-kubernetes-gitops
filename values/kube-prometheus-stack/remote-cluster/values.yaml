@@ -66,7 +66,7 @@ prometheus:
   agentMode: true
   prometheusSpec:
     scrapeInterval: "120s"
-    replicas: 1
+    replicas: 0
     externalLabels:
       cluster: "remote-cluster"
     replicaExternalLabelName: "prometheus_replica"
