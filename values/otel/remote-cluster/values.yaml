@@ -506,7 +506,7 @@ instrumentation:
   enabled: true # Enable/disable auto-instrumentation.
   env: []
   exporter:
-    endpoint: http://opentelemetry-kube-stack-daemon-collector.opentelemetry-operator-system.svc.cluster.local:4318 # The daemonset OpenTelemetry Collector endpoint where telemetry data will be exported.
+    endpoint: http://opentelemetry-kube-stack-daemon-collector.otel-system.svc.cluster.local:4318 # The daemonset OpenTelemetry Collector endpoint where telemetry data will be exported.
   propagators:
     - tracecontext # W3C TraceContext propagator for distributed tracing.
     - baggage # Baggage propagator to include baggage information in trace context.
