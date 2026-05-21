@@ -58,7 +58,10 @@ configs:
   ## Ref: https://github.com/argoproj/argo-cd/blob/master/docs/operator-manual/rbac.md
   rbac:
     policy.csv: |
-      g, argocd_dev, role:readonly
+      p, role:python_app, applications, get, apps/python-app-*, allow
+      
+      g, argocd_dev, role:python_app
+
 
 ## Application controller
 controller:
