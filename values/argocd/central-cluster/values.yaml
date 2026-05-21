@@ -18,13 +18,16 @@ configs:
   # General Argo CD configuration
   ## Ref: https://github.com/argoproj/argo-cd/blob/master/docs/operator-manual/argocd-cm.yaml
   cm:
+    url: http://argocd.lab
+
      # -- Timeout to discover if a new manifests version got published to the repository
     timeout.reconciliation: 3600s #180s
 
     # -- Maximum jitter added to the reconciliation timeout to spread out refreshes and reduce repo-server load
     timeout.reconciliation.jitter: 60s
 
-    accounts.argocd_dev: login
+    accounts.manu: login
+    accounts.fran: login
 
   # Argo CD configuration parameters
   ## Ref: https://github.com/argoproj/argo-cd/blob/master/docs/operator-manual/argocd-cmd-params-cm.yaml
@@ -58,10 +61,11 @@ configs:
   ## Ref: https://github.com/argoproj/argo-cd/blob/master/docs/operator-manual/rbac.md
   rbac:
     policy.csv: |
-      p, role:python_app, applications, get, apps/python-app-*, allow
-      
-      g, argocd_dev, role:python_app
+      p, role:developers, applications, get, apps/*, allow
+      p, role:topolvm_operators, applications, *, addons/topolvm-*, allow
 
+      g, manu, role:developers
+      g, fran, role:developers
 
 ## Application controller
 controller:
