@@ -65,7 +65,7 @@ configs:
       p, role:topolvm_operators, applications, *, addons/topolvm-*, allow
 
       g, manu, role:developers
-      g, fran, role:developers
+      g, fran, role:topolvm_operators
 
 ## Application controller
 controller:
