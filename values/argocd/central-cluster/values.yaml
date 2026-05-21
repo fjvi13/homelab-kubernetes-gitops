@@ -24,6 +24,8 @@ configs:
     # -- Maximum jitter added to the reconciliation timeout to spread out refreshes and reduce repo-server load
     timeout.reconciliation.jitter: 60s
 
+    accounts.argocd_dev: login
+
   # Argo CD configuration parameters
   ## Ref: https://github.com/argoproj/argo-cd/blob/master/docs/operator-manual/argocd-cmd-params-cm.yaml
   params:
@@ -46,6 +48,17 @@ configs:
     # # Enables profile endpoint on the internal metrics port
     # applicationsetcontroller.profile.enabled: "false"  
 
+    # -- Repo server RPC call timeout seconds.
+    controller.repo.server.timeout.seconds: "60"
+  
+    # Number of allowed concurrent kubectl fork/execs. Any value less than 1 means no limit.
+    controller.kubectl.parallelism.limit: "20"
+
+  # Argo CD RBAC policy configuration
+  ## Ref: https://github.com/argoproj/argo-cd/blob/master/docs/operator-manual/rbac.md
+  rbac:
+    policy.csv: |
+      g, argocd_dev, role:readonly
 
 ## Application controller
 controller:
