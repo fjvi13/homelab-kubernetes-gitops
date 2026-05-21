@@ -442,15 +442,16 @@ collectors:
       connectors:
         # [Elastic APM Connector](https://github.com/elastic/opentelemetry-collector-components/tree/main/connector/elasticapmconnector)
         elasticapm: 
-          limits:
-            resource: 
-              max_cardinality: 8000
-            scope:
-              max_cardinality: 4000
-            metric:
-              max_cardinality: 4000
-            datapoint:
-              max_cardinality: 4000
+          aggregation:
+            limits:
+              resource: 
+                max_cardinality: 8000
+              scope:
+                max_cardinality: 4000
+              metric:
+                max_cardinality: 4000
+              datapoint:
+                max_cardinality: 4000
       receivers:
         otlp:
           protocols:
