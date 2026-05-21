@@ -503,6 +503,34 @@ collectors:
                     ],
                 },
             },
+            # Low sample for noisy endpoints
+            {
+              name: noisy-endpoints,
+              type: and,
+              and:
+                {
+                  and_sub_policy:
+                    [
+                      {
+                        # filter by route
+                        name: route-name-policy,
+                        type: string_attribute,
+                        string_attribute:
+                          {
+                            key: http.route,
+                            values: [/openapi.json, /docs],
+                            enabled_regex_matching: true,
+                          },
+                      },
+                      {
+                        # apply 10% probabilistic sampling
+                        name: probabilistic-policy,
+                        type: probabilistic,
+                        probabilistic: { sampling_percentage: 10 },
+                      },
+                    ],
+                },
+            },
             # Sample 100% of traces except for routes /openapi.json and /docs
             {
               name: high-sampling-endpoints,
@@ -563,7 +591,7 @@ collectors:
             exporters: [debug, elasticapm, elasticsearch/otel]
           traces:
             receivers: [otlp]
-            processors: [batch, elasticapm]
+            processors: [batch, elasticapm, tail_sampling]
             exporters: [debug, elasticapm, elasticsearch/otel]
           metrics/aggregated-otel-metrics:
             receivers:
