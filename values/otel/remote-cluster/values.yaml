@@ -461,6 +461,79 @@ collectors:
         # [Elastic APM Processor](https://github.com/elastic/opentelemetry-collector-components/tree/main/processor/elasticapmprocessor)
         # The processor enriches traces with elastic specific requirements.
         elasticapm: {}
+        tail_sampling:
+          decision_wait: 10s
+          num_traces: 100
+          expected_new_traces_per_sec: 10
+          sample_on_first_match: true
+          decision_cache: 
+            sampled_cache_size: 1000
+          policies: [
+            # Always sample error traces
+            {
+              name: error-traces,
+              type: status_code,
+              status_code: { status_codes: [ERROR] }
+            },
+            # Sample 0.1% of healthy traces
+            {
+              name: drop-health-checks,
+              type: and,
+              and:
+                {
+                  and_sub_policy:
+                    [
+                      {
+                        # filter by route
+                        name: route-healthy-policy,
+                        type: string_attribute,
+                        string_attribute:
+                          {
+                            key: http.route,
+                            values: [/healthy, /healthz, /ready, /live],
+                            enabled_regex_matching: true,
+                          },
+                      },
+                      {
+                        # apply 0.1% probabilistic sampling
+                        name: probabilistic-policy,
+                        type: probabilistic,
+                        probabilistic: { sampling_percentage: 0.1 },
+                      },
+                    ],
+                },
+            },
+            # Sample 100% of traces except for routes /openapi.json and /docs
+            {
+              name: high-sampling-endpoints,
+              type: and,
+              and:
+                {
+                  and_sub_policy:
+                    [
+                      {
+                        # apply to all routes except the ones specified 
+                        name: route-name-policy,
+                        type: string_attribute,
+                        string_attribute:
+                          {
+                            key: http.route,
+                            values: [/openapi.json, /docs],
+                            enabled_regex_matching: true,
+                            invert_match: true,
+                          },
+                      },
+                      {
+                        # apply 100% probabilistic sampling
+                        name: probabilistic-policy,
+                        type: probabilistic,
+                        probabilistic: { sampling_percentage: 100 },
+                      },
+                    ],
+                },
+            },
+          ]
+
       exporters:
         debug: {}
         # [Elasticsearch exporter](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/exporter/elasticsearchexporter/README.md)
