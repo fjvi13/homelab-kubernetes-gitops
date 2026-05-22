@@ -314,6 +314,9 @@ collectors:
           insecure_skip_verify: true
           k8s_api_config:
             auth_type: serviceAccount
+          metric_groups:
+            - pod
+            - container
           metrics:
             k8s.pod.memory.node.utilization:
               enabled: true
@@ -339,6 +342,8 @@ collectors:
               enabled: true
           extra_metadata_labels:
             - container.id
+            - container.name
+            - pod.name
       extensions:
         cgroupruntime: {}
         file_storage:
@@ -583,7 +588,7 @@ collectors:
           # tls:
           #   insecure_skip_verify: true
           mapping:
-            mode: otel
+            allowed_modes: otel
       extensions:
         cgroupruntime: {}
         file_storage:
