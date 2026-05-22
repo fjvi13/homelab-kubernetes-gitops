@@ -375,13 +375,13 @@ collectors:
               - hostmetrics
             processors:
               - batch/metrics
-              - k8s_attributes
-              - resourcedetection/system
-              - resourcedetection/eks
-              - resourcedetection/gcp
-              - resourcedetection/aks
+              #- k8s_attributes
+              # - resourcedetection/system
+              # - resourcedetection/eks
+              # - resourcedetection/gcp
+              # - resourcedetection/aks
               - resource/hostname
-              - resource/cloud
+              # - resource/cloud
             exporters:
               # - debug
               - otlp_grpc/gateway
