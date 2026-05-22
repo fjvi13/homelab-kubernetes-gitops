@@ -360,13 +360,13 @@ collectors:
               - file_log
             processors:
               - batch
-              - k8s_attributes
-              - resourcedetection/system
-              - resourcedetection/eks
-              - resourcedetection/gcp
-              - resourcedetection/aks
+              # - k8s_attributes
+              # - resourcedetection/system
+              # - resourcedetection/eks
+              # - resourcedetection/gcp
+              # - resourcedetection/aks
               - resource/hostname
-              - resource/cloud
+              # - resource/cloud
             exporters:
               - otlp_grpc/gateway
           metrics/node/otel:
@@ -375,7 +375,7 @@ collectors:
               - hostmetrics
             processors:
               - batch/metrics
-              #- k8s_attributes
+              # - k8s_attributes
               # - resourcedetection/system
               # - resourcedetection/eks
               # - resourcedetection/gcp
