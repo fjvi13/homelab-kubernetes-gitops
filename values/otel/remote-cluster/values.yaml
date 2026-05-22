@@ -342,8 +342,7 @@ collectors:
               enabled: true
           extra_metadata_labels:
             - container.id
-            - container.name
-            - pod.name
+
       extensions:
         cgroupruntime: {}
         file_storage:
