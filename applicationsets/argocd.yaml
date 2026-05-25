@@ -24,7 +24,7 @@ spec:
           - clusters:
               selector:
                 matchLabels:
-                  cluster: central-cluster
+                  cluster: central-cluste
                   env: lab
               values:
                 chartVersion: 9.5.14
