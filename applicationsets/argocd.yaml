@@ -5,6 +5,8 @@ metadata:
   namespace: argocd
 spec:
   goTemplate: true
+  syncPolicy:
+    preserveResourcesOnDeletion: true
   generators:
     - merge:
         mergeKeys:
@@ -46,7 +48,6 @@ spec:
         name: '{{ .name }}'
         namespace: argocd
       syncPolicy:
-        preserveResourcesOnDeletion: true
         syncOptions:
         - CreateNamespace=true
         - ServerSideApply=true
