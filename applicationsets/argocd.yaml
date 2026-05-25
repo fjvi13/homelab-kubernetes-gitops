@@ -46,6 +46,7 @@ spec:
         name: '{{ .name }}'
         namespace: argocd
       syncPolicy:
+        preserveResourcesOnDeletion: true
         syncOptions:
         - CreateNamespace=true
         - ServerSideApply=true
