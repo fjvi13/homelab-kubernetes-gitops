@@ -29,8 +29,8 @@ configs:
     accounts.manu: login
     accounts.fran: login
 
-    # # An optional comma-separated list of node labels to propagate to the application pod view.
-    # application.allowedNodeLabels: topology.kubernetes.io/zone,node.kubernetes.io/instance-type
+    # An optional comma-separated list of node labels to propagate to the application pod view.
+    application.allowedNodeLabels: node.kubernetes.io/instance-type
 
   # Argo CD configuration parameters
   ## Ref: https://github.com/argoproj/argo-cd/blob/master/docs/operator-manual/argocd-cmd-params-cm.yaml
