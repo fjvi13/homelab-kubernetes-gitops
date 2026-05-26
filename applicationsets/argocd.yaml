@@ -1,0 +1,52 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: argocd
+  namespace: argocd
+spec:
+  goTemplate: true
+  syncPolicy:
+    preserveResourcesOnDeletion: true
+  generators:
+    - merge:
+        mergeKeys:
+          - server
+        generators:
+          - clusters:
+              selector:
+                matchExpressions:
+                  - key: enable_argocd
+                    operator: In
+                    values: ['true']
+              values:
+                chart: argo-cd
+                chartRepository: https://argoproj.github.io/argo-helm
+          - clusters:
+              selector:
+                matchLabels:
+                  env: dev
+              values:
+                chartVersion: 9.5.14
+  template:
+    metadata:
+      name: "argocd-{{.values.chartVersion}}-{{.name}}"
+    spec:
+      project: default
+      sources:
+        - repoURL: '{{ .values.chartRepository}}'
+          targetRevision: '{{ .values.chartVersion}}'
+          chart: '{{ .values.chart}}'
+          helm:
+            releaseName: argocd
+            valueFiles:
+              - $repo/values/argocd/{{ .name }}/values.yaml
+        - repoURL: https://github.com/fjvi13/homelab-kubernetes-gitops.git
+          targetRevision: HEAD
+          ref: repo
+      destination:
+        name: '{{ .name }}'
+        namespace: argocd
+      syncPolicy:
+        syncOptions:
+        - CreateNamespace=true
+        - ServerSideApply=true
