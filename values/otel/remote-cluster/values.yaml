@@ -241,7 +241,7 @@ collectors:
             - id: container-parser # Extract container's metadata
               type: container
             - id: json-parser # Parse logs in JSON format
-              type: json
+              type: json_parser
               if: 'body matches "^{.*}$"'
               parse_from: body.text
               timestamp: 
