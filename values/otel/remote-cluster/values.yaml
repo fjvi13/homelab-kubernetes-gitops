@@ -109,6 +109,11 @@ collectors:
           # explicitly set send_batch_max_size to 0, as splitting metrics requests may cause version_conflict_engine_exception in TSDB
           send_batch_max_size: 0
           timeout: 1s
+        # Filter to drop debug logs from the file_log receiver to avoid large volume of debug logs being sent to the gateway.
+        filter/debug-logs:
+          error_mode: propagate
+          log_conditions:
+            - attributes["level"] == "debug"
         # [Resource Detection Processor](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor/resourcedetectionprocessor)
         resourcedetection/eks:
           # Detects resources from environment variables and EKS (Elastic Kubernetes Service).
@@ -247,8 +252,6 @@ collectors:
               timestamp: 
                 parse_from: attributes.ts
                 layout: '%Y-%m-%dT%H:%M:%S%z'
-
-                
         # [Hostmetrics Receiver](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/hostmetricsreceiver)
         hostmetrics:
           collection_interval: 60s
