@@ -243,7 +243,7 @@ collectors:
             - id: json-parser # Parse logs in JSON format
               type: json_parser
               if: 'body matches "^{.*}$"'
-              parse_from: body.text
+              parse_from: body
               timestamp: 
                 parse_from: body.ts
                 layout: '%Y-%m-%dT%H:%M:%S%z'
