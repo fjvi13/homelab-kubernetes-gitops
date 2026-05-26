@@ -388,7 +388,7 @@ collectors:
               - memory_limiter
               - filter/debug-logs
               - batch
-              # - k8s_attributes
+              - k8s_attributes
               # - resourcedetection/system
               # - resourcedetection/eks
               # - resourcedetection/gcp
@@ -404,7 +404,7 @@ collectors:
             processors:
               - memory_limiter
               - batch/metrics
-              # - k8s_attributes
+              - k8s_attributes
               # - resourcedetection/system
               # - resourcedetection/eks
               # - resourcedetection/gcp
