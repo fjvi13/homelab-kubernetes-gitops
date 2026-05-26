@@ -613,6 +613,15 @@ collectors:
                 },
             },
           ]
+        transform/route-python-app:
+          error_mode: ignore
+          log_statements:
+            - context: resource
+              conditions:
+                - attributes["service.name"] == "python-app"
+              statements:
+                - set(attributes["data_stream.dataset"], "python_app")
+                - set(attributes["data_stream.namespace"], "otel")
 
       exporters:
         debug: {}
