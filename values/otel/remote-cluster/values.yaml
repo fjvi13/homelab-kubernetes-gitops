@@ -113,7 +113,7 @@ collectors:
         filter/debug-logs:
           error_mode: propagate
           log_conditions:
-            - severity_number < SEVERITY_NUMBER_INFO
+            - log.severity_number < SEVERITY_NUMBER_INFO
         # [Resource Detection Processor](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor/resourcedetectionprocessor)
         resourcedetection/eks:
           # Detects resources from environment variables and EKS (Elastic Kubernetes Service).
