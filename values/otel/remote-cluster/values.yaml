@@ -655,7 +655,7 @@ collectors:
             exporters: [debug, elasticapm, elasticsearch/otel]
           traces:
             receivers: [otlp]
-            processors: [memory_limiter, tail_sampling, batch, elasticapm, tail_sampling]
+            processors: [memory_limiter, tail_sampling, batch, elasticapm]
             exporters: [debug, elasticapm, elasticsearch/otel]
           metrics/aggregated-otel-metrics:
             receivers:
