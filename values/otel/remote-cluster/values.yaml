@@ -378,6 +378,7 @@ collectors:
               - file_log
             processors:
               - memory_limiter
+              - filter/debug-logs
               - batch
               # - k8s_attributes
               # - resourcedetection/system
