@@ -240,6 +240,15 @@ collectors:
           operators:
             - id: container-parser # Extract container's metadata
               type: container
+            - id: json-parser # Parse logs in JSON format
+              type: json
+              if: 'body matches "^{.*}$"'
+              parse_from: body.text
+              timestamp: 
+                parse_from: body.ts
+                layout: RFC3339
+
+                
         # [Hostmetrics Receiver](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/hostmetricsreceiver)
         hostmetrics:
           collection_interval: 60s
