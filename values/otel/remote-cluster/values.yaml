@@ -113,7 +113,7 @@ collectors:
         filter/debug-logs:
           error_mode: propagate
           log_conditions:
-            - attributes["level"] == "debug"
+            - severity_number < SEVERITY_NUMBER_INFO
         # [Resource Detection Processor](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor/resourcedetectionprocessor)
         resourcedetection/eks:
           # Detects resources from environment variables and EKS (Elastic Kubernetes Service).
@@ -252,6 +252,14 @@ collectors:
               timestamp: 
                 parse_from: attributes.ts
                 layout: '%Y-%m-%dT%H:%M:%S%z'
+              severity:
+                parse_from: attributes.level
+                mapping:
+                  debug: [debug, DEBUG, trace, TRACE]
+                  info: [info, INFO]
+                  warn: [warn, WARN, warning, WARNING]
+                  error: [error, ERROR]
+                  fatal: [fatal, FATAL]
         # [Hostmetrics Receiver](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/hostmetricsreceiver)
         hostmetrics:
           collection_interval: 60s
