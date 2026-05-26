@@ -246,7 +246,7 @@ collectors:
               parse_from: body.text
               timestamp: 
                 parse_from: body.ts
-                layout: RFC3339
+                layout: '%Y-%m-%dT%H:%M:%S%z'
 
                 
         # [Hostmetrics Receiver](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/hostmetricsreceiver)
