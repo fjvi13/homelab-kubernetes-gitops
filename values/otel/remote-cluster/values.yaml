@@ -464,6 +464,12 @@ collectors:
             http:
               endpoint: ${env:OTEL_K8S_POD_IP}:4318
       processors:
+        memory_limiter:
+          check_interval: 1s
+          limit_mib: 1450
+          spike_limit_mib: 290
+          limit_percentage: 75
+          spike_limit_percentage: 10
         batch:
           send_batch_size: 1000
           timeout: 1s
@@ -597,20 +603,20 @@ collectors:
         pipelines:
           metrics:
             receivers: [otlp]
-            processors: [batch/metrics]
+            processors: [memory_limiter,batch/metrics]
             exporters: [debug, elasticsearch/otel]
           logs:
             receivers: [otlp]
-            processors: [batch]
+            processors: [memory_limiter, batch]
             exporters: [debug, elasticapm, elasticsearch/otel]
           traces:
             receivers: [otlp]
-            processors: [batch, elasticapm, tail_sampling]
+            processors: [memory_limiter,batch, elasticapm, tail_sampling]
             exporters: [debug, elasticapm, elasticsearch/otel]
           metrics/aggregated-otel-metrics:
             receivers:
               - elasticapm
-            processors: []
+            processors: [memory_limiter]
             exporters:
               - debug
               - elasticsearch/otel
