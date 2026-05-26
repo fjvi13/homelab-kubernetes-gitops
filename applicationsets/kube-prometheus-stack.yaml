@@ -22,8 +22,8 @@ spec:
           - clusters:
               selector:
                 matchLabels:
-                  # env: lab
-                  cluster: central-cluster
+                  env: lab
+                  # cluster: central-cluster
               values:
                 chartVersion: 78.5.0
                 branchReference: HEAD
