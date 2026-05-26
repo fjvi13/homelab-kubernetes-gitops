@@ -587,7 +587,7 @@ collectors:
           # tls:
           #   insecure_skip_verify: true
           mapping:
-            mode: ecs
+            allowed_modes: otel
       extensions:
         cgroup_runtime: {}
         file_storage:
