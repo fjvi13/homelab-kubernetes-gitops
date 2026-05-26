@@ -98,6 +98,12 @@ collectors:
       processors:
         # [Batch Processor](https://github.com/open-telemetry/opentelemetry-collector/tree/main/processor/batchprocessor)
         # inherit any values from helm chart
+        memory_limiter:
+          check_interval: 1s
+          limit_mib: 1450
+          spike_limit_mib: 290
+          limit_percentage: 75
+          spike_limit_percentage: 10
         batch: {}
         batch/metrics:
           # explicitly set send_batch_max_size to 0, as splitting metrics requests may cause version_conflict_engine_exception in TSDB
@@ -359,6 +365,7 @@ collectors:
             receivers:
               - file_log
             processors:
+              - memory_limiter
               - batch
               # - k8s_attributes
               # - resourcedetection/system
@@ -374,6 +381,7 @@ collectors:
               - kubeletstats
               - hostmetrics
             processors:
+              - memory_limiter
               - batch/metrics
               # - k8s_attributes
               # - resourcedetection/system
@@ -389,6 +397,7 @@ collectors:
             receivers:
               - otlp
             processors:
+              - memory_limiter
               - batch/metrics
               - resource/hostname
             exporters:
@@ -397,6 +406,7 @@ collectors:
             receivers:
               - otlp
             processors:
+              - memory_limiter
               - batch
               - resource/hostname
             exporters:
@@ -405,6 +415,7 @@ collectors:
             receivers:
               - otlp
             processors:
+              - memory_limiter
               - batch
               - resource/hostname
             exporters:
