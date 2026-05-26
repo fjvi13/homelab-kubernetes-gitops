@@ -245,7 +245,7 @@ collectors:
               if: 'body matches "^{.*}$"'
               parse_from: body
               timestamp: 
-                parse_from: body.ts
+                parse_from: attributes.ts
                 layout: '%Y-%m-%dT%H:%M:%S%z'
 
                 
