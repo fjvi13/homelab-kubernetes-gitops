@@ -96,14 +96,14 @@ collectors:
           tls:
             insecure: true
       processors:
-        # [Batch Processor](https://github.com/open-telemetry/opentelemetry-collector/tree/main/processor/batchprocessor)
-        # inherit any values from helm chart
         memory_limiter:
           check_interval: 1s
           limit_mib: 1450
           spike_limit_mib: 290
           limit_percentage: 75
           spike_limit_percentage: 10
+        # [Batch Processor](https://github.com/open-telemetry/opentelemetry-collector/tree/main/processor/batchprocessor)
+        # inherit any values from helm chart
         batch: {}
         batch/metrics:
           # explicitly set send_batch_max_size to 0, as splitting metrics requests may cause version_conflict_engine_exception in TSDB
@@ -222,6 +222,19 @@ collectors:
               - "service.name"
               - "service.version"
               - "service.instance.id"
+        transform/ecs-mode:
+          log_statements:
+            - context: scope
+              statements:
+                - set(attributes["elastic.mapping.mode"], "ecs")
+          trace_statements:
+            - context: scope
+              statements:
+                - set(attributes["elastic.mapping.mode"], "ecs")
+          metric_statements:
+            - context: scope
+              statements:
+                - set(attributes["elastic.mapping.mode"], "ecs")
         transform/route-python-app:
           error_mode: ignore
           log_statements:
@@ -400,6 +413,7 @@ collectors:
               - filter/debug-logs
               - batch
               - k8s_attributes
+              - transform/ecs-mode
               # - resourcedetection/system
               # - resourcedetection/eks
               # - resourcedetection/gcp
@@ -417,6 +431,7 @@ collectors:
               - memory_limiter
               - batch/metrics
               - k8s_attributes
+              - transform/ecs-mode
               # - resourcedetection/system
               # - resourcedetection/eks
               # - resourcedetection/gcp
@@ -432,6 +447,7 @@ collectors:
             processors:
               - memory_limiter
               - batch/metrics
+              - transform/ecs-mode
               - resource/hostname
             exporters:
               - otlp_grpc/gateway
@@ -441,6 +457,7 @@ collectors:
             processors:
               - memory_limiter
               - batch
+              - transform/ecs-mode
               - resource/hostname
             exporters:
               - otlp_grpc/gateway
@@ -450,6 +467,7 @@ collectors:
             processors:
               - memory_limiter
               - batch
+              - transform/ecs-mode
               - resource/hostname
             exporters:
               - otlp_grpc/gateway
@@ -637,7 +655,7 @@ collectors:
           # tls:
           #   insecure_skip_verify: true
           mapping:
-            allowed_modes: otel
+            allowed_modes: [otel, ecs]
       extensions:
         cgroup_runtime: {}
         file_storage:
@@ -647,20 +665,20 @@ collectors:
         pipelines:
           metrics:
             receivers: [otlp]
-            processors: [memory_limiter,batch/metrics]
+            processors: [memory_limiter,batch/metrics, transform/ecs-mode]
             exporters: [debug, elasticsearch/otel]
           logs:
             receivers: [otlp]
-            processors: [memory_limiter, batch]
+            processors: [memory_limiter, batch, transform/ecs-mode]
             exporters: [debug, elasticapm, elasticsearch/otel]
           traces:
             receivers: [otlp]
-            processors: [memory_limiter, tail_sampling, batch, elasticapm]
+            processors: [memory_limiter, tail_sampling, batch, transform/ecs-mode, elasticapm]
             exporters: [debug, elasticapm, elasticsearch/otel]
           metrics/aggregated-otel-metrics:
             receivers:
               - elasticapm
-            processors: [memory_limiter]
+            processors: [memory_limiter, transform/ecs-mode]
             exporters:
               - debug
               - elasticsearch/otel
