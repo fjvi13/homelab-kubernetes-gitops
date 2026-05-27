@@ -227,10 +227,6 @@ collectors:
             - context: scope
               statements:
                 - set(attributes["elastic.mapping.mode"], "ecs")
-          trace_statements:
-            - context: scope
-              statements:
-                - set(attributes["elastic.mapping.mode"], "ecs")
           metric_statements:
             - context: scope
               statements:
