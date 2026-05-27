@@ -665,20 +665,20 @@ collectors:
         pipelines:
           metrics:
             receivers: [otlp]
-            processors: [memory_limiter,batch/metrics, transform/ecs-mode]
+            processors: [memory_limiter,batch/metrics]
             exporters: [debug, elasticsearch/otel]
           logs:
             receivers: [otlp]
-            processors: [memory_limiter, batch, transform/ecs-mode]
+            processors: [memory_limiter, batch]
             exporters: [debug, elasticapm, elasticsearch/otel]
           traces:
             receivers: [otlp]
-            processors: [memory_limiter, tail_sampling, batch, transform/ecs-mode, elasticapm]
+            processors: [memory_limiter, tail_sampling, batch, elasticapm]
             exporters: [debug, elasticapm, elasticsearch/otel]
           metrics/aggregated-otel-metrics:
             receivers:
               - elasticapm
-            processors: [memory_limiter, transform/ecs-mode]
+            processors: [memory_limiter]
             exporters:
               - debug
               - elasticsearch/otel
