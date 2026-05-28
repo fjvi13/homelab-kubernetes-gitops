@@ -266,9 +266,9 @@ collectors:
             - id: json-parser # Parse logs in JSON format
               type: json_parser
               if: 'body matches "^{.*}$"'
-              parse_from: message
+              parse_from: body
               severity:
-                parse_from: level
+                parse_from: attributes.level
                 mapping:
                   debug: [debug, DEBUG, trace, TRACE]
                   info: [info, INFO]
@@ -277,8 +277,8 @@ collectors:
                   fatal: [fatal, FATAL]
             - id: timestamp-parser # Parse timestamp from 'ts' field (only if present)
               type: time_parser
-              if: 'ts != nil'
-              parse_from: ts
+              if: 'attributes.ts != nil'
+              parse_from: attributes.ts
               layout: '%Y-%m-%dT%H:%M:%S%z'
         # [Hostmetrics Receiver](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/hostmetricsreceiver)
         hostmetrics:
