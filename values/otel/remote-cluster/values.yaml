@@ -610,7 +610,7 @@ instrumentation:
     - b3 # B3 propagator for Zipkin-based distributed tracing compatibility.
   sampler:
     type: parentbased_traceidratio # Sampler type
-    argument: "1.0" # Sampling rate set to 100% (all traces are sampled).
+    argument: "0.2" # Sampling rate set to 100% (all traces are sampled).
   java:
     image: docker.elastic.co/observability/elastic-otel-javaagent:1.11.0
   nodejs:
