@@ -235,11 +235,8 @@ collectors:
           error_mode: ignore
           log_statements:
             - context: resource
-              conditions:
-                - attributes["service.name"] == "python-app"
               statements:
-                - set(attributes["data_stream.dataset"], "python_app")
-                - set(attributes["data_stream.namespace"], "otel")
+                - set(attributes["elasticsearch.index"], "akslogs")
         tail_sampling:
           sampling_strategy: span-ingest
           decision_wait: 10s
@@ -569,7 +566,7 @@ collectors:
           #   insecure_skip_verify: true
           mapping:
             allowed_modes: [otel, ecs]
-          logs_index: "akslogs"
+          # logs_index: "akslogs"
       extensions:
         cgroup_runtime: {}
         file_storage:
@@ -601,7 +598,9 @@ collectors:
 instrumentation:
   name: elastic-instrumentation
   enabled: true # Enable/disable auto-instrumentation.
-  env: []
+  env: 
+    - name: ELASTIC_OTEL_OPAMP_ENDPOINT
+      value: 
   exporter:
     endpoint: http://opentelemetry-kube-stack-daemon-collector.otel-system.svc.cluster.local:4318 # The daemonset OpenTelemetry Collector endpoint where telemetry data will be exported.
   propagators:
