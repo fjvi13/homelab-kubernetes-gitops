@@ -240,6 +240,8 @@ collectors:
               statements:
                 - set(attributes["data_stream.dataset"], "python_app")
                 - set(attributes["data_stream.namespace"], "otel")
+        probabilistic_sampler/traces:
+          sampling_percentage: 20
       receivers:
         # [OTLP Receiver](https://github.com/open-telemetry/opentelemetry-collector/tree/main/receiver/otlpreceiver)
         otlp:
@@ -462,6 +464,7 @@ collectors:
               - otlp
             processors:
               - memory_limiter
+              - probabilistic_sampler/traces
               - batch
               - transform/ecs-mode
               - resource/hostname
@@ -639,8 +642,7 @@ collectors:
                 },
             },
           ]
-        probabilistic_sampler/traces:
-          sampling_percentage: 20
+
       exporters:
         debug: {}
         # [Elasticsearch exporter](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/exporter/elasticsearchexporter/README.md)
@@ -671,7 +673,7 @@ collectors:
             exporters: [debug, elasticapm, elasticsearch/otel]
           traces:
             receivers: [otlp]
-            processors: [memory_limiter, probabilistic_sampler/traces, batch, elasticapm]
+            processors: [memory_limiter, batch, elasticapm]
             exporters: [debug, elasticapm, elasticsearch/otel]
           metrics/aggregated-otel-metrics:
             receivers:
