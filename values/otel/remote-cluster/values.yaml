@@ -478,7 +478,7 @@ collectors:
               - otlp
             processors:
               - memory_limiter
-              - tail_sampling
+              # - tail_sampling
               - batch
               - transform/ecs-mode
               - resource/hostname
