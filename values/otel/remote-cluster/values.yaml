@@ -639,7 +639,8 @@ collectors:
                 },
             },
           ]
-
+        probabilistic_sampler:
+          sampling_percentage: 20
       exporters:
         debug: {}
         # [Elasticsearch exporter](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/exporter/elasticsearchexporter/README.md)
@@ -670,7 +671,7 @@ collectors:
             exporters: [debug, elasticapm, elasticsearch/otel]
           traces:
             receivers: [otlp]
-            processors: [memory_limiter, tail_sampling, batch, elasticapm]
+            processors: [memory_limiter, probabilistic_sampler, batch, elasticapm]
             exporters: [debug, elasticapm, elasticsearch/otel]
           metrics/aggregated-otel-metrics:
             receivers:
