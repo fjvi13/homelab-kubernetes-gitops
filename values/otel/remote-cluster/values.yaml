@@ -240,8 +240,22 @@ collectors:
               statements:
                 - set(attributes["data_stream.dataset"], "python_app")
                 - set(attributes["data_stream.namespace"], "otel")
-        probabilistic_sampler/traces:
-          sampling_percentage: 20
+        tail_sampling:
+          sampling_strategy: span-ingest
+          decision_wait: 10s
+          num_traces: 100
+          expected_new_traces_per_sec: 10
+          sample_on_first_match: true
+          decision_cache: 
+            sampled_cache_size: 1000
+          policies: [
+            # Sample 20% of all traces
+             {
+            name: test-policy-4,
+            type: probabilistic,
+            probabilistic: {sampling_percentage: 20}
+            }
+          ]
       receivers:
         # [OTLP Receiver](https://github.com/open-telemetry/opentelemetry-collector/tree/main/receiver/otlpreceiver)
         otlp:
@@ -464,7 +478,7 @@ collectors:
               - otlp
             processors:
               - memory_limiter
-              - probabilistic_sampler/traces
+              - tail_sampling
               - batch
               - transform/ecs-mode
               - resource/hostname
@@ -542,107 +556,7 @@ collectors:
         # [Elastic APM Processor](https://github.com/elastic/opentelemetry-collector-components/tree/main/processor/elasticapmprocessor)
         # The processor enriches traces with elastic specific requirements.
         elasticapm: {}
-        tail_sampling:
-          decision_wait: 10s
-          num_traces: 100
-          expected_new_traces_per_sec: 10
-          sample_on_first_match: true
-          decision_cache: 
-            sampled_cache_size: 1000
-          policies: [
-            # Always sample error traces
-            {
-              name: error-traces,
-              type: status_code,
-              status_code: { status_codes: [ERROR] }
-            },
-            # Sample 0.1% of healthy traces
-            {
-              name: drop-health-checks,
-              type: and,
-              and:
-                {
-                  and_sub_policy:
-                    [
-                      {
-                        # filter by route
-                        name: route-healthy-policy,
-                        type: string_attribute,
-                        string_attribute:
-                          {
-                            key: http.route,
-                            values: [/healthy, /healthz, /ready, /live],
-                            enabled_regex_matching: true,
-                          },
-                      },
-                      {
-                        # apply 0.1% probabilistic sampling
-                        name: probabilistic-policy,
-                        type: probabilistic,
-                        probabilistic: { sampling_percentage: 0.1 },
-                      },
-                    ],
-                },
-            },
-            # Low sample for noisy endpoints
-            {
-              name: noisy-endpoints,
-              type: and,
-              and:
-                {
-                  and_sub_policy:
-                    [
-                      {
-                        # filter by route
-                        name: route-name-policy,
-                        type: string_attribute,
-                        string_attribute:
-                          {
-                            key: http.route,
-                            values: [/openapi.json, /docs],
-                            enabled_regex_matching: true,
-                          },
-                      },
-                      {
-                        # apply 10% probabilistic sampling
-                        name: probabilistic-policy,
-                        type: probabilistic,
-                        probabilistic: { sampling_percentage: 10 },
-                      },
-                    ],
-                },
-            },
-            # Sample 100% of traces except for routes /openapi.json and /docs
-            {
-              name: high-sampling-endpoints,
-              type: and,
-              and:
-                {
-                  and_sub_policy:
-                    [
-                      {
-                        # apply to all routes except the ones specified 
-                        name: route-name-policy,
-                        type: string_attribute,
-                        string_attribute:
-                          {
-                            key: http.route,
-                            values: [/openapi.json, /docs],
-                            enabled_regex_matching: true,
-                            invert_match: true,
-                          },
-                      },
-                      {
-                        # apply 100% probabilistic sampling
-                        name: probabilistic-policy,
-                        type: probabilistic,
-                        probabilistic: { sampling_percentage: 100 },
-                      },
-                    ],
-                },
-            },
-          ]
-
+        
       exporters:
         debug: {}
         # [Elasticsearch exporter](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/exporter/elasticsearchexporter/README.md)
