@@ -639,7 +639,7 @@ collectors:
                 },
             },
           ]
-        probabilistic_sampler:
+        probabilistic_sampler/traces:
           sampling_percentage: 20
       exporters:
         debug: {}
@@ -671,7 +671,7 @@ collectors:
             exporters: [debug, elasticapm, elasticsearch/otel]
           traces:
             receivers: [otlp]
-            processors: [memory_limiter, probabilistic_sampler, batch, elasticapm]
+            processors: [memory_limiter, probabilistic_sampler/traces, batch, elasticapm]
             exporters: [debug, elasticapm, elasticsearch/otel]
           metrics/aggregated-otel-metrics:
             receivers:
