@@ -657,6 +657,7 @@ collectors:
             - key: release
               operator: In
               values:
+                - otel
                 - prometheus
     config:
       receivers:
