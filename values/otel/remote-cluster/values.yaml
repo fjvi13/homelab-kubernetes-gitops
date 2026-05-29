@@ -824,15 +824,12 @@ kubernetesServiceMonitors:
 ##
 kubeApiServer:
   enabled: true
-  serviceMonitor:
-    enabled: true
-
+  namespace: kube-system
+  
 kubelet:
   enabled: true
   namespace: kube-system
   serviceMonitor:
-    enabled: true
-    kubelet: true
     interval: "30s"
 
 ## Component scraping the kube controller manager
