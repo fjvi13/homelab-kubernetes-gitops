@@ -5,6 +5,9 @@
 opentelemetry-operator:
   replicaCount: 1
   manager:
+    image:
+      repository: "ghcr.io/open-telemetry/opentelemetry-operator/opentelemetry-operator"
+      tag: "0.144.0"
     resources:
       limits:
         cpu: 500m
@@ -53,6 +56,24 @@ clusterRole:
     - apiGroups: [""]
       resources: ["events"]
       verbs: ["get", "list", "watch"]
+    # # Required by the prometheus receiver (used by the prometheus collector)
+    # - apiGroups: [""]
+    #   resources:
+    #     - "nodes"
+    #     - "nodes/metrics"
+    #     - "services"
+    #     - "endpoints"
+    #     - "pods"
+    #   verbs: ["get", "list", "watch"]
+    # - apiGroups: ["discovery.k8s.io"]
+    #   resources: ["endpointslices"]
+    #   verbs: ["get", "list", "watch"]
+    # - apiGroups: ["networking.k8s.io"]
+    #   resources: ["ingresses"]
+    #   verbs: ["get", "list", "watch"]
+    # # Required for scraping kubelet metrics and cAdvisor via SA token
+    # - nonResourceURLs: ["/metrics", "/metrics/cadvisor"]
+    #   verbs: ["get"]
 # `clusterName` specifies the name of the Kubernetes cluster. It sets the 'k8s.cluster.name' field.
 # Cluster Name is automatically detected for EKS/GKE/AKS. Add the below value in environments where cluster name cannot be detected.
 clusterName: remote-cluster
@@ -593,6 +614,109 @@ collectors:
             exporters:
               - debug
               - elasticsearch/otel
+  #  Prometheus collector — consumes existing kube-prometheus-stack ServiceMonitor / PodMonitor / Probe
+  #  CRDs via the OpenTelemetry Operator's TargetAllocator and writes to a Thanos Receive endpoint.
+  #  Runs in StatefulSet mode and uses the upstream OTel Collector Contrib image
+  #  (no Elastic-specific components needed for this pipeline).
+  prometheus:
+    mode: statefulset
+    enabled: true
+    replicas: 1
+    suffix: prom
+    fullnameOverride: "opentelemetry-kube-stack-prometheus"
+    image:
+      repository: "otel/opentelemetry-collector-contrib"
+      tag: "0.153.0"
+    resources:
+      limits:
+        cpu: 1
+        memory: 1Gi
+      requests:
+        cpu: 200m
+        memory: 512Mi
+    # TargetAllocator discovers targets from kube-prometheus-stack CRDs and distributes them across
+    # collector replicas. Selector mirrors the existing Prometheus Agent's serviceMonitorSelector.
+    targetAllocator:
+      enabled: true
+      replicas: 1
+      allocationStrategy: consistent-hashing
+      filterStrategy: relabel-config
+      serviceAccount: opentelemetry-targetallocator-sa
+      resources:
+        limits:
+          cpu: 200m
+          memory: 256Mi
+        requests:
+          cpu: 50m
+          memory: 64Mi
+      prometheusCR:
+        enabled: true
+        scrapeInterval: 120s
+        serviceMonitorSelector:
+          matchExpressions:
+            - key: release
+              operator: In
+              values:
+                - prometheus
+    config:
+      receivers:
+        # scrape_configs is intentionally empty — TargetAllocator pushes jobs at runtime.
+        prometheus:
+          config:
+            scrape_configs: []
+          target_allocator:
+            # endpoint: http://otelcol-targetallocator
+            interval: 120s
+            collector_id: ${env:POD_NAME}
+      processors:
+        memory_limiter:
+          check_interval: 5s
+          limit_percentage: 80
+          spike_limit_percentage: 25
+        batch:
+          send_batch_size: 2000
+          send_batch_max_size: 2000
+          timeout: 10s
+      exporters:
+        debug:
+          verbosity: basic
+        # [Prometheus Remote Write exporter](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/exporter/prometheusremotewriteexporter)
+        prometheusremotewrite/thanos:
+          endpoint: "http://receiver.lab/api/v1/receive"
+          tls:
+            insecure: true
+          timeout: 10s
+          # Preserve metric names verbatim — no _total/_seconds suffix munging.
+          add_metric_suffixes: false
+          # Promote OTel resource attributes to Prometheus labels.
+          resource_to_telemetry_conversion:
+            enabled: true
+          external_labels:
+            cluster: "remote-cluster"
+            # `source` lets us distinguish OTel-scraped vs Prometheus-Agent-scraped series in Thanos
+            # during the side-by-side parity window. Remove once Prometheus Agent is decommissioned.
+            source: "otel"
+          remote_write_queue:
+            enabled: true
+            queue_size: 20000
+            num_consumers: 10
+          retry_on_failure:
+            enabled: true
+            initial_interval: 100ms
+            max_interval: 10s
+            max_elapsed_time: 5m
+      service:
+        telemetry:
+          metrics:
+            level: detailed
+        pipelines:
+          metrics:
+            receivers: [prometheus]
+            processors: [memory_limiter, batch]
+            exporters: [prometheusremotewrite/thanos, debug]
+          # Explicitly null out default pipelines this collector does not use.
+          logs: null
+          traces: null
 # For more details on OpenTelemetry's zero-code instrumentation, see:
 # https://opentelemetry.io/docs/concepts/instrumentation/zero-code/
 instrumentation:
@@ -618,3 +742,143 @@ instrumentation:
     image: docker.elastic.co/observability/elastic-otel-python:1.12.0
   go:
     image: ghcr.io/open-telemetry/opentelemetry-go-instrumentation/autoinstrumentation-go:v0.24.0
+
+## Array of extra manifests to deploy
+## This will deploy arbitrary manifests as part of the helm relase
+extraObjects: []
+  # - apiVersion: v1
+  #   kind: ServiceAccount
+  #   metadata:
+  #     name: opentelemetry-targetallocator-sa
+  #     namespace: opentelemetry
+
+  # - apiVersion: rbac.authorization.k8s.io/v1
+  #   kind: ClusterRole
+  #   metadata:
+  #     name: opentelemetry-targetallocator-role
+  #   rules:
+  #     - apiGroups:
+  #         - monitoring.coreos.com
+  #       resources:
+  #         - servicemonitors
+  #         - podmonitors
+  #       verbs:
+  #         - '*'
+  #     - apiGroups: ['']
+  #       resources:
+  #         - namespaces
+  #       verbs: ['get', 'list', 'watch']
+  #     - apiGroups: ['']
+  #       resources:
+  #         - services
+  #         - services/finalizers
+  #         - endpoints
+  #       verbs: ['get', 'create', 'update', 'delete']
+  #     - apiGroups: ['']
+  #       resources:
+  #         - pods
+  #       verbs: ['list', 'delete']
+  #     - apiGroups: ['']
+  #       resources:
+  #         - configmaps
+  #       verbs: ['get']
+  #     - apiGroups:
+  #         - discovery.k8s.io
+  #       resources:
+  #         - endpointslices
+  #       verbs: ['get', 'create', 'list', 'watch', 'update', 'delete']
+  #     - apiGroups:
+  #         - networking.k8s.io
+  #       resources:
+  #         - ingresses
+  #       verbs: ['get', 'list', 'watch']
+  #     - nonResourceURLs: ['/metrics']
+  #       verbs: ['get']
+
+  # - apiVersion: rbac.authorization.k8s.io/v1
+  #   kind: ClusterRoleBinding
+  #   metadata:
+  #     name: opentelemetry-targetallocator-rb
+  #   subjects:
+  #     - kind: ServiceAccount
+  #       name: opentelemetry-targetallocator-sa
+  #       namespace: opentelemetry
+  #   roleRef:
+  #     kind: ClusterRole
+  #     name: opentelemetry-targetallocator-role
+  #     apiGroup: rbac.authorization.k8s.io
+
+############################
+# Prometheus Configuration #
+# (optional)               #
+############################
+# This configuration sections allows for a direct replacement of the kube-prometheus-stack
+# chart where the collector scrapes the same metrics as the default prometheus installation.
+
+## Flag to disable all the kubernetes component scrapers
+##
+kubernetesServiceMonitors:
+  enabled: true
+
+## Component scraping the kube api server
+##
+kubeApiServer:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+
+kubelet:
+  enabled: true
+  namespace: kube-system
+  serviceMonitor:
+    enabled: true
+    kubelet: true
+    interval: "30s"
+
+## Component scraping the kube controller manager
+##
+kubeControllerManager:
+  enabled: true
+
+## Component scraping coreDns. Use either this or kubeDns
+##
+coreDns:
+  enabled: true
+
+## Component scraping kubeDns. Use either this or coreDns
+##
+kubeDns:
+  enabled: false
+
+## Component scraping etcd
+##
+kubeEtcd:
+  enabled: true
+
+## Component scraping kube scheduler
+##
+kubeScheduler:
+  enabled: true
+
+## Component scraping kube proxy
+##
+kubeProxy:
+  enabled: true
+
+kubeStateMetrics:
+  enabled: true
+kube-state-metrics:
+  fullnameOverride: "kube-state-metrics"
+  prometheus:
+    monitor:
+      enabled: true
+      interval: ""
+
+nodeExporter:
+  enabled: true
+prometheus-node-exporter:
+  fullnameOverride: "node-exporter"
+  prometheus:
+    monitor:
+      enabled: true
+      interval: "30s"
