@@ -641,7 +641,7 @@ collectors:
       replicas: 1
       allocationStrategy: consistent-hashing
       filterStrategy: relabel-config
-      serviceAccount: opentelemetry-targetallocator-sa
+      ###### serviceAccount: opentelemetry-targetallocator-sa
       resources:
         limits:
           cpu: 200m
@@ -714,9 +714,6 @@ collectors:
             receivers: [prometheus]
             processors: [memory_limiter, batch]
             exporters: [prometheusremotewrite/thanos, debug]
-          # Explicitly null out default pipelines this collector does not use.
-          logs: null
-          traces: null
 # For more details on OpenTelemetry's zero-code instrumentation, see:
 # https://opentelemetry.io/docs/concepts/instrumentation/zero-code/
 instrumentation:
