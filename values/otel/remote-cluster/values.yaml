@@ -824,8 +824,7 @@ kubernetesServiceMonitors:
 ##
 kubeApiServer:
   enabled: true
-  namespace: kube-system
-  
+
 kubelet:
   enabled: true
   namespace: kube-system
