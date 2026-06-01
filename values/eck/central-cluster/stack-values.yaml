@@ -89,16 +89,7 @@ eck-fleet-server:
       spec:
         serviceAccountName: fleet-server
         automountServiceAccountToken: true
-        containers:
-          resources:
-            limits:
-              memory: 100Mi
-              cpu: 100m
-            requests:
-              cpu: 50m
-              memory: 50Mi
-    
-
+        
 # If enabled, will use the eck-beats chart and deploy a Beats resource.
 #
 eck-beats:
