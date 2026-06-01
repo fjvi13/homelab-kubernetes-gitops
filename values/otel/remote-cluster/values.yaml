@@ -97,7 +97,7 @@ collectors:
           tls:
             insecure: true
       extensions:
-        cgroupruntime: {}
+        cgroup_runtime: {}
       processors:
         memory_limiter:
           check_interval: 1s
@@ -195,7 +195,7 @@ collectors:
               enabled: true
       # [Service Section](https://opentelemetry.io/docs/collector/configuration/#service)
       service:
-        extensions: [cgroupruntime]
+        extensions: [cgroup_runtime]
         pipelines:
           metrics:
             exporters:
