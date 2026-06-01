@@ -74,7 +74,25 @@ eck-agent:
 # If enabled, will use the eck-fleet-server chart and deploy a Fleet Server resource.
 #
 eck-fleet-server:
-  enabled: false
+  enabled: true
+  fullnameOverride: fleet-server
+  version: 9.3.0
+  # This is also adjusting the kibana reference to the elasticsearch resource named previously so that
+  # both the eck-elasticsearch and the eck-kibana chart work together by default in the eck-stack chart.
+  elasticsearchRef:
+    name: elasticsearch
+  podTemplate:
+    spec:
+      containers:
+      - name: fleet-server
+        resources:
+          limits:
+            memory: 100Mi
+            cpu: 100m
+          requests:
+            cpu: 50m
+            memory: 50Mi
+    
 
 # If enabled, will use the eck-beats chart and deploy a Beats resource.
 #
