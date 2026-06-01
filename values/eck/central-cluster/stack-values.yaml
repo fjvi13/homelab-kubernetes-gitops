@@ -87,8 +87,9 @@ eck-fleet-server:
     replicas: 1
     podTemplate:
       spec:
+        serviceAccountName: fleet-server
+        automountServiceAccountToken: true
         containers:
-        - name: fleet-server
           resources:
             limits:
               memory: 100Mi
