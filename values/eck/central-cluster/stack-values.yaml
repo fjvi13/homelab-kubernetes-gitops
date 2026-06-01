@@ -81,17 +81,21 @@ eck-fleet-server:
   # both the eck-elasticsearch and the eck-kibana chart work together by default in the eck-stack chart.
   elasticsearchRef:
     name: elasticsearch
-  podTemplate:
-    spec:
-      containers:
-      - name: fleet-server
-        resources:
-          limits:
-            memory: 100Mi
-            cpu: 100m
-          requests:
-            cpu: 50m
-            memory: 50Mi
+  kibanaRef:
+    name: kibana
+  deployment:
+    replicas: 1
+    podTemplate:
+      spec:
+        containers:
+        - name: fleet-server
+          resources:
+            limits:
+              memory: 100Mi
+              cpu: 100m
+            requests:
+              cpu: 50m
+              memory: 50Mi
     
 
 # If enabled, will use the eck-beats chart and deploy a Beats resource.
