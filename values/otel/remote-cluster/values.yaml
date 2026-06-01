@@ -138,7 +138,7 @@ collectors:
               from_attribute: k8s.node.name
               action: upsert
         # [K8s Attributes Processor](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor/k8sattributesprocessor)
-        k8sattributes:
+        k8s_attributes:
           passthrough: false # Annotates resources with the pod IP and does not try to extract any other metadata.
           pod_association:
             # Below association takes a look at the k8s.pod.ip and k8s.pod.uid resource attributes or connection's context, and tries to match it with the pod having the same attribute.
@@ -204,7 +204,7 @@ collectors:
             processors:
               - memory_limiter
               - batch
-              - k8sattributes
+              - k8s_attributes
               # - resourcedetection/eks
               # - resourcedetection/gcp
               # - resourcedetection/aks
