@@ -266,7 +266,7 @@ collectors:
         debug:
           verbosity: basic
         otlp_grpc/gateway:
-          endpoint: "http://opentelemetry-kube-stack-gateway-collector-headless:4317"
+          endpoint: "http://opentelemetry-kube-stack-gateway-collector-headless:4320"
           tls:
             insecure: true
       processors:
