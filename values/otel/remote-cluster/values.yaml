@@ -120,8 +120,6 @@ collectors:
   cluster:
     enabled: true
     fullnameOverride: "opentelemetry-kube-stack-cluster-stats"
-    spec:
-      revisionHistoryLimit: 1
     resources:
       limits:
         cpu: 1000m
@@ -700,6 +698,8 @@ collectors:
     #     protocol: TCP
     #     port: 4320
     #     targetPort: 4320
+    spec:
+      revisionHistoryLimit: 1
     resources:
       limits:
         cpu: 1500m
