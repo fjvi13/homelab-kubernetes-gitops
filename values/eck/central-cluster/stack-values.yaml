@@ -77,10 +77,9 @@ eck-fleet-server:
   enabled: true
   fullnameOverride: fleet-server
   version: 9.3.0
-  # This is also adjusting the kibana reference to the elasticsearch resource named previously so that
-  # both the eck-elasticsearch and the eck-kibana chart work together by default in the eck-stack chart.
+  policyID: 020c969a-ef88-4319-9780-0a7865276f47
   elasticsearchRefs: 
-  - secretName: fleet-server-config
+  - name: elasticsearch
   kibanaRef:
     name: kibana
   deployment:
