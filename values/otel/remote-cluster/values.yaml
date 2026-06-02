@@ -745,8 +745,25 @@ collectors:
         cgroup_runtime: {}
         file_storage:
           directory: /var/lib/otelcol-scratch
+        bearertokenauth:
+          scheme: "APIKey"
+          token: "dm84WWg1NEJ5cTV6RXFOaFd5ZXY6alpMOEN3ZDN6YUs1d1hhSFZVekJOZw=="
+
+        apmconfig:
+          opamp:
+            protocols:
+              http:
+                # Default is localhost:4320
+                # To specify a custom endpoint, uncomment the following line
+                # and set the endpoint to the custom endpoint
+                # endpoint: "http://fleet.lab:4320"
+          source:
+            elasticsearch:
+              endpoint: ${env:ELASTIC_ENDPOINT}
+              auth:
+                authenticator: bearertokenauth
       service:
-        extensions: [cgroup_runtime, file_storage]
+        extensions: [cgroup_runtime, file_storage, bearertokenauth, apmconfig]
         pipelines:
           metrics:
             receivers: [otlp]
