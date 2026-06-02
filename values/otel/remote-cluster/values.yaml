@@ -752,7 +752,7 @@ collectors:
           directory: /var/lib/otelcol-scratch
         bearertokenauth:
           scheme: "APIKey"
-          token: "dm84WWg1NEJ5cTV6RXFOaFd5ZXY6alpMOEN3ZDN6YUs1d1hhSFZVekJOZw=="
+          token: ${env:ELASTIC_API_KEY}
 
         apmconfig:
           opamp:
@@ -764,7 +764,7 @@ collectors:
                 endpoint: ":4320"
           source:
             elasticsearch:
-              endpoint: http://elasticsearch.lab:80
+              endpoint: ${env:ELASTIC_ENDPOINT}
               auth:
                 authenticator: bearertokenauth
       service:
