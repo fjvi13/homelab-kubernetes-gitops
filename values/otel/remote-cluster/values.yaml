@@ -918,6 +918,8 @@ instrumentation:
         value: 'http://opentelemetry-kube-stack-gateway-collector.otel-system.svc.cluster.local:4320/v1/opamp'
       - name: ELASTIC_OTEL_OPAMP_HEADERS
         value: 'Authorization=ApiKey dm84WWg1NEJ5cTV6RXFOaFd5ZXY6alpMOEN3ZDN6YUs1d1hhSFZVekJOZw=='
+      - name: OTEL_TRACES_SAMPLER
+        value: 'experimental_composite_parentbased_traceidratio'
   go:
     image: ghcr.io/open-telemetry/opentelemetry-go-instrumentation/autoinstrumentation-go:v0.24.0
 
