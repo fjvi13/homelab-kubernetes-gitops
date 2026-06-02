@@ -3,6 +3,7 @@
 # For advanced configuration options, refer to the [official OpenTelemetry Helm chart](https://github.com/open-telemetry/opentelemetry-helm-charts/blob/main/charts/opentelemetry-kube-stack/values.yaml)
 # This file has been tested together with opentelemetry-kube-stack helm chart version: 0.3.3
 opentelemetry-operator:
+  revisionHistoryLimit: 1
   replicaCount: 1
   manager:
     image:
@@ -118,7 +119,6 @@ collectors:
   #  at the cluster level (Kubernetes Events and cluster metrics).
   cluster:
     enabled: true
-    revisionHistoryLimit: 1
     fullnameOverride: "opentelemetry-kube-stack-cluster-stats"
     resources:
       limits:
@@ -273,7 +273,6 @@ collectors:
   #  Auto-instrumentation SDKs will use this endpoint.
   daemon:
     enabled: true
-    revisionHistoryLimit: 1
     fullnameOverride: "opentelemetry-kube-stack-daemon"
     resources:
       limits:
@@ -709,7 +708,6 @@ collectors:
     suffix: gateway
     replicas: 1
     enabled: true
-    revisionHistoryLimit: 1
     env:
       - name: ELASTIC_AGENT_OTEL
         value: '"true"'
@@ -835,7 +833,6 @@ collectors:
   prometheus:
     mode: statefulset
     enabled: true
-    revisionHistoryLimit: 1
     replicas: 1
     suffix: prom
     fullnameOverride: "opentelemetry-kube-stack-prometheus"
