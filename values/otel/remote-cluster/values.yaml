@@ -401,10 +401,6 @@ collectors:
             - context: scope
               statements:
                 - set(attributes["elastic.mapping.mode"], "ecs")
-          metric_statements:
-            - context: scope
-              statements:
-                - set(attributes["elastic.mapping.mode"], "ecs")
         transform/route-python-app:
           error_mode: ignore
           log_statements:
