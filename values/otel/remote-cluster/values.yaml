@@ -266,7 +266,7 @@ collectors:
         debug:
           verbosity: basic
         otlp_grpc/gateway:
-          endpoint: "http://opentelemetry-kube-stack-gateway-collector-headless:4320"
+          endpoint: "http://opentelemetry-kube-stack-gateway-collector-headless:4317"
           tls:
             insecure: true
       processors:
@@ -659,11 +659,12 @@ collectors:
   #  forwarding telemetry to an Elasticsearch endpoint.
   gateway:
     fullnameOverride: "opentelemetry-kube-stack-gateway"
-    ports:
-      - name: opamp-http
-        protocol: TCP
-        port: 4320
-        targetPort: 4320
+    # Uncomment to enable central config in Kibana APM
+    # ports:
+    #   - name: opamp-http
+    #     protocol: TCP
+    #     port: 4320
+    #     targetPort: 4320
     resources:
       limits:
         cpu: 1500m
@@ -750,25 +751,28 @@ collectors:
         cgroup_runtime: {}
         file_storage:
           directory: /var/lib/otelcol-scratch
-        bearertokenauth:
-          scheme: "APIKey"
-          token: ${env:ELASTIC_API_KEY}
+        # Uncomment to enable central config in Kibana APM
+        # bearertokenauth:
+        #   scheme: "APIKey"
+        #   token: ${env:ELASTIC_API_KEY}
 
-        apmconfig:
-          opamp:
-            protocols:
-              http:
-                # Default is localhost:4320
-                # To specify a custom endpoint, uncomment the following line
-                # and set the endpoint to the custom endpoint
-                endpoint: ":4320"
-          source:
-            elasticsearch:
-              endpoint: ${env:ELASTIC_ENDPOINT}
-              auth:
-                authenticator: bearertokenauth
+        # apmconfig:
+        #   opamp:
+        #     protocols:
+        #       http:
+        #         # Default is localhost:4320
+        #         # To specify a custom endpoint, uncomment the following line
+        #         # and set the endpoint to the custom endpoint
+        #         endpoint: ":4320"
+        #   source:
+        #     elasticsearch:
+        #       endpoint: ${env:ELASTIC_ENDPOINT}
+        #       auth:
+        #         authenticator: bearertokenauth
+
       service:
-        extensions: [cgroup_runtime, file_storage, bearertokenauth, apmconfig]
+        # To enable central config in Kibana APM add the extensions bearertokenauth and apmconfig
+        extensions: [cgroup_runtime, file_storage]
         pipelines:
           metrics:
             receivers: [otlp]
@@ -913,13 +917,14 @@ instrumentation:
     image: docker.elastic.co/observability/elastic-otel-dotnet:1.4.0
   python:
     image: docker.elastic.co/observability/elastic-otel-python:1.12.0
-    env:
-      - name: ELASTIC_OTEL_OPAMP_ENDPOINT
-        value: 'http://opentelemetry-kube-stack-gateway-collector.otel-system.svc.cluster.local:4320/v1/opamp'
-      - name: ELASTIC_OTEL_OPAMP_HEADERS
-        value: 'Authorization=ApiKey dm84WWg1NEJ5cTV6RXFOaFd5ZXY6alpMOEN3ZDN6YUs1d1hhSFZVekJOZw=='
-      - name: OTEL_TRACES_SAMPLER
-        value: 'experimental_composite_parentbased_traceidratio'
+    # Uncomment to enable central config in Kibana APM
+    # env:
+    #   - name: ELASTIC_OTEL_OPAMP_ENDPOINT
+    #     value: 'http://opentelemetry-kube-stack-gateway-collector.otel-system.svc.cluster.local:4320/v1/opamp'
+    #   - name: ELASTIC_OTEL_OPAMP_HEADERS
+    #     value: 'Authorization=ApiKey dm84WWg1NEJ5cTV6RXFOaFd5ZXY6alpMOEN3ZDN6YUs1d1hhSFZVekJOZw=='
+    #   - name: OTEL_TRACES_SAMPLER
+    #     value: 'experimental_composite_parentbased_traceidratio'
   go:
     image: ghcr.io/open-telemetry/opentelemetry-go-instrumentation/autoinstrumentation-go:v0.24.0
 
