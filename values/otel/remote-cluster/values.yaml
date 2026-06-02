@@ -836,10 +836,9 @@ collectors:
                 - prometheus
     config:
       receivers:
-        # scrape_configs is intentionally empty — TargetAllocator pushes jobs at runtime.
         prometheus:
-          config:
-            scrape_configs: []
+          config: {}
+            # scrape_configs: []
           target_allocator:
             endpoint: http://opentelemetry-kube-stack-prometheus-targetallocator:80
             interval: 110s
