@@ -759,7 +759,7 @@ collectors:
                 # endpoint: "http://fleet.lab:4320"
           source:
             elasticsearch:
-              endpoint: ${env:ELASTIC_ENDPOINT}
+              endpoint: http://elasticsearch.lab:80
               auth:
                 authenticator: bearertokenauth
       service:
