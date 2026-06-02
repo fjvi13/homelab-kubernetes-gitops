@@ -118,6 +118,7 @@ collectors:
   #  at the cluster level (Kubernetes Events and cluster metrics).
   cluster:
     enabled: true
+    revisionHistoryLimit: 1
     fullnameOverride: "opentelemetry-kube-stack-cluster-stats"
     resources:
       limits:
@@ -272,6 +273,7 @@ collectors:
   #  Auto-instrumentation SDKs will use this endpoint.
   daemon:
     enabled: true
+    revisionHistoryLimit: 1
     fullnameOverride: "opentelemetry-kube-stack-daemon"
     resources:
       limits:
@@ -707,6 +709,7 @@ collectors:
     suffix: gateway
     replicas: 1
     enabled: true
+    revisionHistoryLimit: 1
     env:
       - name: ELASTIC_AGENT_OTEL
         value: '"true"'
@@ -832,6 +835,7 @@ collectors:
   prometheus:
     mode: statefulset
     enabled: true
+    revisionHistoryLimit: 1
     replicas: 1
     suffix: prom
     fullnameOverride: "opentelemetry-kube-stack-prometheus"
