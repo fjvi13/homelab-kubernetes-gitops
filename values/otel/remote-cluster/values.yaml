@@ -698,8 +698,6 @@ collectors:
     #     protocol: TCP
     #     port: 4320
     #     targetPort: 4320
-    spec:
-      revisionHistoryLimit: 1
     resources:
       limits:
         cpu: 1500m
@@ -708,6 +706,7 @@ collectors:
         cpu: 100m
         memory: 500Mi
     suffix: gateway
+    revisionHistoryLimit: 1
     replicas: 1
     enabled: true
     env:
