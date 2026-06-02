@@ -5,7 +5,9 @@
 opentelemetry-operator:
   replicaCount: 1
   manager:
-    image: "ghcr.io/open-telemetry/opentelemetry-operator/opentelemetry-operator:0.152.0"
+    image:
+      repository: "ghcr.io/open-telemetry/opentelemetry-operator/opentelemetry-operator"
+      tag: "0.152.0"
     resources:
       limits:
         cpu: 500m
@@ -26,7 +28,9 @@ opentelemetry-operator:
 crds:
   create: true # Install the OpenTelemetry Operator CRDs.
 defaultCRConfig:
-  image: "docker.elastic.co/elastic-agent/elastic-agent:9.4.0"
+  image:
+    repository: "docker.elastic.co/elastic-agent/elastic-agent"
+    tag: "9.4.0"
   targetAllocator:
     enabled: false # Enable/disable the Operator's Target allocator.
     # Refer to: https://github.com/open-telemetry/opentelemetry-operator/tree/main/cmd/otel-allocator
