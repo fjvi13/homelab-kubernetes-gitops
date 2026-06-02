@@ -120,6 +120,8 @@ collectors:
   cluster:
     enabled: true
     fullnameOverride: "opentelemetry-kube-stack-cluster-stats"
+    spec:
+      revisionHistoryLimit: 1
     resources:
       limits:
         cpu: 1000m
@@ -273,8 +275,6 @@ collectors:
   #  Auto-instrumentation SDKs will use this endpoint.
   daemon:
     enabled: true
-    spec:
-      revisionHistoryLimit: 1
     fullnameOverride: "opentelemetry-kube-stack-daemon"
     resources:
       limits:
