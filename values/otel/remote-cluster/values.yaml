@@ -659,6 +659,11 @@ collectors:
   #  forwarding telemetry to an Elasticsearch endpoint.
   gateway:
     fullnameOverride: "opentelemetry-kube-stack-gateway"
+    ports:
+      - name: opamp-http
+        protocol: TCP
+        port: 4320
+        targetPort: 4320
     resources:
       limits:
         cpu: 1500m
