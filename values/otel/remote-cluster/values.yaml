@@ -706,7 +706,6 @@ collectors:
         cpu: 100m
         memory: 500Mi
     suffix: gateway
-    revisionHistoryLimit: 1
     replicas: 1
     enabled: true
     env:
@@ -864,7 +863,7 @@ collectors:
           memory: 64Mi
       prometheusCR:
         enabled: true
-        scrapeInterval: 120s
+        scrapeInterval: 60s
         serviceMonitorSelector:
           matchExpressions:
             - key: release
