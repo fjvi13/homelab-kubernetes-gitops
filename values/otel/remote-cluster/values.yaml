@@ -840,8 +840,8 @@ collectors:
           config: {}
             # scrape_configs: []
           target_allocator:
-            endpoint: http://opentelemetry-kube-stack-prometheus-targetallocator:80
-            interval: 110s
+            endpoint: http://opentelemetry-kube-stack-prometheus-targetallocator:8080
+            interval: 35s
             collector_id: ${env:POD_NAME}
       processors:
         memory_limiter:
