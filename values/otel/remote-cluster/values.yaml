@@ -57,6 +57,16 @@ clusterRole:
     - apiGroups: [""]
       resources: ["events"]
       verbs: ["get", "list", "watch"]
+    # Strategy B kubelet scraping (prometheus collector):
+    # `role: node` service discovery for the kubelet/cadvisor/probes scrape jobs.
+    - apiGroups: [""]
+      resources: ["nodes"]
+      verbs: ["get", "list", "watch"]
+    # The kubelet delegates authz to the API server; scraping /metrics, /metrics/cadvisor
+    # and /metrics/probes on :10250 is authorized via the nodes/metrics subresource.
+    - apiGroups: [""]
+      resources: ["nodes/metrics"]
+      verbs: ["get"]
     # - apiGroups:
     #     - monitoring.coreos.com
     #   resources:
@@ -874,8 +884,119 @@ collectors:
     config:
       receivers:
         prometheus:
-          config: {}
-            # scrape_configs: []
+          config:
+            # Strategy B: self-contained kubelet scraping translated from the
+            # kube-prometheus-stack `prometheus-kube-prometheus-kubelet` ServiceMonitor.
+            # Uses `role: node` SD (one target per node, address defaults to <nodeIP>:10250),
+            # so it does NOT depend on prometheus-operator maintaining a kubelet Service/Endpoints.
+            # The TargetAllocator performs discovery and shards targets across collector replicas,
+            # so NO hashmod/$(SHARD) relabeling is needed here.
+            scrape_configs:
+              # ServiceMonitor endpoint #1 -> kubelet /metrics
+              - job_name: kubelet
+                scheme: https
+                scrape_interval: 30s
+                honor_labels: true
+                honor_timestamps: true
+                authorization:
+                  type: Bearer
+                  credentials_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+                tls_config:
+                  ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+                  insecure_skip_verify: true
+                kubernetes_sd_configs:
+                  - role: node
+                relabel_configs:
+                  # jobLabel: k8s-app on the SM -> all kubelet endpoints share job="kubelet"
+                  - action: replace
+                    target_label: job
+                    replacement: kubelet
+                  - action: replace
+                    source_labels: [__meta_kubernetes_node_name]
+                    target_label: node
+                  - action: replace
+                    source_labels: [__metrics_path__]
+                    target_label: metrics_path
+                metric_relabel_configs:
+                  - action: drop
+                    source_labels: [__name__, le]
+                    regex: (csi_operations|storage_operation_duration)_seconds_bucket;(0.25|2.5|15|25|120|600)(\.0)?
+              # ServiceMonitor endpoint #2 -> kubelet /metrics/cadvisor
+              - job_name: kubelet-cadvisor
+                scheme: https
+                metrics_path: /metrics/cadvisor
+                scrape_interval: 30s
+                honor_labels: true
+                honor_timestamps: true
+                track_timestamps_staleness: true
+                authorization:
+                  type: Bearer
+                  credentials_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+                tls_config:
+                  ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+                  insecure_skip_verify: true
+                kubernetes_sd_configs:
+                  - role: node
+                relabel_configs:
+                  - action: replace
+                    target_label: job
+                    replacement: kubelet
+                  - action: replace
+                    source_labels: [__meta_kubernetes_node_name]
+                    target_label: node
+                  - action: replace
+                    source_labels: [__metrics_path__]
+                    target_label: metrics_path
+                metric_relabel_configs:
+                  - action: drop
+                    source_labels: [__name__]
+                    regex: container_cpu_(cfs_throttled_seconds_total|load_average_10s|system_seconds_total|user_seconds_total)
+                  - action: drop
+                    source_labels: [__name__]
+                    regex: container_fs_(io_current|io_time_seconds_total|io_time_weighted_seconds_total|reads_merged_total|sector_reads_total|sector_writes_total|writes_merged_total)
+                  - action: drop
+                    source_labels: [__name__]
+                    regex: container_memory_(mapped_file|swap)
+                  - action: drop
+                    source_labels: [__name__]
+                    regex: container_(file_descriptors|tasks_state|threads_max)
+                  - action: drop
+                    source_labels: [__name__, scope]
+                    regex: container_memory_failures_total;hierarchy
+                  - action: drop
+                    source_labels: [__name__, interface]
+                    regex: container_network_.*;(cali|cilium|cni|lxc|nodelocaldns|tunl).*
+                  - action: drop
+                    source_labels: [__name__]
+                    regex: container_spec.*
+                  - action: drop
+                    source_labels: [id, pod]
+                    regex: .+;
+              # ServiceMonitor endpoint #3 -> kubelet /metrics/probes
+              - job_name: kubelet-probes
+                scheme: https
+                metrics_path: /metrics/probes
+                scrape_interval: 30s
+                honor_labels: true
+                honor_timestamps: true
+                authorization:
+                  type: Bearer
+                  credentials_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+                tls_config:
+                  ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+                  insecure_skip_verify: true
+                kubernetes_sd_configs:
+                  - role: node
+                relabel_configs:
+                  - action: replace
+                    target_label: job
+                    replacement: kubelet
+                  - action: replace
+                    source_labels: [__meta_kubernetes_node_name]
+                    target_label: node
+                  - action: replace
+                    source_labels: [__metrics_path__]
+                    target_label: metrics_path
           target_allocator:
             endpoint: http://opentelemetry-kube-stack-prometheus-targetallocator:8080
             interval: 35s
