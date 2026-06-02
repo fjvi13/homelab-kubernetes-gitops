@@ -756,7 +756,7 @@ collectors:
                 # Default is localhost:4320
                 # To specify a custom endpoint, uncomment the following line
                 # and set the endpoint to the custom endpoint
-                # endpoint: "http://fleet.lab:4320"
+                endpoint: ":4320"
           source:
             elasticsearch:
               endpoint: http://elasticsearch.lab:80
@@ -910,7 +910,7 @@ instrumentation:
     image: docker.elastic.co/observability/elastic-otel-python:1.12.0
     env:
       - name: ELASTIC_OTEL_OPAMP_ENDPOINT
-        value: 'http://localhost:4320/v1/opamp'
+        value: 'http://opentelemetry-kube-stack-gateway-collector.otel-system.svc.cluster.local:4320/v1/opamp'
       - name: ELASTIC_OTEL_OPAMP_HEADERS
         value: 'Authorization=ApiKey dm84WWg1NEJ5cTV6RXFOaFd5ZXY6alpMOEN3ZDN6YUs1d1hhSFZVekJOZw=='
   go:
