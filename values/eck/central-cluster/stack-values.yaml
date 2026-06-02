@@ -80,8 +80,7 @@ eck-fleet-server:
   # This is also adjusting the kibana reference to the elasticsearch resource named previously so that
   # both the eck-elasticsearch and the eck-kibana chart work together by default in the eck-stack chart.
   elasticsearchRefs: 
-  - name: eck-elasticsearch
-    secretName: fleet-server-config
+  - secretName: fleet-server-config
   kibanaRef:
     name: kibana
   deployment:
