@@ -890,11 +890,7 @@ collectors:
 instrumentation:
   name: elastic-instrumentation
   enabled: true # Enable/disable auto-instrumentation.
-  env: 
-    - name: ELASTIC_OTEL_OPAMP_ENDPOINT
-      value: 'http://localhost:4320/v1/opamp'
-    - name: ELASTIC_OTEL_OPAMP_HEADERS
-      value: 'Authorization=ApiKey dm84WWg1NEJ5cTV6RXFOaFd5ZXY6alpMOEN3ZDN6YUs1d1hhSFZVekJOZw=='
+  env: []
   exporter:
     endpoint: http://opentelemetry-kube-stack-daemon-collector.otel-system.svc.cluster.local:4318 # The daemonset OpenTelemetry Collector endpoint where telemetry data will be exported.
   propagators:
@@ -912,6 +908,11 @@ instrumentation:
     image: docker.elastic.co/observability/elastic-otel-dotnet:1.4.0
   python:
     image: docker.elastic.co/observability/elastic-otel-python:1.12.0
+    env:
+      - name: ELASTIC_OTEL_OPAMP_ENDPOINT
+        value: 'http://localhost:4320/v1/opamp'
+      - name: ELASTIC_OTEL_OPAMP_HEADERS
+        value: 'Authorization=ApiKey dm84WWg1NEJ5cTV6RXFOaFd5ZXY6alpMOEN3ZDN6YUs1d1hhSFZVekJOZw=='
   go:
     image: ghcr.io/open-telemetry/opentelemetry-go-instrumentation/autoinstrumentation-go:v0.24.0
 
