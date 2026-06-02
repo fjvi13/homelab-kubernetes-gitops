@@ -56,6 +56,42 @@ clusterRole:
     - apiGroups: [""]
       resources: ["events"]
       verbs: ["get", "list", "watch"]
+    - apiGroups:
+        - monitoring.coreos.com
+      resources:
+        - servicemonitors
+        - podmonitors
+      verbs:
+        - '*'
+    - apiGroups: ['']
+      resources:
+        - namespaces
+      verbs: ['get', 'list', 'watch']
+    - apiGroups: ['']
+      resources:
+        - nodes
+        - nodes/metrics
+        - services
+        - endpoints
+        - pods
+      verbs: ['get', 'list', 'watch']
+    - apiGroups: ['']
+      resources:
+        - configmaps
+      verbs: ['get']
+    - apiGroups:
+        - discovery.k8s.io
+      resources:
+        - endpointslices
+      verbs: ['get', 'list', 'watch']
+    - apiGroups:
+        - networking.k8s.io
+      resources:
+        - ingresses
+      verbs: ['get', 'list', 'watch']
+    - nonResourceURLs: ['/metrics']
+      verbs: ['get']
+
     # # Required by the prometheus receiver (used by the prometheus collector)
     # - apiGroups: [""]
     #   resources:
@@ -816,7 +852,7 @@ collectors:
       replicas: 1
       allocationStrategy: consistent-hashing
       filterStrategy: relabel-config
-      ###### serviceAccount: opentelemetry-targetallocator-sa
+      # serviceAccount: opentelemetry-kube-stack-prometheus-targetallocator
       resources:
         limits:
           cpu: 200m
