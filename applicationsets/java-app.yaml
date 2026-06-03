@@ -1,0 +1,43 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: java-app
+  namespace: argocd
+spec:
+  goTemplate: true
+  generators:
+    - merge:
+        mergeKeys:
+          - server
+        generators:
+          - clusters:
+              selector:
+                matchExpressions:
+                  - key: enable_java_app
+                    operator: In
+                    values: ['true']
+              values:
+                repoURL: https://github.com/txack/java-app.git
+                targetRevision: main
+                path: k8s
+          - clusters:
+              selector:
+                matchLabels:
+                  env: lab
+
+  template:
+    metadata:
+      name: "java-app-{{.name}}"
+    spec:
+      project: apps
+      source:
+        repoURL: '{{ .values.repoURL }}'
+        targetRevision: '{{ .values.targetRevision }}'
+        path: '{{ .values.path }}'
+      destination:
+        name: '{{ .name }}'
+        namespace: java-app
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
