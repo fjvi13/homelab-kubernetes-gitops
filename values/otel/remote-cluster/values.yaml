@@ -48,6 +48,9 @@ defaultCRConfig:
   volumeMounts:
     - name: scratch
       mountPath: /var/lib/otelcol-scratch
+  observability:
+    metrics:
+      enableMetrics: true
 clusterRole:
   rules:
     - apiGroups: [""]
@@ -1163,11 +1166,11 @@ kubernetesServiceMonitors:
 kubeApiServer:
   enabled: true
 
-kubelet:
-  enabled: true
-  namespace: kube-system
-  serviceMonitor:
-    interval: "30s"
+# kubelet:
+#   enabled: true
+#   namespace: kube-system
+#   serviceMonitor:
+#     interval: "30s"
 
 ## Component scraping the kube controller manager
 ##
