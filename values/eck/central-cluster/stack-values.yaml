@@ -43,7 +43,7 @@ eck-elasticsearch:
 eck-kibana:
   enabled: true
   fullnameOverride: kibana
-  version: 9.3.0
+  version: 9.4.2
   # This is also adjusting the kibana reference to the elasticsearch resource named previously so that
   # both the eck-elasticsearch and the eck-kibana chart work together by default in the eck-stack chart.
   elasticsearchRef:
