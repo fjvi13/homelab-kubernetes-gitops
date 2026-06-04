@@ -7,7 +7,7 @@
 eck-elasticsearch:
   enabled: true
   fullnameOverride: elasticsearch
-  version: 9.3.0
+  version: 9.4.2
   http:
     tls:
       selfSignedCertificate:
