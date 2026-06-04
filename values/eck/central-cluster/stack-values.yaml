@@ -76,7 +76,7 @@ eck-agent:
 eck-fleet-server:
   enabled: true
   fullnameOverride: fleet-server
-  version: 9.3.0
+  version: 9.4.2
   policyID: 020c969a-ef88-4319-9780-0a7865276f47
   elasticsearchRefs: 
   - name: elasticsearch
