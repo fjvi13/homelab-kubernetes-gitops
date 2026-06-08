@@ -24,8 +24,11 @@ eck-elasticsearch:
         - name: elasticsearch
           resources:
             limits:
-              memory: 2Gi
-              cpu: 1000m
+              memory: 3Gi
+              cpu: 4
+          requests:
+            cpu: 2
+            memory: 2Gi
     volumeClaimTemplates:
     - metadata:
         name: elasticsearch-data
@@ -55,7 +58,7 @@ eck-kibana:
         resources:
           limits:
             memory: 2Gi
-            cpu: 1000m
+            cpu: 2
           requests:
             cpu: 500m
             memory: 1Gi
