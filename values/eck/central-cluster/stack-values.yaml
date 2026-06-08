@@ -27,7 +27,7 @@ eck-elasticsearch:
               memory: 3Gi
               cpu: 4
           requests:
-            cpu: 2
+            cpu: 1
             memory: 2Gi
     volumeClaimTemplates:
     - metadata:
