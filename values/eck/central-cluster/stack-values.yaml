@@ -25,7 +25,7 @@ eck-elasticsearch:
           resources:
             limits:
               memory: 3Gi
-              cpu: 4
+              cpu: 2
           requests:
             cpu: 1
             memory: 2Gi
