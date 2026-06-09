@@ -659,7 +659,7 @@ collectors:
             processors:
               - memory_limiter
               - batch/metrics
-              - k8s_attributes
+              # - k8s_attributes
               - transform/ecs-mode
               - resourcedetection/system
               - resourcedetection/eks
