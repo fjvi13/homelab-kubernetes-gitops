@@ -414,6 +414,11 @@ collectors:
             - key: cloud.instance.id
               from_attribute: host.id
               action: insert
+        resource/cluster-name:
+          attributes:
+            - key: k8s.cluster.name
+              value: remote-cluster
+              action: upsert
         # [K8s Attributes Processor](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor/k8sattributesprocessor)
         k8s_attributes:
           filter:
@@ -651,6 +656,7 @@ collectors:
               # - resourcedetection/aks
               # - resource/hostname
               # - resource/cloud
+              - resource/cluster-name
               - transform/route-python-app
             exporters:
               - otlp_grpc/gateway
@@ -668,6 +674,7 @@ collectors:
               # - resourcedetection/aks
               # - resource/hostname
               # - resource/cloud
+              - resource/cluster-name
             exporters:
               # - debug
               - otlp_grpc/gateway
@@ -678,6 +685,7 @@ collectors:
               - memory_limiter
               - batch/metrics
               # - resource/hostname
+              - resource/cluster-name
             exporters:
               - otlp_grpc/gateway
           logs/apm:
@@ -688,6 +696,7 @@ collectors:
               - batch
               - transform/ecs-mode
               - resource/hostname
+              - resource/cluster-name
             exporters:
               - otlp_grpc/gateway
           traces/apm:
@@ -698,6 +707,7 @@ collectors:
               # - tail_sampling
               - batch
               - resource/hostname
+              - resource/cluster-name
             exporters:
               - otlp_grpc/gateway
   #  Gateway is a K8s deployment EDOT collector focused on processing and
@@ -778,6 +788,11 @@ collectors:
         # [Elastic APM Processor](https://github.com/elastic/opentelemetry-collector-components/tree/main/processor/elasticapmprocessor)
         # The processor enriches traces with elastic specific requirements.
         elasticapm: {}
+        resource/cluster-name:
+          attributes:
+            - key: k8s.cluster.name
+              value: remote-cluster
+              action: upsert
         
       exporters:
         debug: {}
@@ -821,20 +836,20 @@ collectors:
         pipelines:
           metrics:
             receivers: [otlp]
-            processors: [memory_limiter,batch/metrics]
+            processors: [memory_limiter, batch/metrics, resource/cluster-name]
             exporters: [debug, elasticsearch/otel]
           logs:
             receivers: [otlp]
-            processors: [memory_limiter, batch]
+            processors: [memory_limiter, batch, resource/cluster-name]
             exporters: [debug, elasticapm, elasticsearch/otel]
           traces:
             receivers: [otlp]
-            processors: [memory_limiter, batch, elasticapm]
+            processors: [memory_limiter, batch, elasticapm, resource/cluster-name]
             exporters: [debug, elasticapm, elasticsearch/otel]
           metrics/aggregated-otel-metrics:
             receivers:
               - elasticapm
-            processors: [memory_limiter]
+            processors: [memory_limiter, resource/cluster-name]
             exporters:
               - debug
               - elasticsearch/otel
