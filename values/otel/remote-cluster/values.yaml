@@ -659,8 +659,7 @@ collectors:
             processors:
               - memory_limiter
               - batch/metrics
-              # - k8s_attributes
-              - transform/ecs-mode
+              - k8s_attributes
               - resourcedetection/system
               - resourcedetection/eks
               - resourcedetection/gcp
@@ -676,7 +675,6 @@ collectors:
             processors:
               - memory_limiter
               - batch/metrics
-              - transform/ecs-mode
               - resource/hostname
             exporters:
               - otlp_grpc/gateway
@@ -697,7 +695,6 @@ collectors:
               - memory_limiter
               # - tail_sampling
               - batch
-              - transform/ecs-mode
               - resource/hostname
             exporters:
               - otlp_grpc/gateway
