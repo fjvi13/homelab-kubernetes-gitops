@@ -255,28 +255,28 @@ collectors:
       # [Service Section](https://opentelemetry.io/docs/collector/configuration/#service)
       service:
         extensions: [cgroup_runtime, file_storage]
-        telemetry:
-          metrics:
-            readers:
-              - periodic:
-                  exporter:
-                    otlp:
-                      protocol: http/protobuf
-                      endpoint: http://opentelemetry-kube-stack-daemon-collector.otel-system.svc.cluster.local:4318
-          logs:
-            readers:
-              - periodic:
-                  exporter:
-                    otlp:
-                      protocol: http/protobuf
-                      endpoint: http://opentelemetry-kube-stack-daemon-collector.otel-system.svc.cluster.local:4318
-          traces:
-            readers:
-              - periodic:
-                  exporter:
-                    otlp:
-                      protocol: http/protobuf
-                      endpoint: http://opentelemetry-kube-stack-daemon-collector.otel-system.svc.cluster.local:4318
+        # telemetry:
+        #   metrics:
+        #     readers:
+        #       - periodic:
+        #           exporter:
+        #             otlp:
+        #               protocol: http/protobuf
+        #               endpoint: http://opentelemetry-kube-stack-daemon-collector.otel-system.svc.cluster.local:4318
+        #   logs:
+        #     readers:
+        #       - periodic:
+        #           exporter:
+        #             otlp:
+        #               protocol: http/protobuf
+        #               endpoint: http://opentelemetry-kube-stack-daemon-collector.otel-system.svc.cluster.local:4318
+        #   traces:
+        #     readers:
+        #       - periodic:
+        #           exporter:
+        #             otlp:
+        #               protocol: http/protobuf
+        #               endpoint: http://opentelemetry-kube-stack-daemon-collector.otel-system.svc.cluster.local:4318
         pipelines:
           metrics:
             exporters:
