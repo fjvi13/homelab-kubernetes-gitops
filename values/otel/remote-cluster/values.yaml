@@ -263,6 +263,20 @@ collectors:
                     otlp:
                       protocol: http/protobuf
                       endpoint: http://opentelemetry-kube-stack-daemon-collector.otel-system.svc.cluster.local:4318
+          logs:
+            readers:
+              - periodic:
+                  exporter:
+                    otlp:
+                      protocol: http/protobuf
+                      endpoint: http://opentelemetry-kube-stack-daemon-collector.otel-system.svc.cluster.local:4318
+          traces:
+            readers:
+              - periodic:
+                  exporter:
+                    otlp:
+                      protocol: http/protobuf
+                      endpoint: http://opentelemetry-kube-stack-daemon-collector.otel-system.svc.cluster.local:4318
         pipelines:
           metrics:
             exporters:
