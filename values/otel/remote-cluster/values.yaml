@@ -264,20 +264,20 @@ collectors:
               - memory_limiter
               - batch
               - k8s_attributes
-              - resourcedetection/eks
-              - resourcedetection/gcp
-              - resourcedetection/aks
-              - resource/hostname
+              # - resourcedetection/eks
+              # - resourcedetection/gcp
+              # - resourcedetection/aks
+              # - resource/hostname
             receivers:
               - k8s_cluster
           logs:
             receivers:
               - k8s_events
             processors:
-              - resourcedetection/eks
-              - resourcedetection/gcp
-              - resourcedetection/aks
-              - resource/hostname
+              # - resourcedetection/eks
+              # - resourcedetection/gcp
+              # - resourcedetection/aks
+              # - resource/hostname
             exporters:
               - debug
               - otlp_grpc/gateway
