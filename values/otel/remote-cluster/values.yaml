@@ -274,6 +274,8 @@ collectors:
             receivers:
               - k8s_events
             processors:
+              - memory_limiter
+              - batch
               # - resourcedetection/eks
               # - resourcedetection/gcp
               # - resourcedetection/aks
