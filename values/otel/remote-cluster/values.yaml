@@ -644,9 +644,9 @@ collectors:
               - k8s_attributes
               - transform/ecs-mode
               - resourcedetection/system
-              - resourcedetection/eks
-              - resourcedetection/gcp
-              - resourcedetection/aks
+              # - resourcedetection/eks
+              # - resourcedetection/gcp
+              # - resourcedetection/aks
               - resource/hostname
               - resource/cloud
               - transform/route-python-app
@@ -661,9 +661,9 @@ collectors:
               - batch/metrics
               - k8s_attributes
               - resourcedetection/system
-              - resourcedetection/eks
-              - resourcedetection/gcp
-              - resourcedetection/aks
+              # - resourcedetection/eks
+              # - resourcedetection/gcp
+              # - resourcedetection/aks
               - resource/hostname
               - resource/cloud
             exporters:
