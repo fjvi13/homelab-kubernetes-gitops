@@ -264,9 +264,9 @@ collectors:
               - memory_limiter
               - batch
               - k8s_attributes
-              # - resourcedetection/eks
-              # - resourcedetection/gcp
-              # - resourcedetection/aks
+              - resourcedetection/eks
+              - resourcedetection/gcp
+              - resourcedetection/aks
               - resource/hostname
             receivers:
               - k8s_cluster
@@ -274,9 +274,9 @@ collectors:
             receivers:
               - k8s_events
             processors:
-              # - resourcedetection/eks
-              # - resourcedetection/gcp
-              # - resourcedetection/aks
+              - resourcedetection/eks
+              - resourcedetection/gcp
+              - resourcedetection/aks
               - resource/hostname
             exporters:
               - debug
@@ -643,12 +643,12 @@ collectors:
               - batch
               - k8s_attributes
               - transform/ecs-mode
-              # - resourcedetection/system
-              # - resourcedetection/eks
-              # - resourcedetection/gcp
-              # - resourcedetection/aks
+              - resourcedetection/system
+              - resourcedetection/eks
+              - resourcedetection/gcp
+              - resourcedetection/aks
               - resource/hostname
-              # - resource/cloud
+              - resource/cloud
               - transform/route-python-app
             exporters:
               - otlp_grpc/gateway
@@ -661,12 +661,12 @@ collectors:
               - batch/metrics
               - k8s_attributes
               - transform/ecs-mode
-              # - resourcedetection/system
-              # - resourcedetection/eks
-              # - resourcedetection/gcp
-              # - resourcedetection/aks
+              - resourcedetection/system
+              - resourcedetection/eks
+              - resourcedetection/gcp
+              - resourcedetection/aks
               - resource/hostname
-              # - resource/cloud
+              - resource/cloud
             exporters:
               # - debug
               - otlp_grpc/gateway
