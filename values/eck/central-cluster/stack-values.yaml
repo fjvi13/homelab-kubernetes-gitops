@@ -95,7 +95,24 @@ eck-fleet-server:
 # If enabled, will use the eck-beats chart and deploy a Beats resource.
 #
 eck-beats:
-  enabled: false
+  enabled: true
+  type: metricbeat
+  version: 9.4.2
+  elasticsearchRefs: 
+  - name: elasticsearch
+  kibanaRef:
+    name: kibana
+  deployment:
+    replicas: 1
+    podTemplate:
+      spec:
+        securityContext:
+          runAsUser: 0
+  daemonSet:
+    podTemplate:
+      spec:
+        securityContext:
+          runAsUser: 0
 
 # If enabled, will use the eck-logstash chart and deploy a Logstash resource.
 #
