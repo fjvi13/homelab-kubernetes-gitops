@@ -102,12 +102,6 @@ eck-beats:
   - name: elasticsearch
   kibanaRef:
     name: kibana
-  deployment:
-    replicas: 1
-    podTemplate:
-      spec:
-        securityContext:
-          runAsUser: 0
   daemonSet:
     podTemplate:
       spec:
