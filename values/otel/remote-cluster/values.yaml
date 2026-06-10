@@ -255,28 +255,34 @@ collectors:
       # [Service Section](https://opentelemetry.io/docs/collector/configuration/#service)
       service:
         extensions: [cgroup_runtime, file_storage]
-        # telemetry:
-        #   metrics:
-        #     readers:
-        #       - periodic:
-        #           exporter:
-        #             otlp:
-        #               protocol: http/protobuf
-        #               endpoint: http://opentelemetry-kube-stack-daemon-collector.otel-system.svc.cluster.local:4318
-          # logs:
-          #   readers:
-          #     - periodic:
-          #         exporter:
-          #           otlp:
-          #             protocol: http/protobuf
-          #             endpoint: http://opentelemetry-kube-stack-daemon-collector.otel-system.svc.cluster.local:4318
-          # traces:
-          #   readers:
-          #     - periodic:
-          #         exporter:
-          #           otlp:
-          #             protocol: http/protobuf
-          #             endpoint: http://opentelemetry-kube-stack-daemon-collector.otel-system.svc.cluster.local:4318
+        telemetry:
+            resource:
+              elastic.collector.group_name: "OTel Collector Group"
+              elastic.collector.group: "otel-collector-group"
+              service.namespace: "otel-collector-group"
+              service.name: "otel-collector-group"
+              service.instance.id: "cluster-collector"
+            metrics:
+              readers:
+                - periodic:
+                    exporter:
+                      otlp:
+                        protocol: "grpc"
+                        endpoint: "http://opentelemetry-kube-stack-gateway-collector-headless:4317"
+            logs:
+              processors:
+                - batch:
+                    exporter:
+                      otlp:
+                        protocol: "grpc"
+                        endpoint: "http://opentelemetry-kube-stack-gateway-collector-headless:4317"
+            traces:
+              processors:
+                - batch:
+                    exporter:
+                      otlp:
+                        protocol: "grpc"
+                        endpoint: "http://opentelemetry-kube-stack-gateway-collector-headless:4317"
         pipelines:
           metrics:
             exporters:
