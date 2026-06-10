@@ -1,6 +1,7 @@
 ﻿global:
   security:
     allowInsecureImages: true
+  revisionHistoryLimit: 1
 
 extraDeploy: 
   - apiVersion: v1
