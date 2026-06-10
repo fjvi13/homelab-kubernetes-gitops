@@ -1,7 +1,6 @@
 ﻿global:
   security:
     allowInsecureImages: true
-  revisionHistoryLimit: 1
 
 extraDeploy: 
   - apiVersion: v1
@@ -178,6 +177,7 @@ objstoreConfig: |-
 existingObjstoreSecret: ""
 
 query:
+  revisionHistoryLimit: 1
   containerPorts:
     http: 10902
     grpc: 10901
@@ -236,6 +236,7 @@ query:
 
 queryFrontend:
   enabled: true
+  revisionHistoryLimit: 1
   logLevel: info
   config: |
     type: IN-MEMORY
@@ -296,6 +297,7 @@ bucketweb:
 
 compactor:
   enabled: true
+  revisionHistoryLimit: 1
   logLevel: info
   dataDir: /data
   retentionResolutionRaw: 6d
@@ -361,6 +363,7 @@ compactor:
 
 storegateway:
   enabled: true
+  revisionHistoryLimit: 1
   logLevel: info
   useEndpointGroup: true
   config: |
@@ -418,6 +421,7 @@ storegateway:
 
 ruler:
   enabled: false
+  revisionHistoryLimit: 1
   logLevel: info
   logFormat: logfmt
   replicaCount: 1
@@ -484,6 +488,7 @@ ruler:
 
 receive:
   enabled: true
+  revisionHistoryLimit: 1
   mode: dual-mode
   logLevel: info
   tsdbRetention: 2h
@@ -538,6 +543,7 @@ receive:
 
 receiveDistributor:
   enabled: true
+  revisionHistoryLimit: 1
   logLevel: info
   replicationProtocol: capnproto
   replicationFactor: 1
