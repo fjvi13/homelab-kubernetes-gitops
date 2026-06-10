@@ -98,8 +98,8 @@ eck-beats:
   enabled: true
   type: metricbeat
   version: 9.4.2
-  elasticsearchRefs: 
-    name: elasticsearch
+  elasticsearchRef:
+    name: eck-elasticsearch
   kibanaRef:
     name: kibana
   config:
