@@ -99,7 +99,7 @@ eck-beats:
   type: metricbeat
   version: 9.4.2
   elasticsearchRef:
-    name: eck-elasticsearch
+    name: elasticsearch
   kibanaRef:
     name: kibana
   config:
