@@ -180,6 +180,13 @@ eck-beats:
             valueFrom:
               fieldRef:
                 fieldPath: spec.nodeName
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: 300m
+            requests:
+              cpu: 100m
+              memory: 100Mi
         dnsPolicy: ClusterFirstWithHostNet
         hostNetwork: true # Allows to provide richer host metadata
         securityContext:
