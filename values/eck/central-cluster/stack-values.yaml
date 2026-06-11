@@ -379,6 +379,8 @@ extraObjects:
           spec:
             serviceAccountName: metricbeat
             automountServiceAccountToken: true
+            securityContext:
+              runAsUser: 0
             containers:
             - name: metricbeat
               resources:
