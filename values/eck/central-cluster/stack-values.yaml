@@ -208,43 +208,27 @@ eck-beats:
     # source: https://www.elastic.co/guide/en/beats/metricbeat/current/metricbeat-module-kubernetes.html
     name: metricbeat
     rules:
-    - apiGroups:
-      - ""
+    - apiGroups: [""]
       resources:
       - nodes
       - namespaces
       - events
       - pods
-      verbs:
-      - get
-      - list
-      - watch
-    - apiGroups:
-      - events.k8s.io
+      verbs: ["get", "list", "watch"]
+    - apiGroups: ["batch"]
       resources:
-      - events
-      verbs:
-      - get
-      - list
-      - watch
-    - apiGroups:
-      - "extensions"
+      - jobs
+      verbs: ["get", "list", "watch"]
+    - apiGroups: ["extensions"]
       resources:
       - replicasets
-      verbs:
-      - get
-      - list
-      - watch
-    - apiGroups:
-      - apps
+      verbs: ["get", "list", "watch"]
+    - apiGroups: ["apps"]
       resources:
       - statefulsets
       - deployments
       - replicasets
-      verbs:
-      - get
-      - list
-      - watch
+      verbs: ["get", "list", "watch"]
     - apiGroups:
       - ""
       resources:
