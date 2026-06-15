@@ -132,7 +132,8 @@ collectors:
   #  at the cluster level (Kubernetes Events and cluster metrics).
   cluster:
     enabled: true
-    fullnameOverride: "opentelemetry-kube-stack-cluster-stats"
+    fullnameOverride: "opentelemetry-kube-stack-cluster-stats"ç
+    replicas: 1
     resources:
       limits:
         cpu: 1000m
@@ -1094,6 +1095,45 @@ collectors:
             receivers: [prometheus]
             processors: [memory_limiter, batch]
             exporters: [prometheusremotewrite/thanos, debug]
+  loki:
+    enabled: false
+    mode: daemon
+    fullnameOverride: "opentelemetry-kube-stack-loki"
+    image:
+      repository: "otel/opentelemetry-collector-contrib"
+      tag: "0.153.0"
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 512Mi
+      requests:
+        cpu: 200m
+        memory: 256Mi
+    presets:
+      logsCollection:
+        enabled: true
+        storeCheckpoints: true
+      kubernetesAttributes:
+        enabled: true
+    config:
+      processors:
+        memory_limiter:
+          check_interval: 5s
+          limit_percentage: 80
+          spike_limit_percentage: 25
+        batch:
+          send_batch_size: 2000
+          send_batch_max_size: 2000
+          timeout: 10s
+      exporters:
+        otlphttp/loki:
+          endpoint: http://<loki-addr>/otlp
+      service:
+        pipelines:
+          logs:
+            processors: [memory_limiter, batch]
+            exporters: [otlphttp/loki]
+      
 # For more details on OpenTelemetry's zero-code instrumentation, see:
 # https://opentelemetry.io/docs/concepts/instrumentation/zero-code/
 instrumentation:
