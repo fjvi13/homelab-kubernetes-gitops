@@ -632,6 +632,7 @@ collectors:
             - node
             - pod
             - container
+            - volume
           metrics:
             k8s.pod.memory.node.utilization:
               enabled: true
