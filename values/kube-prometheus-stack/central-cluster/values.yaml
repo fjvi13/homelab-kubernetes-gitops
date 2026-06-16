@@ -341,7 +341,7 @@ thanosRuler:
 
     ## QueryEndpoints defines Thanos querier endpoints from which to query metrics.
     ## Maps to the --query flag of thanos ruler.
-    queryEndpoints: thanos-query.monitoring.svc.cluster.local:9090
+    queryEndpoints: [thanos-query.monitoring.svc.cluster.local:9090]
 
     ## Labels configure the external label pairs to ThanosRuler. A default replica
     ## label `thanos_ruler_replica` will be always added as a label with the value
