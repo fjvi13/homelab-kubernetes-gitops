@@ -1,0 +1,623 @@
+global:
+  # @schema type:[string, null]
+  # -- Overrides the Docker registry globally for all images (standard format).
+  # This has the highest precedence and overrides every component-level image.registry value.
+  imageRegistry: null
+
+# -- Deployment mode lets you specify how to deploy Loki.
+# There are 3 options:
+# - Monolithic (deprecated: SingleBinary): Loki is deployed as a single binary, useful for small installs typically without HA, up to a few tens of GB/day.
+# - SimpleScalable (deprecated, removed in Loki 4): Loki is deployed as 3 targets: read, write, and backend. Useful for medium installs easier to manage than distributed, up to a about 1TB/day.
+# - Distributed: Loki is deployed as individual microservices. The most complicated but most capable, useful for large installs, typically over 1TB/day.
+# There are also 2 additional modes used for migrating between deployment modes:
+# - Monolithic<->SimpleScalable (deprecated: SingleBinary<->SimpleScalable): Migrate from SingleBinary to SimpleScalable (or vice versa)
+# - SimpleScalable<->Distributed: Migrate from SimpleScalable to Distributed (or vice versa)
+# Note: SimpleScalable and Distributed REQUIRE the use of object storage.
+# Ref: https://grafana.com/docs/loki/latest/get-started/deployment-modes/
+deploymentMode: Distributed
+
+######################################################################################################################
+#
+# Defaults applied to loki components only. Not applied to loki-canary, memcache, gateway/nginx or other components.
+#
+######################################################################################################################
+defaults:
+  goSettings:
+    # -- Fraction of the container memory limit used to compute GOMEMLIMIT (e.g. 0.85 = 85%).
+    # Set to 0 to disable automatic GOMEMLIMIT injection.
+    goMemLimitFactor: 0.85
+    # -- Value to set for GOGC alongside GOMEMLIMIT. Lowering below the default of 100 reduces
+    # heap growth between GC cycles, working in tandem with GOMEMLIMIT to smooth memory usage.
+    # Set to 0 to disable automatic GOGC injection.
+    gogc: 80
+
+
+######################################################################################################################
+#
+# Base Loki Configs including kubernetes configurations and configurations for Loki itself,
+# see below for more specifics on Loki's configuration.
+#
+######################################################################################################################
+# -- Configuration for running Loki
+# @default -- See values.yaml
+loki:
+  image:
+    # -- The Docker registry
+    registry: docker.io
+    # -- Docker image repository
+    repository: grafana/loki
+    # @schema type:[string, null]
+    # -- Overrides the image tag whose default is the chart's appVersion
+    tag: null
+    # @schema type:[string, null]
+    # -- Overrides the image tag with an image digest
+    digest: null
+    # -- Docker image pull policy
+    pullPolicy: IfNotPresent
+
+  # -- Defines what kind of object stores the configuration, a ConfigMap or a Secret.
+  # In order to move sensitive information (such as credentials) from the ConfigMap/Secret to a more secure location (e.g. vault), it is possible to use [environment variables in the configuration](https://grafana.com/docs/loki/latest/configuration/#use-environment-variables-in-the-configuration).
+  # Such environment variables can be then stored in a separate Secret and injected via the global.extraEnvFrom value. For details about environment injection from a Secret please see [Secrets](https://kubernetes.io/docs/concepts/configuration/secret/#use-case-as-container-environment-variables).
+  configStorageType: ConfigMap
+  # -- The name of the object which Loki will mount as a volume containing the config.
+  # If the configStorageType is Secret, this will be the name of the Secret, if it is ConfigMap, this will be the name of the ConfigMap.
+  # The value will be passed through tpl.
+  configObjectName: '{{ include "loki.name" . }}'
+  # -- The name of the Secret or ConfigMap that will be created by this chart.
+  # If empty, no configmap or secret will be created.
+  # The value will be passed through tpl.
+  generatedConfigObjectName: '{{ include "loki.name" . }}'
+  # -- Config file contents for Loki
+  # @default -- See values.yaml
+  config: |
+    auth_enabled: {{ .Values.loki.auth_enabled }}
+
+    {{- with .Values.loki.server }}
+    server:
+      {{- toYaml . | nindent 2}}
+    {{- end}}
+
+    {{- with .Values.loki.pattern_ingester }}
+    pattern_ingester:
+      {{- tpl (. | toYaml) $ | nindent 4 }}
+    {{- end }}
+
+    memberlist:
+    {{- if .Values.loki.memberlistConfig }}
+      {{- toYaml .Values.loki.memberlistConfig | nindent 2 }}
+    {{- else }}
+    {{- if .Values.loki.extraMemberlistConfig}}
+    {{- toYaml .Values.loki.extraMemberlistConfig | nindent 2}}
+    {{- end }}
+      join_members:
+        - {{ include "loki.memberlist" . }}.{{ include "loki.namespace" $ }}.svc.{{ .Values.global.clusterDomain }}
+        {{- with .Values.migrate.fromDistributed }}
+        {{- if .enabled }}
+        - {{ .memberlistService }}
+        {{- end }}
+        {{- end }}
+    {{- end }}
+
+    {{- with .Values.loki.ingester }}
+    ingester:
+      {{- tpl (. | toYaml) $ | nindent 4 }}
+    {{- end }}
+
+    {{- with .Values.loki.ingester_client }}
+    ingester_client:
+      {{- tpl (. | toYaml) $ | nindent 4 }}
+    {{- end }}
+
+    {{- with .Values.loki.block_builder }}
+    block_builder:
+      {{- tpl (. | toYaml) $ | nindent 4 }}
+    {{- end }}
+
+    {{- if .Values.loki.commonConfig}}
+    common:
+    {{- toYaml .Values.loki.commonConfig | nindent 2}}
+      storage:
+      {{- include "loki.commonStorageConfig" . | nindent 4}}
+    {{- end}}
+
+    {{- with .Values.loki.limits_config }}
+    limits_config:
+      {{- tpl (. | toYaml) $ | nindent 4 }}
+    {{- end }}
+
+    runtime_config:
+      file: /etc/loki/runtime-config/runtime-config.yaml
+
+    {{- if .Values.chunksCache.enabled }}
+    {{- with .Values.chunksCache }}
+    chunk_store_config:
+      chunk_cache_config:
+        default_validity: {{ .defaultValidity }}
+        background:
+          writeback_goroutines: {{ .writebackParallelism }}
+          writeback_buffer: {{ .writebackBuffer }}
+          writeback_size_limit: {{ .writebackSizeLimit }}
+        memcached:
+          batch_size: {{ .batchSize }}
+          parallelism: {{ .parallelism }}
+        memcached_client:
+          addresses: {{ .addresses }}
+          consistent_hash: true
+          timeout: {{ .timeout }}
+          max_idle_conns: 72
+      {{- end }}
+      {{- with .Values.chunksCache.l2 }}
+      {{- if .enabled }}
+      l2_chunk_cache_handoff: {{ .l2ChunkCacheHandoff }}
+      chunk_cache_config_l2:
+        default_validity: {{ .defaultValidity }}
+        background:
+          writeback_goroutines: {{ .writebackParallelism }}
+          writeback_buffer: {{ .writebackBuffer }}
+          writeback_size_limit: {{ .writebackSizeLimit }}
+        memcached:
+          batch_size: {{ .batchSize }}
+          parallelism: {{ .parallelism }}
+        memcached_client:
+          addresses: {{ .addresses }}
+          consistent_hash: true
+          timeout: {{ .timeout }}
+          max_idle_conns: 72
+      {{- end }}
+      {{- end }}
+    {{- end }}
+
+    {{- if .Values.loki.schemaConfig }}
+    schema_config:
+    {{- toYaml .Values.loki.schemaConfig | nindent 2}}
+    {{- end }}
+
+    {{- if .Values.loki.useTestSchema }}
+    schema_config:
+    {{- toYaml .Values.loki.testSchemaConfig | nindent 2}}
+    {{- end }}
+
+    {{- if .Values.ruler.enabled }}
+    {{ include "loki.rulerConfig" . }}
+    {{- end }}
+
+    {{- if and .Values.loki.storage.use_thanos_objstore .Values.ruler.enabled}}
+    ruler_storage:
+      {{- include "loki.rulerThanosStorageConfig" . | nindent 2 }}
+    {{- end }}
+
+    {{- if or .Values.tableManager.retention_deletes_enabled .Values.tableManager.retention_period }}
+    table_manager:
+      retention_deletes_enabled: {{ .Values.tableManager.retention_deletes_enabled }}
+      retention_period: {{ .Values.tableManager.retention_period }}
+    {{- end }}
+
+    query_range:
+      align_queries_with_step: true
+      {{- with .Values.loki.query_range }}
+      {{- tpl (. | toYaml) $ | nindent 2 }}
+      {{- end }}
+      {{- if .Values.resultsCache.enabled }}
+      {{- with .Values.resultsCache }}
+      cache_results: true
+      results_cache:
+        cache:
+          default_validity: {{ .defaultValidity }}
+          background:
+            writeback_goroutines: {{ .writebackParallelism }}
+            writeback_buffer: {{ .writebackBuffer }}
+            writeback_size_limit: {{ .writebackSizeLimit }}
+          memcached_client:
+            addresses: {{ .addresses }}
+            consistent_hash: true
+            timeout: {{ .timeout }}
+            update_interval: 1m
+      {{- end }}
+      {{- end }}
+
+    {{- with .Values.loki.storage_config }}
+    storage_config:
+        {{- if not (hasKey $.Values.loki.storage_config "use_thanos_objstore") }}
+        use_thanos_objstore: {{ $.Values.loki.storage.use_thanos_objstore }}
+        {{- end }}
+        {{- tpl (. | toYaml) $ | nindent 4 }}
+    {{- end }}
+
+    {{- with .Values.loki.query_scheduler }}
+    query_scheduler:
+      {{- tpl (. | toYaml) $ | nindent 4 }}
+    {{- end }}
+
+    {{- with .Values.loki.compactor }}
+    compactor:
+      {{- tpl (. | toYaml) $ | nindent 4 }}
+    {{- end }}
+
+    {{- with .Values.loki.compactor_grpc_client }}
+    compactor_grpc_client:
+      {{- tpl (. | toYaml) $ | nindent 4 }}
+    {{- end }}
+
+    {{- with .Values.loki.analytics }}
+    analytics:
+      {{- tpl (. | toYaml) $ | nindent 4 }}
+    {{- end }}
+
+    {{- if .Values.loki.ui.enabled }}
+    ui:
+      enabled: true
+    {{- end }}
+    {{- with .Values.loki.querier }}
+    querier:
+      {{- tpl (. | toYaml) $ | nindent 4 }}
+    {{- end }}
+
+    {{- with .Values.loki.index_gateway }}
+    index_gateway:
+      {{- tpl (. | toYaml) $ | nindent 4 }}
+    {{- end }}
+
+    {{- with .Values.loki.frontend }}
+    frontend:
+      {{- tpl (. | toYaml) $ | nindent 4 }}
+    {{- end }}
+
+    {{- with .Values.loki.frontend_worker }}
+    frontend_worker:
+      {{- tpl (. | toYaml) $ | nindent 4 }}
+    {{- end }}
+
+    {{- with .Values.loki.distributor }}
+    distributor:
+      {{- tpl (. | toYaml) $ | nindent 4 }}
+    {{- end }}
+
+    tracing:
+      enabled: {{ .Values.loki.tracing.enabled }}
+
+    {{- with .Values.loki.bloom_build }}
+    bloom_build:
+      {{- tpl (. | toYaml) $ | nindent 4 }}
+    {{- end }}
+
+    {{- with .Values.loki.bloom_gateway }}
+    bloom_gateway:
+      {{- tpl (. | toYaml) $ | nindent 4 }}
+    {{- end }}
+
+    {{- with .Values.loki.operational_config }}
+    operational_config:
+      {{- tpl (. | toYaml) $ | nindent 4 }}
+    {{- end }}
+
+  # -- Storage config. Providing this will automatically populate all necessary storage configs in the templated config.
+  # -- In case of using thanos storage, enable use_thanos_objstore and the configuration should be done inside the object_store section.
+  storage:
+
+    # Loki now supports using thanos storage clients for connecting to object storage backend.
+    # This will become the default way to configure storage in a future releases.
+    use_thanos_objstore: true
+  
+    # @schema skipProperties:true;additionalProperties:true
+    object_store:
+      # Type of object store. Valid options are: s3, gcs, azure
+      type: s3
+      # @schema type:[string, null]
+      # Optional prefix for storage keys
+      storage_prefix: null
+      # S3 configuration (when type is "s3")
+      s3:
+        bucket_name: loki
+        endpoint: "minio.minio:9000"
+        access_key_id: "X7UbZfd3hoLhqdLN"
+        secret_access_key: "mQRwzaRlofjvLeit6gCBfCMjjRYp7o3v"
+        insecure: true
+
+  # @schema skipProperties:true;additionalProperties:true
+  # --  Optional Loki UI: Provides access to a operators UI for Loki distributed. When enabled UI will be available at /ui/ of loki-gateway
+  ui:
+    # Disabled by default for backwards compatibility. Enable to use the Loki UI.
+    enabled: true
+    gateway:
+      # enable gateway proxying to UI under /ui
+      enabled: true
+
+######################################################################################################################
+#
+# Chart Testing
+#
+######################################################################################################################
+
+# -- Section for configuring optional Helm test
+test:
+  enabled: true
+
+# The Loki canary pushes logs to and queries from this loki installation to test
+# that it's working correctly
+lokiCanary:
+  enabled: true
+
+######################################################################################################################
+#
+# Service Accounts and Kubernetes RBAC
+#
+######################################################################################################################
+serviceAccount:
+  # -- Specifies whether a ServiceAccount should be created
+  create: true
+
+# RBAC configuration
+rbac:
+  # -- For OpenShift set sccEnabled to 'true' to use the SecurityContextConstraints.
+  sccEnabled: false
+  # -- Toggle this to true to allow the use of hostPath volumes on OpenShift
+  sccAllowHostDirVolumePlugin: false
+  # -- Whether to install RBAC in the namespace only or cluster-wide. Useful if you want to watch ConfigMap globally.
+  namespaced: false
+
+######################################################################################################################
+#
+# Gateway and Ingress
+#
+# By default this chart will deploy a Nginx container to act as a gateway which handles routing of traffic
+# and can also do auth.
+#
+# If you would prefer you can optionally disable this and enable using k8s ingress to do the incoming routing.
+#
+######################################################################################################################
+
+# Configuration for the gateway
+gateway:
+  # -- Specifies whether the gateway should be enabled
+  enabled: true
+  # -- Gateway API routes configuration. Mutually exclusive with gateway.ingress.
+  # Use either ingress or route, but not both at once.
+  # Each entry in the map creates a separate HTTPRoute resource. The key "main" produces
+  # a route named after the gateway fullname; any other key appends the key as a suffix.
+  # This allows defining multiple routes, e.g. one HTTPRoute and one GRPCRoute.
+  route:
+    main:
+      # -- Specifies whether this Gateway API route should be created
+      enabled: true
+  metrics:
+    # -- Whether gateway metrics should be exported
+    enabled: true
+
+######################################################################################################################
+#
+# Microservices Mode
+#
+# For large Loki deployments ingesting more than 1 TB/day
+#
+######################################################################################################################
+
+# -- Configuration for the ingester
+ingester:
+  # -- Enable the component. Requires `loki.deploymentMode` to be set to `Distributed`.
+  enabled: true
+  # -- Kind of compactor deployment. StatefulSet and Deployment are supported.
+  kind: StatefulSet
+  podDisruptionBudget:
+    # -- Enable Pod Disruption Budget
+    enabled: true
+    minAvailable: 1
+  persistence:
+    # -- Enable creating PVCs which is required when using boltdb-shipper
+    enabled: false
+    # -- Use emptyDir with ramdisk for storage. **Please note that all data in ingester will be lost on pod restart**
+    inMemory: false
+    # -- List of the ingester PVCs
+    # @notationType -- list
+    claims:
+      - name: data
+        # -- Set access modes on the PersistentVolumeClaim
+        accessModes:
+          - ReadWriteOnce
+        size: 5Gi
+        storageClass: topolvm-provisioner
+  # -- Enabling zone awareness on ingesters will create 3 statefulests where all writes will send a replica to each zone.
+  # This is primarily intended to accelerate rollout operations by allowing for multiple ingesters within a single
+  # zone to be shutdown and restart simultaneously (the remaining 2 zones will be guaranteed to have at least one copy
+  # of the data).
+  # Note: This can be used to run Loki over multiple cloud provider availability zones however this is not currently
+  # recommended as Loki is not optimized for this and cross zone network traffic costs can become extremely high
+  # extremely quickly. Even with zone awareness enabled, it is recommended to run Loki in a single availability zone.
+  zoneAwareReplication:
+    # -- Enable zone awareness.
+    enabled: true
+    # -- The percent of replicas in each zone that will be restarted at once. In a value of 0-100
+    maxUnavailablePct: 33
+    # -- zoneA configuration
+    zoneA:
+      # @schema type:[object, null]
+      # @schema additionalProperties:true
+      # -- optionally define a node selector for this zone
+      nodeSelector: null
+      # -- optionally define extra affinity rules, by default different zones are not allowed to schedule on the same host
+      # The value will be passed through tpl.
+      extraAffinity: {}
+      # @schema additionalProperties:{"type":"string"}
+      # -- Specific annotations to add to zone A statefulset
+      annotations: {}
+      # @schema additionalProperties:{"type":"string"}
+      # -- Specific annotations to add to zone A pods
+      podAnnotations: {}
+      # -- Persistence overrides applied only to the zone A StatefulSet.
+      persistence:
+        # @schema type:[string, null]
+        # -- Storage class to use for every PVC in zone A. Overrides the `storageClass` of each entry in
+        # `ingester.persistence.claims` for this zone only. Use this when you have one StorageClass per
+        # availability zone (for example a topology-pinned EBS/PD StorageClass). If null, the
+        # claim-level `storageClass` is used as before, preserving existing behavior.
+        # If set to "-", `storageClassName: ""` is rendered, which disables dynamic provisioning.
+        storageClass: null
+    zoneB:
+      # @schema type:[object, null]
+      # @schema additionalProperties:true
+      # -- optionally define a node selector for this zone
+      nodeSelector: null
+      # -- optionally define extra affinity rules, by default different zones are not allowed to schedule on the same host
+      # The value will be passed through tpl.
+      extraAffinity: {}
+      # @schema additionalProperties:{"type":"string"}
+      # -- Specific annotations to add to zone B statefulset
+      annotations: {}
+      # @schema additionalProperties:{"type":"string"}
+      # -- Specific annotations to add to zone B pods
+      podAnnotations: {}
+      # -- Persistence overrides applied only to the zone B StatefulSet.
+      persistence:
+        # @schema type:[string, null]
+        # -- Storage class to use for every PVC in zone B. See
+        # `ingester.zoneAwareReplication.zoneA.persistence.storageClass` for details. If null, the
+        # claim-level `storageClass` is used as before.
+        storageClass: null
+    zoneC:
+      # @schema type:[object, null]
+      # @schema additionalProperties:true
+      # -- optionally define a node selector for this zone
+      nodeSelector: null
+      # -- optionally define extra affinity rules, by default different zones are not allowed to schedule on the same host
+      # The value will be passed through tpl.
+      extraAffinity: {}
+      # @schema additionalProperties:{"type":"string"}
+      # -- Specific annotations to add to zone C statefulset
+      annotations: {}
+      # @schema additionalProperties:{"type":"string"}
+      # -- Specific annotations to add to zone C pods
+      podAnnotations: {}
+      # -- Persistence overrides applied only to the zone C StatefulSet.
+      persistence:
+        # @schema type:[string, null]
+        # -- Storage class to use for every PVC in zone C. See
+        # `ingester.zoneAwareReplication.zoneA.persistence.storageClass` for details. If null, the
+        # claim-level `storageClass` is used as before.
+        storageClass: null
+
+# -- Configuration for the distributor
+distributor:
+  # -- Enable the component. Requires `loki.deploymentMode` to be set to `Distributed`.
+  enabled: true
+  autoscaling:
+    # -- Enable autoscaling for the distributor
+    enabled: false
+    # -- Minimum autoscaling replicas for the distributor
+    minReplicas: 1
+    # -- Maximum autoscaling replicas for the distributor
+    maxReplicas: 3
+    # @schema type:[number, null]
+    # -- Target CPU utilisation percentage for the distributor
+    targetCPUUtilizationPercentage: 60
+  # -- Grace period to allow the distributor to shutdown before it is killed
+  terminationGracePeriodSeconds: 30
+  podDisruptionBudget:
+    # -- Enable Pod Disruption Budget
+    enabled: true
+
+# -- Configuration for the querier
+querier:
+  # -- Enable the component. Requires `loki.deploymentMode` to be set to `Distributed`.
+  enabled: true
+  autoscaling:
+    # -- Enable autoscaling for the querier, this is only used if `indexGateway.enabled: true`
+    enabled: false
+    # -- Minimum autoscaling replicas for the querier
+    minReplicas: 1
+    # -- Maximum autoscaling replicas for the querier
+    maxReplicas: 3
+  podDisruptionBudget:
+    # -- Enable Pod Disruption Budget
+    enabled: true
+
+# -- Configuration for the query-frontend
+queryFrontend:
+  # -- Enable the component. Requires `loki.deploymentMode` to be set to `Distributed`.
+  enabled: true
+  autoscaling:
+    # -- Enable autoscaling for the query-frontend
+    enabled: false
+    # -- Minimum autoscaling replicas for the query-frontend
+    minReplicas: 1
+    # -- Maximum autoscaling replicas for the query-frontend
+    maxReplicas: 3
+  podDisruptionBudget:
+    # -- Enable Pod Disruption Budget
+    enabled: true
+
+# -- Configuration for the query-scheduler
+queryScheduler:
+  # -- Enable the component. Requires `loki.deploymentMode` to be set to `Distributed`.
+  enabled: true
+  podDisruptionBudget:
+    # -- Enable Pod Disruption Budget
+    enabled: true
+
+# -- Configuration for the index-gateway
+indexGateway:
+  # -- Enable the component. Requires `loki.deploymentMode` to be set to `Distributed`.
+  enabled: true
+  podDisruptionBudget:
+    # -- Enable Pod Disruption Budget
+    enabled: true
+  persistence:
+    # -- Enable creating PVCs which is required when using boltdb-shipper
+    enabled: false
+    # -- Set access modes on the PersistentVolumeClaim
+    accessModes:
+      - ReadWriteOnce
+    # @schema skipProperties:true;additionalProperties:true
+    # -- Parameters used for the `data` volume when volumeClaimEnabled if false
+    dataVolumeParameters:
+      emptyDir: {}
+    # -- Size of persistent disk
+    size: 5Gi
+    storageClass: topolvm-provisioner
+
+# -- Configuration for the compactor
+compactor:
+  # -- Enable the component. Requires `loki.deploymentMode` to be set to `Distributed`.
+  enabled: true
+  persistence:
+    # -- Enable creating PVCs for the compactor
+    enabled: false
+    # -- Storage type for the compactor. pvc and ephemeral are supported.
+    type: pvc
+    # @schema type:[string, null]
+    # -- Storage class to be used.
+    # If defined, storageClassName: <storageClass>.
+    # If set to "-", storageClassName: "", which disables dynamic provisioning.
+    # If empty or set to null, no storageClassName spec is
+    # set, choosing the default provisioner (gp2 on AWS, standard on GKE, AWS, and OpenStack).
+    storageClass: topolvm-provisioner
+    # -- Set access modes on the PersistentVolumeClaim
+    accessModes:
+      - ReadWriteOnce
+    # -- Size of persistent disk
+    size: 5Gi
+    
+# -- Configuration for the bloom-gateway
+bloomGateway:
+  # -- Enable the component. Requires `loki.deploymentMode` to be set to `Distributed`.
+  enabled: false
+  podDisruptionBudget:
+    # -- Enable Pod Disruption Budget
+    enabled: true
+  persistence:
+    # -- Enable creating PVCs for the bloom-gateway
+    enabled: false
+    # @schema additionalProperties:{"type":"string"}
+    # -- Annotations for bloom-gateway PVCs
+    annotations: {}
+    # @schema additionalProperties:{"type":"string"}
+    # -- Labels for bloom gateway PVCs
+    labels: {}
+    # -- List of the bloom-gateway PVCs
+    # @notationType -- list
+    claims:
+      - name: data
+        # -- Set access modes on the PersistentVolumeClaim
+        accessModes:
+          - ReadWriteOnce
+        # -- Size of persistent disk
+        size: 5Gi
+        storageClass: topolvm-provisioner
