@@ -132,7 +132,7 @@ collectors:
   #  at the cluster level (Kubernetes Events and cluster metrics).
   cluster:
     enabled: true
-    fullnameOverride: "opentelemetry-kube-stack-cluster-stats"ç
+    fullnameOverride: "opentelemetry-kube-stack-cluster-stats"
     replicas: 1
     resources:
       limits:
