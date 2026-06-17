@@ -308,6 +308,14 @@ collectors:
                 fields:
                   orchestrator.cluster.name: cluster-remoto
                 fields_under_root: true
+              - module: kubernetes
+                enabled: true
+                metricsets:
+                  - event
+                period: 60s
+                fields:
+                  orchestrator.cluster.name: cluster-remoto
+                fields_under_root: true
           queue.mem.flush.timeout: 0s
       # [Service Section](https://opentelemetry.io/docs/collector/configuration/#service)
       service:
