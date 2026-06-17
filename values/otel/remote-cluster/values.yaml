@@ -299,6 +299,7 @@ collectors:
                   - state_statefulset
                   - state_pod
                   - state_container
+                host: ${env:OTEL_K8S_NODE_NAME}
                 hosts: ["https://${env:OTEL_K8S_NODE_NAME}:10250"]
                 bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
                 ssl.verification_mode: none
