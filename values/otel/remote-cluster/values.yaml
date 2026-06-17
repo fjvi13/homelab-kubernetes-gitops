@@ -475,6 +475,11 @@ collectors:
             - key: k8s.cluster.name
               value: remote-cluster
               action: upsert
+        resource/orchestrator-cluster:
+          attributes:
+            - key: orchestrator.cluster
+              value: remote-cluster
+              action: upsert
         # [K8s Attributes Processor](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor/k8sattributesprocessor)
         k8s_attributes:
           filter:
@@ -520,6 +525,12 @@ collectors:
             - context: resource
               statements:
                 - set(attributes["elasticsearch.index"], "akslogs")
+        transform/route-metricbeat:
+          error_mode: ignore
+          log_statements:
+            - context: resource
+              statements:
+                - set(attributes["elasticsearch.index"], "metricbeat-default")
         tail_sampling:
           sampling_strategy: span-ingest
           decision_wait: 10s
@@ -729,12 +740,13 @@ collectors:
             processors:
               - memory_limiter
               - batch
+              - transform/route-metricbeat
               # - resourcedetection/eks
               # - resourcedetection/gcp
               # - resourcedetection/aks
               # - resource/hostname
               # - resource/cloud
-              # - resource/cluster-name
+              - resource/orchestrator-cluster
             exporters:
               - elasticsearch/_agent-component/default
           logs/node:
