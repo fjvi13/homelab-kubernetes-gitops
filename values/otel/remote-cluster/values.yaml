@@ -328,6 +328,10 @@ collectors:
     env:
       - name: ELASTIC_AGENT_OTEL
         value: '"true"'
+      - name: NODE_NAME
+        valueFrom:
+          fieldRef:
+            fieldPath: spec.nodeName
     presets:
       logsCollection:
         enabled: true # Enable/disable the collection of node's logs.
