@@ -604,7 +604,7 @@ collectors:
                       - pod
                       - system
                       - volume
-                    hosts: ["https://${env:K8S_NODE_NAME}:10250"]
+                    hosts: ["https://${K8S_NODE_NAME}:10250"]
                     bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
                     ssl.verification_mode: none
                     data_stream:
