@@ -482,7 +482,7 @@ collectors:
         resource/orchestrator-cluster:
           attributes:
             - key: orchestrator.cluster.name
-              value: 'remote-cluster'
+              value: "remote-cluster"
               action: upsert
         # [K8s Attributes Processor](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor/k8sattributesprocessor)
         k8s_attributes:
@@ -535,6 +535,7 @@ collectors:
             - context: resource
               statements:
                 - set(attributes["elasticsearch.index"], "metricbeat-9.4.2")
+                - set(attributes["orchestrator.cluster.name"], "remote-cluster")
         tail_sampling:
           sampling_strategy: span-ingest
           decision_wait: 10s
