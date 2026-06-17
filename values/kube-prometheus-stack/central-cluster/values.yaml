@@ -360,8 +360,8 @@ thanosRuler:
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api-reference/api.md#thanosruler
     ##
     additionalArgs:
-      # - name: alert.query-url
-      #   value: "http://query.lab"
+      - name: alert.query-url
+        value: "http://query.lab"
       - name: remote-write.config
         value: |-
           "remote_write":
