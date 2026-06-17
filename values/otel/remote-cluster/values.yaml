@@ -350,6 +350,33 @@ collectors:
           endpoint: "http://opentelemetry-kube-stack-gateway-collector-headless:4317"
           tls:
             insecure: true
+        elasticsearch/_agent-component/default:
+          api_key: aUcyVGJaNEJsWV9sN0RoaDJ2Y046ODlOMHYyX2xCUFdVd0JRVmllaE51dw==
+          compression: gzip
+          compression_params:
+              level: 1
+          endpoints:
+              - http://elasticsearch.lab:80
+          logs_dynamic_id:
+              enabled: true
+
+          retry:
+              enabled: true
+              initial_interval: 1s
+              max_interval: 1m0s
+              max_retries: 3
+
+          sending_queue:
+              enabled: true
+              wait_for_result: true
+              block_on_overflow: true
+              num_consumers: 1
+              queue_size: 3200
+              batch:
+                  max_size: 1600
+                  min_size: 0
+                  flush_timeout: 10s
+                  sizer: items
       processors:
         memory_limiter:
           check_interval: 1s
@@ -549,6 +576,16 @@ collectors:
               if: 'attributes.ts != nil'
               parse_from: attributes.ts
               layout: '%Y-%m-%dT%H:%M:%S%z'
+        metricbeatreceiver:
+          metricbeat:
+              modules:
+                  - data_stream:
+                      dataset: system.cpu
+                    index: metrics-system.cpu-default
+                    metricsets:
+                      - cpu
+                    module: system
+          queue.mem.flush.timeout: 0s
         # [Hostmetrics Receiver](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/hostmetricsreceiver)
         hostmetrics:
           collection_interval: 60s
@@ -672,6 +709,20 @@ collectors:
           logs: null
           metrics: null
           traces: null
+          logs/metricbeatreceiver:
+            receivers:
+              - metricbeatreceiver
+            processors:
+              - memory_limiter
+              - batch
+              # - resourcedetection/eks
+              # - resourcedetection/gcp
+              # - resourcedetection/aks
+              # - resource/hostname
+              # - resource/cloud
+              #- resource/cluster-name
+            exporters:
+              - elasticsearch/_agent-component/default
           logs/node:
             receivers:
               - file_log
