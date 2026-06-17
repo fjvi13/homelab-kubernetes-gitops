@@ -184,7 +184,8 @@ query:
   enabled: true
   logLevel: info
   replicaLabel: [prometheus_replica, receive_replica, ruler_replica]
-  stores: []
+  stores:
+    - dnssrv+_grpc._tcp.thanos-ruler.monitoring.svc.cluster.local
   replicaCount: 1
   resources:
     requests:
