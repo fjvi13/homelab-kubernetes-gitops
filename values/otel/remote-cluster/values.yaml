@@ -478,7 +478,7 @@ collectors:
         resource/orchestrator-cluster:
           attributes:
             - key: orchestrator.cluster.name
-              value: "remote-cluster"
+              value: '"remote-cluster"'
               action: upsert
         # [K8s Attributes Processor](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor/k8sattributesprocessor)
         k8s_attributes:
@@ -604,7 +604,7 @@ collectors:
                       - pod
                       - system
                       - volume
-                    hosts: ["https://${OTEL_K8S_NODE_NAME}:10250"]
+                    hosts: ["https://${env:OTEL_K8S_NODE_NAME}:10250"]
                     bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
                     ssl.verification_mode: none
                     data_stream:
