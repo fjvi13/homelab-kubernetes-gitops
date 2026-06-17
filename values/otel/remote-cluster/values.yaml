@@ -611,13 +611,8 @@ collectors:
                   dataset: kubernetes
                 index: metrics-kubernetes-default
                 fields:
-                  orchestrator.cluster.name: remote-cluster
+                  orchestrator.cluster.name: cluster-remoto
                 fields_under_root: true
-                processors:
-                  - add_fields:
-                      target: orchestrator.cluster
-                      fields:
-                        name: cluster-remoto
           queue.mem.flush.timeout: 0s
         # [Hostmetrics Receiver](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/hostmetricsreceiver)
         hostmetrics:
