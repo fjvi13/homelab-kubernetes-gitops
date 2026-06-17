@@ -530,7 +530,6 @@ collectors:
             - context: resource
               statements:
                 - set(attributes["elasticsearch.index"], "metricbeat-9.4.2")
-                - set(attributes["orchestrator.cluster.name"], "remote-cluster")
         tail_sampling:
           sampling_strategy: span-ingest
           decision_wait: 10s
@@ -589,27 +588,36 @@ collectors:
               layout: '%Y-%m-%dT%H:%M:%S%z'
         metricbeatreceiver:
           metricbeat:
-              modules:
-                  - data_stream:
-                      dataset: system.cpu
-                    index: metrics-system.cpu-default
-                    metricsets:
-                      - cpu
-                    module: system
-                  - module: kubernetes
-                    period: 1m
-                    metricsets:
-                      - container
-                      - node
-                      - pod
-                      - system
-                      - volume
-                    hosts: ["https://${env:OTEL_K8S_NODE_NAME}:10250"]
-                    bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
-                    ssl.verification_mode: none
-                    data_stream:
-                      dataset: kubernetes
-                    index: metrics-kubernetes-default
+            modules:
+              - data_stream:
+                  dataset: system.cpu
+                index: metrics-system.cpu-default
+                metricsets:
+                  - cpu
+                module: system
+
+              - module: kubernetes
+                period: 1m
+                metricsets:
+                  - container
+                  - node
+                  - pod
+                  - system
+                  - volume
+                hosts: ["https://${env:OTEL_K8S_NODE_NAME}:10250"]
+                bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+                ssl.verification_mode: none
+                data_stream:
+                  dataset: kubernetes
+                index: metrics-kubernetes-default
+                fields:
+                  orchestrator.cluster.name: remote-cluster
+                fields_under_root: true
+                processors:
+                  - add_fields:
+                      target: orchestrator.cluster
+                      fields:
+                        name: remote-cluster
           queue.mem.flush.timeout: 0s
         # [Hostmetrics Receiver](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/hostmetricsreceiver)
         hostmetrics:
