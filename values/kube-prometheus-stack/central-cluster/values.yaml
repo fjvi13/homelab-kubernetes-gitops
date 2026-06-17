@@ -197,7 +197,7 @@ thanosRuler:
   route:
     main:
       # -- Enables or disables the route
-      enabled: false
+      enabled: true
 
       # -- Set the route apiVersion, e.g. gateway.networking.k8s.io/v1 or gateway.networking.k8s.io/v1alpha2
       apiVersion: gateway.networking.k8s.io/v1
@@ -208,10 +208,14 @@ thanosRuler:
       annotations: {}
       labels: {}
 
-      hostnames: []
-      # - my-filter.example.com
-      parentRefs: []
-      # - name: acme-gw
+      hostnames:
+        - ruler.lab
+      parentRefs:
+        - group: gateway.networking.k8s.io
+          kind: Gateway
+          name: lab-gateway
+          namespace: istio-system
+          sectionName: http
 
       # -- create http route for redirect (https://gateway-api.sigs.k8s.io/guides/http-redirect-rewrite/#http-to-https-redirects)
       ## Take care that you only enable this on the http listener of the gateway to avoid an infinite redirect.
