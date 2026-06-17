@@ -298,7 +298,7 @@ collectors:
                   - state_replicaset
                   - state_statefulset
                   - state_pod
-                  - state_container}
+                  - state_container
                 hosts: ["kube-state-metrics:8080"]
                 bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
                 ssl.verification_mode: none
