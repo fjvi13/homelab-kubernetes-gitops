@@ -709,7 +709,7 @@ collectors:
           logs: null
           metrics: null
           traces: null
-          logs/metricbeatreceiver:
+          metrics/metricbeatreceiver:
             receivers:
               - metricbeatreceiver
             processors:
