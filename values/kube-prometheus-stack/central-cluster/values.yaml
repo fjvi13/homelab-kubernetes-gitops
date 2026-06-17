@@ -345,7 +345,7 @@ thanosRuler:
 
     ## QueryEndpoints defines Thanos querier endpoints from which to query metrics.
     ## Maps to the --query flag of thanos ruler.
-    # queryEndpoints: [dnssrv+_http._tcp.thanos-query.monitoring.svc.cluster.local]
+    queryEndpoints: [dnssrv+_http._tcp.thanos-query.monitoring.svc.cluster.local]
 
     ## Labels configure the external label pairs to ThanosRuler. A default replica
     ## label `thanos_ruler_replica` will be always added as a label with the value
@@ -360,8 +360,8 @@ thanosRuler:
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api-reference/api.md#thanosruler
     ##
     additionalArgs:
-      - name: alert.query-url
-        value: "http://query.lab"
+      # - name: alert.query-url
+      #   value: "http://query.lab"
       - name: remote-write.config
         value: |-
           "remote_write":

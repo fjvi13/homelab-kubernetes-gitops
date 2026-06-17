@@ -185,7 +185,7 @@ query:
   logLevel: info
   replicaLabel: [prometheus_replica, receive_replica, ruler_replica]
   stores:
-    - dnssrv+_grpc._tcp.thanos-ruler.monitoring.svc.cluster.local
+    - dnssrv+_grpc._tcp.thanos-ruler.monitoring.svc.cluster.local # Store GW and Receiver endpoints are automatically added as they belong to the same Helm Chart as the Querier.
   replicaCount: 1
   resources:
     requests:
