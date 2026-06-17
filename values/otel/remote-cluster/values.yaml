@@ -585,6 +585,35 @@ collectors:
                     metricsets:
                       - cpu
                     module: system
+                  - module: kubernetes
+                    period: 1m
+                    metricsets:
+                      - container
+                      - node
+                      - pod
+                      - system
+                      - volume
+                      - state_node
+                      - state_daemonset
+                      - state_deployment
+                      - state_replicaset
+                      - state_statefulset
+                      - state_pod
+                      - state_container
+                      - state_job
+                      - state_cronjob
+                      - state_resourcequota
+                      - state_service
+                      - state_persistentvolume
+                      - state_persistentvolumeclaim
+                      - state_storageclass
+                    host: ${env:OTEL_K8S_NODE_NAME}
+                    hosts: ["${env:OTEL_K8S_NODE_NAME}:10250"]
+                    bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+                    ssl.verification_mode: none
+                    data_stream:
+                      dataset: kubernetes
+                    index: metrics-kubernetes-default
           queue.mem.flush.timeout: 0s
         # [Hostmetrics Receiver](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/hostmetricsreceiver)
         hostmetrics:
@@ -709,7 +738,7 @@ collectors:
           logs: null
           metrics: null
           traces: null
-          metrics/metricbeatreceiver:
+          logs/metricbeatreceiver:
             receivers:
               - metricbeatreceiver
             processors:
@@ -720,7 +749,7 @@ collectors:
               # - resourcedetection/aks
               # - resource/hostname
               # - resource/cloud
-              #- resource/cluster-name
+              # - resource/cluster-name
             exporters:
               - elasticsearch/_agent-component/default
           logs/node:
