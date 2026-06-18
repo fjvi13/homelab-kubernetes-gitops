@@ -674,7 +674,7 @@ collectors:
               # - resourcedetection/eks
               # - resourcedetection/gcp
               # - resourcedetection/aks
-              # - resource/hostname
+              - resource/hostname
               # - resource/cloud
               - resource/cluster-name
               - transform/route-logs
@@ -692,7 +692,7 @@ collectors:
               # - resourcedetection/eks
               # - resourcedetection/gcp
               # - resourcedetection/aks
-              # - resource/hostname
+              - resource/hostname
               # - resource/cloud
               - resource/cluster-name
             exporters:
@@ -704,7 +704,7 @@ collectors:
             processors:
               - memory_limiter
               - batch/metrics
-              # - resource/hostname
+              - resource/hostname
               - resource/cluster-name
             exporters:
               - otlp_grpc/gateway
