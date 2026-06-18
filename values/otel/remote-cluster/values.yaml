@@ -404,6 +404,9 @@ collectors:
             - key: host.name
               from_attribute: k8s.node.name
               action: upsert
+            - key: kubernetes.node.hostname
+              from_attribute: k8s.node.name
+              action: upsert
         resourcedetection/system:
           # Detects resources from the system and EC2 instances.
           detectors: ["system", "ec2"]
@@ -675,7 +678,7 @@ collectors:
               # - resourcedetection/gcp
               # - resourcedetection/aks
               - resource/hostname
-              # - resource/cloud
+              - resource/cloud
               - resource/cluster-name
               - transform/route-logs
             exporters:
@@ -693,7 +696,7 @@ collectors:
               # - resourcedetection/gcp
               # - resourcedetection/aks
               - resource/hostname
-              # - resource/cloud
+              - resource/cloud
               - resource/cluster-name
             exporters:
               # - debug
