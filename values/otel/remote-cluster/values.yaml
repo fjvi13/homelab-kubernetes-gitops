@@ -492,28 +492,12 @@ collectors:
             - context: scope
               statements:
                 - set(attributes["elastic.mapping.mode"], "ecs")
-        transform/route-python-app:
+        transform/route-logs:
           error_mode: ignore
           log_statements:
             - context: resource
               statements:
-                - set(attributes["elasticsearch.index"], "akslogs")
-        tail_sampling:
-          sampling_strategy: span-ingest
-          decision_wait: 10s
-          num_traces: 100
-          expected_new_traces_per_sec: 10
-          sample_on_first_match: true
-          decision_cache: 
-            sampled_cache_size: 1000
-          policies: [
-            # Sample 20% of all traces
-             {
-            name: test-policy-4,
-            type: probabilistic,
-            probabilistic: {sampling_percentage: 20}
-            }
-          ]
+                - set(attributes["elasticsearch.index"], "ekslogs")
       receivers:
         # [OTLP Receiver](https://github.com/open-telemetry/opentelemetry-collector/tree/main/receiver/otlpreceiver)
         otlp:
@@ -692,7 +676,7 @@ collectors:
               # - resource/hostname
               # - resource/cloud
               - resource/cluster-name
-              - transform/route-python-app
+              - transform/route-logs
             exporters:
               - otlp_grpc/gateway
           metrics/node/otel:
