@@ -884,6 +884,34 @@ collectors:
       service:
         # To enable central config in Kibana APM add the extensions bearertokenauth and apmconfig
         extensions: [cgroup_runtime, file_storage]
+        telemetry:
+            resource:
+              elastic.collector.group_name: "OTel Collector Group"
+              elastic.collector.group: "otel-collector-group"
+              service.namespace: "otel-system"
+              service.name: "otel-collector-gateway"
+              service.instance.id: "opentelemetry-kube-stack-gateway"
+            metrics:
+              readers:
+                - periodic:
+                    exporter:
+                      otlp:
+                        protocol: "grpc"
+                        endpoint: "http://opentelemetry-kube-stack-gateway-collector-headless:4317"
+            logs:
+              processors:
+                - batch:
+                    exporter:
+                      otlp:
+                        protocol: "grpc"
+                        endpoint: "http://opentelemetry-kube-stack-gateway-collector-headless:4317"
+            traces:
+              processors:
+                - batch:
+                    exporter:
+                      otlp:
+                        protocol: "grpc"
+                        endpoint: "http://opentelemetry-kube-stack-gateway-collector-headless:4317"
         pipelines:
           metrics:
             receivers: [otlp]
