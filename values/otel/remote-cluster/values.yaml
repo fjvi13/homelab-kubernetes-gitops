@@ -261,9 +261,9 @@ collectors:
             resource:
               elastic.collector.group_name: "OTel Collector Group"
               elastic.collector.group: "otel-collector-group"
-              service.namespace: "otel-collector-group"
-              service.name: "otel-collector-group"
-              service.instance.id: "cluster-collector"
+              service.namespace: "otel-system"
+              service.name: "otel-collector-cluster"
+              service.instance.id: "opentelemetry-kube-stack-cluster-stats"
             metrics:
               readers:
                 - periodic:
@@ -659,6 +659,34 @@ collectors:
       # [Service Section](https://opentelemetry.io/docs/collector/configuration/#service)
       service:
         extensions: [cgroup_runtime, file_storage]
+        telemetry:
+            resource:
+              elastic.collector.group_name: "OTel Collector Group"
+              elastic.collector.group: "otel-collector-group"
+              service.namespace: "otel-system"
+              service.name: "otel-collector-daemon"
+              service.instance.id: "opentelemetry-kube-stack-daemon"
+            metrics:
+              readers:
+                - periodic:
+                    exporter:
+                      otlp:
+                        protocol: "grpc"
+                        endpoint: "http://opentelemetry-kube-stack-gateway-collector-headless:4317"
+            logs:
+              processors:
+                - batch:
+                    exporter:
+                      otlp:
+                        protocol: "grpc"
+                        endpoint: "http://opentelemetry-kube-stack-gateway-collector-headless:4317"
+            traces:
+              processors:
+                - batch:
+                    exporter:
+                      otlp:
+                        protocol: "grpc"
+                        endpoint: "http://opentelemetry-kube-stack-gateway-collector-headless:4317"
         pipelines:
           # Disable default non used kube-stack Helm Chart pipelines
           logs: null
