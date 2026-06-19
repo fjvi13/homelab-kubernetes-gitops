@@ -1206,9 +1206,7 @@ instrumentation:
   python:
     image: docker.elastic.co/observability/elastic-otel-python:1.12.0
     # Uncomment to enable central config in Kibana APM
-    env:
-      - name: instrumentation.opentelemetry.io/otel-python-platform
-        value: "musl"
+    #  env:
     #   - name: ELASTIC_OTEL_OPAMP_ENDPOINT
     #     value: 'http://opentelemetry-kube-stack-gateway-collector.otel-system.svc.cluster.local:4320/v1/opamp'
     #   - name: ELASTIC_OTEL_OPAMP_HEADERS
