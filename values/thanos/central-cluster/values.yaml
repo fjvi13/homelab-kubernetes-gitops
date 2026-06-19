@@ -598,3 +598,5 @@ metrics:
       receive: true
       ruler: true
       store_gateway: true
+      disabled:
+        ThanosSidecarIsDown: true
