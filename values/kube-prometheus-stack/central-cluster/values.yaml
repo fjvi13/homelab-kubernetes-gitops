@@ -53,6 +53,46 @@ alertmanager:
   serviceMonitor:
     selfMonitor: true
     interval: ""
+
+  route:
+    main:
+      # -- Enables or disables the route
+      enabled: true
+
+      # -- Set the route apiVersion, e.g. gateway.networking.k8s.io/v1 or gateway.networking.k8s.io/v1alpha2
+      apiVersion: gateway.networking.k8s.io/v1
+      # -- Set the route kind
+      # Valid options are GRPCRoute, HTTPRoute, TCPRoute, TLSRoute, UDPRoute
+      kind: HTTPRoute
+
+      annotations: {}
+      labels: {}
+
+      hostnames:
+        - alertmanager.lab
+      parentRefs:
+        - group: gateway.networking.k8s.io
+          kind: Gateway
+          name: lab-gateway
+          namespace: istio-system
+          sectionName: http
+
+      # -- create http route for redirect (https://gateway-api.sigs.k8s.io/guides/http-redirect-rewrite/#http-to-https-redirects)
+      ## Take care that you only enable this on the http listener of the gateway to avoid an infinite redirect.
+      ## matches, filters and additionalRules will be ignored if this is set to true. Be are
+      httpsRedirect: false
+
+      matches:
+        - path:
+            type: PathPrefix
+            value: /
+
+      ## Filters define the filters that are applied to requests that match this rule.
+      filters: []
+
+      ## Additional custom rules that can be added to the route
+      additionalRules: []
+
   alertmanagerSpec:
     image:
       registry: quay.io
@@ -60,7 +100,7 @@ alertmanager:
       tag: v0.33.0
       sha: ""
       pullPolicy: IfNotPresent
-    replicas: 1
+    replicas: 2
     ## Time duration Alertmanager shall retain data for. Default is '120h', and must match the regular expression
     ## [0-9]+(ms|s|m|h) (milliseconds seconds minutes hours).
     ##
@@ -358,7 +398,13 @@ thanosRuler:
         # key: ""
       # will render alertmanagersConfig secret data and configure it to be used by Thanos Ruler custom resource, ignored when alertmanagersConfig.existingSecret is set
       # https://thanos.io/tip/components/rule.md/#alertmanager
-      secret: {}
+      secret:
+        alertmanagers:
+          - static_configs:
+              - alertmanager-operated.monitoring.svc.cluster.local:9093
+            scheme: http
+            api_version: v2
+            timeout: 10s
         # alertmanagers:
         # - api_version: v2
         #   http_config:
