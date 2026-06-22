@@ -401,7 +401,7 @@ thanosRuler:
       secret:
         alertmanagers:
           - static_configs:
-              - alertmanager-operated.monitoring.svc.cluster.local:9093
+              - dns+alertmanager-operated.monitoring.svc.cluster.local:9093
             scheme: http
             api_version: v2
             timeout: 10s
@@ -462,6 +462,10 @@ thanosRuler:
           - "name": "receiver"
             "remote_timeout": "30s"
             "url": "http://thanos-receive.monitoring.svc.cluster.local:10908/api/v1/receive"
+            "queue_config":
+              "capacity": 500
+              "max_shards": 30
+              "max_samples_per_send": 200
 
     ## Define resources requests and limits for single Pods.
     ## ref: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
