@@ -148,6 +148,14 @@ prometheus-node-exporter:
 
 prometheusOperator:
   fullnameOverride: "prometheus-operator"
+
+  image:
+    registry: quay.io
+    repository: prometheus-operator/prometheus-operator
+    tag: v0.92.0
+    sha: ""
+    pullPolicy: IfNotPresent
+
   podDisruptionBudget:
     enabled: true
     minAvailable: 1
