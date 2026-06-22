@@ -39,6 +39,39 @@ defaultRules:
     prometheusOperator: true
     windows: false
 
+## Provide custom recording or alerting rules to be deployed into the cluster.
+##
+additionalPrometheusRulesMap:
+ rule-name:
+   groups:
+   - name: custom.rules
+     rules:
+      - alert: ClusterDown
+        annotations:
+          summary: Cluster {{ $labels.cluster }} is down
+          description: The Prometheus instance for cluster {{ $labels.cluster }} is either down or missing.
+        expr: |
+          max by (cluster) (
+            max_over_time(
+              up{job="prometheus-kube-prometheus-prometheus", namespace="monitoring"}[5d]
+            )
+            or
+            max_over_time(
+              up{pod=~"opentelemetry-kube-stack-prometheus-collector-.*", namespace="otel-system"}[5d]
+            )
+          )
+          unless
+          on (cluster)
+          max by (cluster) (
+            up{job="prometheus-kube-prometheus-prometheus", namespace="monitoring"} == 1
+            or
+            up{pod=~"opentelemetry-kube-stack-prometheus-collector-.*", namespace="otel-system"} == 1
+          ) > 0
+        for: 5m
+        labels:
+          severity: critical
+          namespace: monitoring
+
 alertmanager:
   enabled: true
   fullnameOverride: "alertmanager"
@@ -100,7 +133,7 @@ alertmanager:
       tag: v0.33.0
       sha: ""
       pullPolicy: IfNotPresent
-    replicas: 2
+    replicas: 1
     ## Time duration Alertmanager shall retain data for. Default is '120h', and must match the regular expression
     ## [0-9]+(ms|s|m|h) (milliseconds seconds minutes hours).
     ##
@@ -337,9 +370,7 @@ thanosRuler:
 
     logFormat: logfmt
     logLevel: info
-    replicas: 2
-
-    retention: 2h
+    replicas: 1
 
     evaluationInterval: 1m
 
