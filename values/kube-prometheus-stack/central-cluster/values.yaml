@@ -371,7 +371,6 @@ thanosRuler:
     logFormat: logfmt
     logLevel: info
     replicas: 1
-    retention: ""
     evaluationInterval: 1m
 
     storage: {}
