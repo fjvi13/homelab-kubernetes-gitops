@@ -25,7 +25,7 @@ spec:
                   env: lab
                   # cluster: central-cluster
               values:
-                chartVersion: 78.5.0
+                chartVersion: 86.3.2
                 branchReference: HEAD
   template:
     metadata:
