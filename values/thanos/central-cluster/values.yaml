@@ -183,7 +183,7 @@ query:
     grpc: 10901
   enabled: true
   logLevel: info
-  replicaLabel: [prometheus_replica, receive_replica, ruler_replica]
+  replicaLabel: [prometheus_replica, receive_replica, thanos_ruler_replica]
   stores: 
     - dnssrv+_grpc._tcp.thanos-ruler-operated.monitoring.svc.cluster.local # Store GW and Receiver endpoints are automatically discovered by the Querier
   replicaCount: 1
