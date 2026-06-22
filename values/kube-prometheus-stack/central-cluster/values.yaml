@@ -46,6 +46,10 @@ alertmanager:
     enabled: true
     port: 9093
     type: ClusterIP
+  podDisruptionBudget:
+    enabled: true
+    minAvailable: 1
+    unhealthyPodEvictionPolicy: AlwaysAllow
   serviceMonitor:
     selfMonitor: true
     interval: ""
@@ -53,7 +57,7 @@ alertmanager:
     image:
       registry: quay.io
       repository: prometheus/alertmanager
-      tag: v0.28.1
+      tag: v0.33.0
       sha: ""
       pullPolicy: IfNotPresent
     replicas: 1
@@ -104,7 +108,10 @@ prometheus-node-exporter:
 
 prometheusOperator:
   fullnameOverride: "prometheus-operator"
-
+  podDisruptionBudget:
+    enabled: true
+    minAvailable: 1
+    unhealthyPodEvictionPolicy: AlwaysAllow
   resources:
     limits:
       cpu: 400m
@@ -218,15 +225,17 @@ prometheus:
       # requests:
       #   cpu: 500m
       #   memory: 512Mi
-
+  podDisruptionBudget:
+    enabled: true
+    minAvailable: 1
+    unhealthyPodEvictionPolicy: AlwaysAllow
 
 thanosRuler:
   enabled: true
 
   podDisruptionBudget:
-    enabled: false
+    enabled: true
     minAvailable: 1
-    # maxUnavailable: ""
     unhealthyPodEvictionPolicy: AlwaysAllow
 
   route:
@@ -278,7 +287,7 @@ thanosRuler:
     image:
       registry: quay.io
       repository: thanos/thanos
-      tag: v0.39.2
+      tag: v0.41.0
       sha: ""
 
     ## Namespaces to be selected for PrometheusRules discovery.
