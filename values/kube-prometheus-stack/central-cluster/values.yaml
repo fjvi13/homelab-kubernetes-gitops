@@ -337,7 +337,7 @@ thanosRuler:
 
     logFormat: logfmt
     logLevel: info
-    replicas: 1
+    replicas: 2
 
     retention: 2h
 
