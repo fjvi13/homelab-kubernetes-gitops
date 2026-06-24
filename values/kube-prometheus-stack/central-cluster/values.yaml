@@ -165,6 +165,12 @@ kubelet:
 
 kube-state-metrics:
   fullnameOverride: "kube-state-metrics"
+  image:
+    registry: registry.k8s.io
+    repository: kube-state-metrics/kube-state-metrics
+    tag: v2.19.1
+    sha: ""
+    pullPolicy: IfNotPresent
   prometheus:
     monitor:
       enabled: true
@@ -174,6 +180,12 @@ nodeExporter:
   enabled: true
 prometheus-node-exporter:
   fullnameOverride: "node-exporter"
+  image:
+    registry: quay.io
+    repository: prometheus/node-exporter
+    tag: v1.11.1-distroless
+    sha: ""
+    pullPolicy: IfNotPresent
   prometheus:
     monitor:
       enabled: true
@@ -201,12 +213,35 @@ prometheusOperator:
       cpu: 200m
       memory: 300Mi
 
+  admissionWebhooks:
+    deployment:
+      enabled: false
+      image:
+        registry: quay.io
+        repository: prometheus-operator/admission-webhook
+        tag: v0.92.0
+        sha: ""
+        pullPolicy: IfNotPresent
+    patch:
+      enabled: true
+      image:
+        registry: ghcr.io
+        repository: jkroepke/kube-webhook-certgen
+        tag: 1.8.4
+        sha: ""
+        pullPolicy: IfNotPresent
+
   ## Create Endpoints objects for kubelet targets.
   kubeletEndpointsEnabled: false
   ## Create EndpointSlice objects for kubelet targets.
   kubeletEndpointSliceEnabled: true
 
   prometheusConfigReloader:
+    image:
+      registry: quay.io
+      repository: prometheus-operator/prometheus-config-reloader
+      tag: v0.92.0
+      sha: ""
     resources:
       requests:
         cpu: 200m
@@ -283,6 +318,12 @@ prometheus:
             - prometheus
     externalLabels:
       cluster: "central-cluster"
+    image:
+      registry: quay.io
+      repository: prometheus/prometheus
+      tag: v3.12.0-distroless
+      sha: ""
+      pullPolicy: IfNotPresent
     remoteWrite:
     - url: http://thanos-receive.monitoring.svc.cluster.local:10908/api/v1/receive
       # headers:
