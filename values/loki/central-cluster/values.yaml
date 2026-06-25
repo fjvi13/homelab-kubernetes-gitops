@@ -3,6 +3,8 @@ global:
   # -- Overrides the Docker registry globally for all images (standard format).
   # This has the highest precedence and overrides every component-level image.registry value.
   imageRegistry: null
+  # -- configures cluster domain ("cluster.local" by default)
+  clusterDomain: "lab"
 
 # -- Deployment mode lets you specify how to deploy Loki.
 # There are 3 options:
@@ -369,7 +371,7 @@ rbac:
 # Configuration for the gateway
 gateway:
   # -- Specifies whether the gateway should be enabled
-  enabled: true
+  enabled: false
   # -- Gateway API routes configuration. Mutually exclusive with gateway.ingress.
   # Use either ingress or route, but not both at once.
   # Each entry in the map creates a separate HTTPRoute resource. The key "main" produces
@@ -378,10 +380,107 @@ gateway:
   route:
     main:
       # -- Specifies whether this Gateway API route should be created
-      enabled: true
+      enabled: false
   metrics:
     # -- Whether gateway metrics should be exported
     enabled: true
+# -- Gateway API routes for direct routing to Loki services, bypassing the nginx gateway.
+# Use either this or the top-level ingress, but not both at once.
+# Each entry in the map creates a separate HTTPRoute resource. The key "main" produces
+# a route named after the loki fullname; any other key appends the key as a suffix.
+# This allows defining multiple routes, e.g. one HTTPRoute and one GRPCRoute.
+route:
+  main:
+    # -- Specifies whether this Gateway API route should be created
+    enabled: true
+    # -- Gateway API version to use. Auto-detected from cluster capabilities if empty.
+    apiVersion: ""
+    # -- Kind of the route resource. Valid options are GRPCRoute, HTTPRoute, TCPRoute, TLSRoute, UDPRoute
+    kind: HTTPRoute
+    # @schema additionalProperties:{"type":"string"}
+    # -- Annotations for the route
+    annotations: {}
+    # @schema additionalProperties:{"type":"string"}
+    # -- Labels for the route
+    labels: {}
+    # -- Hostnames for the route
+    hostnames:
+      - loki.{{ .Values.global.clusterDomain }}
+    # -- Parent references for the route (required for Gateway API)
+    parentRefs:
+      - group: gateway.networking.k8s.io
+        kind: Gateway
+        name: lab-gateway
+        namespace: istio-system
+        sectionName: http
+    # -- Additional rules to prepend before the generated path-routing rules.
+    # Each entry is rendered into spec.rules as written (templating is supported),
+    # so any HTTPRoute/GRPCRoute rule shape is accepted — including filter-only rules
+    # with no backendRefs (e.g. RequestRedirect, URLRewrite).
+    additionalRules: []
+    # @schema type:[number, null]
+    # -- Backend port override for all generated rules.
+    # When unset, GRPCRoute automatically uses loki.server.grpc_listen_port (default 9095)
+    # and all other kinds use loki.server.http_listen_port (default 3100).
+    backendPort: null
+    # -- Paths routed to each Loki service group. The target service depends on the deployment mode.
+    # To produce a route that contains only `additionalRules` and no chart-generated path rules
+    # (for example, a dedicated HTTP-to-HTTPS redirect route), set every entry below to an empty
+    # list — e.g. `distributor: []`, `queryFrontend: []`, `ruler: []`, `compactor: []`.
+    paths:
+      # -- Paths that are exposed by Loki Distributor.
+      # If deployment mode is Distributed, the requests are forwarded to the service: `{{"loki.distributorFullname"}}`.
+      # If deployment mode is SimpleScalable, the requests are forwarded to write k8s service: `{{"loki.writeFullname"}}`.
+      # If deployment mode is SingleBinary, the requests are forwarded to the central/single k8s service: `{{"loki.fullname"}}`
+      distributor:
+        - /api/prom/push
+        - /loki/api/v1/push
+        - /otlp/v1/logs
+      # -- Paths that are exposed by Loki Query Frontend.
+      # If deployment mode is Distributed, the requests are forwarded to the service.
+      # If deployment mode is SimpleScalable, the requests are forwarded to read k8s service.
+      # If deployment mode is SingleBinary, the requests are forwarded to the central/single k8s service`
+      queryFrontend:
+        - /api/prom/query
+        # this path covers labels and labelValues endpoints
+        - /api/prom/label
+        - /api/prom/series
+        - /api/prom/tail
+        - /loki/api/v1/query
+        - /loki/api/v1/query_range
+        - /loki/api/v1/tail
+        # this path covers labels and labelValues endpoints
+        - /loki/api/v1/label
+        - /loki/api/v1/labels
+        - /loki/api/v1/series
+        - /loki/api/v1/index/stats
+        - /loki/api/v1/index/volume
+        - /loki/api/v1/index/volume_range
+        - /loki/api/v1/format_query
+        - /loki/api/v1/detected_field
+        - /loki/api/v1/detected_fields
+        - /loki/api/v1/detected_labels
+        - /loki/api/v1/patterns
+        # this path covers UI API
+        - /ui
+      # -- Paths that are exposed by Loki Ruler.
+      # If deployment mode is Distributed, the requests are forwarded to the service.
+      # If deployment mode is SimpleScalable, the requests are forwarded to k8s service.
+      # If deployment mode is SingleBinary, the requests are forwarded to the central/single k8s service.
+      ruler:
+        - /api/prom/rules
+        - /api/prom/api/v1/rules
+        - /api/prom/api/v1/alerts
+        - /loki/api/v1/rules
+        - /prometheus/api/v1/rules
+        - /prometheus/api/v1/alerts
+      # -- Paths that are exposed by Loki Compactor.
+      # If deployment mode is Distributed, the requests are forwarded to the service.
+      # If deployment mode is SimpleScalable, the requests are forwarded to k8s service.
+      # If deployment mode is SingleBinary, the requests are forwarded to the central/single k8s service.
+      compactor:
+        - /loki/api/v1/delete
+
 
 ######################################################################################################################
 #
@@ -413,7 +512,7 @@ ingester:
         # -- Set access modes on the PersistentVolumeClaim
         accessModes:
           - ReadWriteOnce
-        size: 5Gi
+        size: 3Gi
         storageClass: topolvm-provisioner
   # -- Enabling zone awareness on ingesters will create 3 statefulests where all writes will send a replica to each zone.
   # This is primarily intended to accelerate rollout operations by allowing for multiple ingesters within a single
@@ -570,7 +669,7 @@ indexGateway:
     dataVolumeParameters:
       emptyDir: {}
     # -- Size of persistent disk
-    size: 5Gi
+    size: 2Gi
     storageClass: topolvm-provisioner
 
 # -- Configuration for the compactor
@@ -621,3 +720,51 @@ bloomGateway:
         # -- Size of persistent disk
         size: 5Gi
         storageClass: topolvm-provisioner
+      
+# -- Configuration for the bloom-planner
+bloomPlanner:
+  # -- Enable the component. Requires `loki.deploymentMode` to be set to `Distributed`.
+  enabled: false
+
+# -- Configuration for the bloom-builder
+bloomBuilder:
+  # -- Enable the component. Requires `loki.deploymentMode` to be set to `Distributed`.
+  enabled: false
+
+# -- Configuration for the pattern ingester
+patternIngester:
+  # -- Enable the component. Requires `loki.deploymentMode` to be set to `Distributed`.
+  enabled: false
+
+# -- Configuration for the ruler
+ruler:
+  # -- The ruler component is optional and can be disabled if desired.
+  enabled: false
+  # -- Kind of ruler deployment. StatefulSet and Deployment are supported.
+  kind: StatefulSet
+
+# -- Configuration for the overrides-exporter
+overridesExporter:
+  # -- The overrides-exporter component is optional and can be disabled if desired.
+  enabled: false
+  # -- Kind of backend workload. StatefulSet and Deployment are supported.
+  kind: Deployment
+
+# You can use a self hosted memcached by setting enabled to false and providing addresses.
+memcached:
+  # -- Enable the built in memcached server provided by the chart
+  enabled: true
+
+memcachedExporter:
+  # -- Whether memcached metrics should be exported
+  enabled: true
+
+resultsCache:
+  # -- Specifies whether memcached based results-cache should be enabled
+  enabled: true
+
+chunksCache:
+  # -- Append to the name of the resources to make names different for l1 and l2
+  suffix: ""
+  # -- Specifies whether memcached based chunks-cache should be enabled
+  enabled: true

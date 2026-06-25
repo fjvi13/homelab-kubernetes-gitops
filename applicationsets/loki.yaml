@@ -1,0 +1,50 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: loki
+  namespace: argocd
+spec:
+  goTemplate: true
+  generators:
+    - merge:
+        mergeKeys:
+          - server
+        generators:
+          - clusters:
+              selector:
+                matchExpressions:
+                  - key: enable_loki
+                    operator: In
+                    values: ['true']
+              values:
+                chart: loki
+                chartRepository: https://grafana-community.github.io/helm-charts
+          - clusters:
+              selector:
+                matchLabels:
+                  env: lab
+              values:
+                chartVersion: 17.4.1
+  template:
+    metadata:
+      name: "loki-{{.name}}"
+    spec:
+      project: monitoring
+      sources:
+        - repoURL: '{{ .values.chartRepository}}'
+          targetRevision: '{{ .values.chartVersion}}'
+          chart: '{{ .values.chart}}'
+          helm:
+            releaseName: loki
+            valueFiles:
+              - $repo/values/loki/{{ .name }}/values.yaml
+        - repoURL: https://github.com/fjvi13/homelab-kubernetes-gitops.git
+          targetRevision: HEAD
+          ref: repo
+      destination:
+        name: '{{ .name }}'
+        namespace: monitoring
+      syncPolicy:
+        syncOptions:
+        - CreateNamespace=true
+        - ServerSideApply=true
