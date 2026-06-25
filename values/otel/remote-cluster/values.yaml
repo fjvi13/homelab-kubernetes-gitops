@@ -1182,8 +1182,7 @@ collectors:
         otlphttp/loki:
           endpoint: http://<loki-addr>/otlp
         debug:
-          debug:
-            verbosity: basic
+          verbosity: basic
       service:
         pipelines:
           logs:
