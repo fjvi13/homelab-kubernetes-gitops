@@ -542,6 +542,11 @@ collectors:
               if: 'attributes.ts != nil'
               parse_from: attributes.ts
               layout: '%Y-%m-%dT%H:%M:%S%z'
+            - id: move-message-to-body # Replace body with extracted message so ECS mapping uses the clean message
+              type: move
+              if: 'attributes.message != nil'
+              from: attributes.message
+              to: body
         # [Hostmetrics Receiver](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/hostmetricsreceiver)
         hostmetrics:
           collection_interval: 60s
