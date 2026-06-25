@@ -1149,7 +1149,7 @@ collectors:
             processors: [memory_limiter, batch]
             exporters: [prometheusremotewrite/thanos, debug]
   loki:
-    enabled: false
+    enabled: true
     mode: daemon
     fullnameOverride: "opentelemetry-kube-stack-loki"
     image:
@@ -1180,7 +1180,10 @@ collectors:
           timeout: 10s
       exporters:
         otlphttp/loki:
-          endpoint: http://<loki-addr>/otlp
+          # endpoint: http://<loki-addr>/otlp
+          debug:
+            debug:
+              verbosity: basic
       service:
         pipelines:
           logs:
