@@ -1150,7 +1150,7 @@ collectors:
             exporters: [prometheusremotewrite/thanos, debug]
   loki:
     enabled: true
-    mode: daemon
+    mode: daemonset
     fullnameOverride: "opentelemetry-kube-stack-loki"
     image:
       repository: "otel/opentelemetry-collector-contrib"
