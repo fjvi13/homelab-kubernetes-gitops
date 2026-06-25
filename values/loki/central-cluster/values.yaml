@@ -319,6 +319,22 @@ loki:
         secret_access_key: "mQRwzaRlofjvLeit6gCBfCMjjRYp7o3v"
         insecure: true
 
+  # -- Check https://grafana.com/docs/loki/latest/configuration/#schema_config for more info on how to configure schemas
+  schemaConfig: {}
+  # -- a real Loki install requires a proper schemaConfig defined above this, however for testing or playing around
+  # you can enable useTestSchema
+  useTestSchema: true
+  # @schema skipProperties:true;additionalProperties:true
+  testSchemaConfig:
+    configs:
+      - from: 2024-04-01
+        store: tsdb
+        object_store: '{{ include "loki.testSchemaObjectStore" . }}'
+        schema: v13
+        index:
+          prefix: index_
+          period: 24h
+
   # @schema skipProperties:true;additionalProperties:true
   # --  Optional Loki UI: Provides access to a operators UI for Loki distributed. When enabled UI will be available at /ui/ of loki-gateway
   ui:
