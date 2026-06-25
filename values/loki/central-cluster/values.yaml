@@ -483,17 +483,17 @@ route:
         - /loki/api/v1/patterns
         # this path covers UI API
         - /ui
-      # -- Paths that are exposed by Loki Ruler.
-      # If deployment mode is Distributed, the requests are forwarded to the service.
-      # If deployment mode is SimpleScalable, the requests are forwarded to k8s service.
-      # If deployment mode is SingleBinary, the requests are forwarded to the central/single k8s service.
-      ruler:
-        - /api/prom/rules
-        - /api/prom/api/v1/rules
-        - /api/prom/api/v1/alerts
-        - /loki/api/v1/rules
-        - /prometheus/api/v1/rules
-        - /prometheus/api/v1/alerts
+      # # -- Paths that are exposed by Loki Ruler.
+      # # If deployment mode is Distributed, the requests are forwarded to the service.
+      # # If deployment mode is SimpleScalable, the requests are forwarded to k8s service.
+      # # If deployment mode is SingleBinary, the requests are forwarded to the central/single k8s service.
+      # ruler:
+      #   - /api/prom/rules
+      #   - /api/prom/api/v1/rules
+      #   - /api/prom/api/v1/alerts
+      #   - /loki/api/v1/rules
+      #   - /prometheus/api/v1/rules
+      #   - /prometheus/api/v1/alerts
       # -- Paths that are exposed by Loki Compactor.
       # If deployment mode is Distributed, the requests are forwarded to the service.
       # If deployment mode is SimpleScalable, the requests are forwarded to k8s service.
