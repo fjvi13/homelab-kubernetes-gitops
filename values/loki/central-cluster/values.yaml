@@ -296,6 +296,10 @@ loki:
   # -- In case of using thanos storage, enable use_thanos_objstore and the configuration should be done inside the object_store section.
   storage:
 
+    bucketNames:
+      chunks: loki-chunks
+      ruler: loki-ruler
+
     # Loki now supports using thanos storage clients for connecting to object storage backend.
     # This will become the default way to configure storage in a future releases.
     use_thanos_objstore: true
@@ -309,7 +313,7 @@ loki:
       storage_prefix: null
       # S3 configuration (when type is "s3")
       s3:
-        bucket_name: loki
+        # bucket_name: loki
         endpoint: "minio.minio:9000"
         access_key_id: "X7UbZfd3hoLhqdLN"
         secret_access_key: "mQRwzaRlofjvLeit6gCBfCMjjRYp7o3v"
