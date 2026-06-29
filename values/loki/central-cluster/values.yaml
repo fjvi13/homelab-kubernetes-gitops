@@ -4,7 +4,7 @@ global:
   # This has the highest precedence and overrides every component-level image.registry value.
   imageRegistry: null
   # -- configures cluster domain ("cluster.local" by default)
-  clusterDomain: "lab"
+  clusterDomain: "cluster.local"
 
 # -- Deployment mode lets you specify how to deploy Loki.
 # There are 3 options:
@@ -425,7 +425,7 @@ route:
     labels: {}
     # -- Hostnames for the route
     hostnames:
-      - loki.{{ .Values.global.clusterDomain }}
+      - loki.lab
     # -- Parent references for the route (required for Gateway API)
     parentRefs:
       - group: gateway.networking.k8s.io
