@@ -360,6 +360,8 @@ test:
 # that it's working correctly
 lokiCanary:
   enabled: true
+  push: true
+  lokiurl: http://loki-distributor.monitoring.svc.cluster.local:3100
 
 ######################################################################################################################
 #
