@@ -354,12 +354,12 @@ loki:
 
 # -- Section for configuring optional Helm test
 test:
-  enabled: true
+  enabled: false
 
 # The Loki canary pushes logs to and queries from this loki installation to test
 # that it's working correctly
 lokiCanary:
-  enabled: true
+  enabled: false
   push: true
   lokiurl: http://loki-distributor.monitoring.svc.cluster.local:3100
 
