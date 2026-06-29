@@ -788,3 +788,10 @@ chunksCache:
   suffix: ""
   # -- Specifies whether memcached based chunks-cache should be enabled
   enabled: true
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 200m
+      memory: 512Mi
