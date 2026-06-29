@@ -1180,14 +1180,14 @@ collectors:
           timeout: 10s
       exporters:
         otlphttp/loki:
-          endpoint: http://<loki-addr>/otlp
+          endpoint: http://loki.lab/otlp/v1/logs
         debug:
           verbosity: basic
       service:
         pipelines:
           logs:
             processors: [memory_limiter, batch]
-            exporters: [debug]
+            exporters: [debug, otlphttp/loki]
       
 # For more details on OpenTelemetry's zero-code instrumentation, see:
 # https://opentelemetry.io/docs/concepts/instrumentation/zero-code/
