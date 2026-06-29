@@ -501,6 +501,54 @@ route:
       compactor:
         - /loki/api/v1/delete
 
+######################################################################################################################
+#
+# Simple Scalable Deployment (SSD) Mode
+#
+# For small to medium size Loki deployments up to around 1 TB/day, this is the default mode for this helm chart
+#
+######################################################################################################################
+
+# Configuration for the write pod(s)
+write:
+  # -- Enable the component. Requires `loki.deploymentMode` to be set to `SimpleScalable`.
+  enabled: false
+  # -- Kind of write workload. StatefulSet and Deployment are supported.
+  kind: StatefulSet
+  # -- Override for the write fullname. By default, this is generated using the fullname template with "-backend"
+  fullnameOverride: '{{ include "loki.name" . }}-write'
+  # -- EXPERIMENTAL: Enable creating a Job to recreate the write StatefulSet when the compactor configuration is changed.
+  ## Only applicable if `compactor.kind` is StatefulSet. Useful for PVC size changes, which require recreating the StatefulSet.
+  statefulSetRecreateJob:
+    enabled: false
+  # -- Number of replicas for the write
+  replicas: 0
+
+# --  Configuration for the read pod(s)
+read:
+  # -- Enable the component. Requires `loki.deploymentMode` to be set to `SimpleScalable`.
+  enabled: false
+  # -- Kind of read deployment. StatefulSet and Deployment are supported.
+  kind: Deployment
+  # -- Override for the read fullname. By default, this is generated using the fullname template with "-backend"
+  fullnameOverride: '{{ include "loki.name" . }}-read'
+  # -- Number of replicas for the read
+  replicas: 0
+
+# --  Configuration for the backend pod(s)
+backend:
+  # -- Enable the component. Requires `loki.deploymentMode` to be set to `SimpleScalable`.
+  enabled: false
+  # -- Kind of backend workload. StatefulSet and Deployment are supported.
+  kind: StatefulSet
+  # -- Override for the backend fullname. By default, this is generated using the fullname template with "-backend"
+  fullnameOverride: '{{ include "loki.name" . }}-backend'
+  # -- EXPERIMENTAL: Enable creating a Job to recreate the backend StatefulSet when the compactor configuration is changed.
+  ## Only applicable if `compactor.kind` is StatefulSet. Useful for PVC size changes, which require recreating the StatefulSet.
+  statefulSetRecreateJob:
+    enabled: false
+  # -- Number of replicas for the backend
+  replicas: 0
 
 ######################################################################################################################
 #
