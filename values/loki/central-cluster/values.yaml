@@ -516,6 +516,7 @@ ingester:
   enabled: true
   # -- Kind of compactor deployment. StatefulSet and Deployment are supported.
   kind: StatefulSet
+  replicas: 3
   podDisruptionBudget:
     # -- Enable Pod Disruption Budget
     enabled: true
@@ -619,7 +620,7 @@ distributor:
   enabled: true
   autoscaling:
     # -- Enable autoscaling for the distributor
-    enabled: false
+    enabled: true
     # -- Minimum autoscaling replicas for the distributor
     minReplicas: 1
     # -- Maximum autoscaling replicas for the distributor
@@ -639,7 +640,7 @@ querier:
   enabled: true
   autoscaling:
     # -- Enable autoscaling for the querier, this is only used if `indexGateway.enabled: true`
-    enabled: false
+    enabled: true
     # -- Minimum autoscaling replicas for the querier
     minReplicas: 1
     # -- Maximum autoscaling replicas for the querier
@@ -654,7 +655,7 @@ queryFrontend:
   enabled: true
   autoscaling:
     # -- Enable autoscaling for the query-frontend
-    enabled: false
+    enabled: true
     # -- Minimum autoscaling replicas for the query-frontend
     minReplicas: 1
     # -- Maximum autoscaling replicas for the query-frontend
@@ -667,6 +668,7 @@ queryFrontend:
 queryScheduler:
   # -- Enable the component. Requires `loki.deploymentMode` to be set to `Distributed`.
   enabled: true
+  replicas: 1
   podDisruptionBudget:
     # -- Enable Pod Disruption Budget
     enabled: true
@@ -675,6 +677,7 @@ queryScheduler:
 indexGateway:
   # -- Enable the component. Requires `loki.deploymentMode` to be set to `Distributed`.
   enabled: true
+  replicas: 1
   podDisruptionBudget:
     # -- Enable Pod Disruption Budget
     enabled: true
@@ -696,6 +699,7 @@ indexGateway:
 compactor:
   # -- Enable the component. Requires `loki.deploymentMode` to be set to `Distributed`.
   enabled: true
+  replicas: 1
   persistence:
     # -- Enable creating PVCs for the compactor
     enabled: false
@@ -762,6 +766,7 @@ ruler:
   enabled: true
   # -- Kind of ruler deployment. StatefulSet and Deployment are supported.
   kind: StatefulSet
+  replicas: 0
 
 # -- Configuration for the overrides-exporter
 overridesExporter:
