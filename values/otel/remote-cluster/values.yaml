@@ -1180,7 +1180,7 @@ collectors:
           timeout: 10s
       exporters:
         otlphttp/loki:
-          endpoint: http://loki.lab/otlp/v1/logs
+          endpoint: http://loki.lab/otlp
         debug:
           verbosity: basic
       service:
