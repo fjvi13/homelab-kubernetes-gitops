@@ -207,11 +207,11 @@ prometheusOperator:
     unhealthyPodEvictionPolicy: AlwaysAllow
   resources:
     limits:
-      cpu: 400m
-      memory: 600Mi
+      cpu: 100m
+      memory: 64Mi
     requests:
-      cpu: 200m
-      memory: 300Mi
+      cpu: 20m
+      memory: 32Mi
 
   admissionWebhooks:
     deployment:
@@ -244,10 +244,10 @@ prometheusOperator:
       sha: ""
     resources:
       requests:
-        cpu: 200m
-        memory: 50Mi
+        cpu: 10m
+        memory: 10Mi
       limits:
-        cpu: 200m
+        cpu: 20m
         memory: 50Mi
 
 # prometheus:
