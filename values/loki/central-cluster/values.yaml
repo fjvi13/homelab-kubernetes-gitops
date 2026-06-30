@@ -294,18 +294,39 @@ loki:
   # Should authentication be enabled
   auth_enabled: false
 
+  limits_config:
+    allow_structured_metadata: true # for Otel
+    reject_old_samples: true
+    reject_old_samples_max_age: 168h
+    max_cache_freshness_per_query: 10m
+    split_queries_by_interval: 15m
+    query_timeout: 300s
+    volume_enabled: true
+    retention_period: 3d
+
+  # @schema skipProperties:true;additionalProperties:true
+  # -- Check https://grafana.com/docs/loki/latest/configuration/#common_config for more info on how to provide a common configuration
+  commonConfig:
+    path_prefix: /var/loki
+    replication_factor: 3
+    # -- The gRPC address of the compactor. The use of compactor_grpc_address is preferred over compactor_address.
+    # If a customized compactor_address is set, compactor_grpc_address should be set to an empty string.
+    compactor_grpc_address: '{{ include "loki.compactorAddress" . }}'
+  # @schema skipProperties:true;additionalProperties:true
   # -- Storage config. Providing this will automatically populate all necessary storage configs in the templated config.
   # -- In case of using thanos storage, enable use_thanos_objstore and the configuration should be done inside the object_store section.
   storage:
-
     bucketNames:
       chunks: loki-chunks
-      ruler: loki-ruler
+      ruler: loki-rules
 
+    # Enables the use of thanos-io/objstore clients for connecting to object storage.
     # Loki now supports using thanos storage clients for connecting to object storage backend.
     # This will become the default way to configure storage in a future releases.
     use_thanos_objstore: true
-  
+
+    # The thanos_object_store_config block configures the connection to object
+    # storage backend using thanos-io/objstore clients.
     # @schema skipProperties:true;additionalProperties:true
     object_store:
       # Type of object store. Valid options are: s3, gcs, azure
@@ -337,6 +358,41 @@ loki:
           prefix: index_
           period: 24h
 
+  rulerConfig:
+    # enable_api: true
+    wal:
+      dir: /var/loki/ruler-wal
+    # ruler_storage:
+    #
+    # alertmanager_url: http://alertmanager:9093
+    # remote_write:
+    #   clients:
+    #   enabled: true
+
+  # -- Additional storage config
+  # The storage_config block configures one of many possible stores for both the
+  # index and chunks. Which configuration to be picked should be defined in
+  # schema_config block.
+  storage_config:
+    boltdb_shipper:
+      index_gateway_client:
+        server_address: '{{ include "loki.indexGatewayAddress" . }}'
+    tsdb_shipper:
+      index_gateway_client:
+        server_address: '{{ include "loki.indexGatewayAddress" . }}'
+    bloom_shipper:
+      working_directory: /var/loki/data/bloomshipper
+    hedging:
+      at: "250ms"
+      max_per_second: 20
+      up_to: 3
+
+  compactor:
+    retention_enabled: true
+    delete_request_store: ""
+  pattern_ingester:
+    enabled: true
+
   # @schema skipProperties:true;additionalProperties:true
   # --  Optional Loki UI: Provides access to a operators UI for Loki distributed. When enabled UI will be available at /ui/ of loki-gateway
   ui:
@@ -344,7 +400,10 @@ loki:
     enabled: true
     gateway:
       # enable gateway proxying to UI under /ui
-      enabled: true
+      enabled: false
+
+  querier:
+    max_concurrent: 4 # this is based on each node cpu
 
 ######################################################################################################################
 #
@@ -360,8 +419,6 @@ test:
 # that it's working correctly
 lokiCanary:
   enabled: false
-  push: true
-  lokiurl: http://loki-distributor.monitoring.svc.cluster.local:3100
 
 ######################################################################################################################
 #
@@ -442,7 +499,7 @@ route:
     # so any HTTPRoute/GRPCRoute rule shape is accepted — including filter-only rules
     # with no backendRefs (e.g. RequestRedirect, URLRewrite).
     additionalRules: []
-    # @schema type:[number, null]
+    # @schema type:[integer, null]
     # -- Backend port override for all generated rules.
     # When unset, GRPCRoute automatically uses loki.server.grpc_listen_port (default 9095)
     # and all other kinds use loki.server.http_listen_port (default 3100).
@@ -515,45 +572,15 @@ route:
 
 # Configuration for the write pod(s)
 write:
-  # -- Enable the component. Requires `loki.deploymentMode` to be set to `SimpleScalable`.
   enabled: false
-  # -- Kind of write workload. StatefulSet and Deployment are supported.
-  kind: StatefulSet
-  # -- Override for the write fullname. By default, this is generated using the fullname template with "-backend"
-  fullnameOverride: '{{ include "loki.name" . }}-write'
-  # -- EXPERIMENTAL: Enable creating a Job to recreate the write StatefulSet when the compactor configuration is changed.
-  ## Only applicable if `compactor.kind` is StatefulSet. Useful for PVC size changes, which require recreating the StatefulSet.
-  statefulSetRecreateJob:
-    enabled: false
-  # -- Number of replicas for the write
-  replicas: 0
 
 # --  Configuration for the read pod(s)
 read:
-  # -- Enable the component. Requires `loki.deploymentMode` to be set to `SimpleScalable`.
   enabled: false
-  # -- Kind of read deployment. StatefulSet and Deployment are supported.
-  kind: Deployment
-  # -- Override for the read fullname. By default, this is generated using the fullname template with "-backend"
-  fullnameOverride: '{{ include "loki.name" . }}-read'
-  # -- Number of replicas for the read
-  replicas: 0
 
 # --  Configuration for the backend pod(s)
 backend:
-  # -- Enable the component. Requires `loki.deploymentMode` to be set to `SimpleScalable`.
   enabled: false
-  # -- Kind of backend workload. StatefulSet and Deployment are supported.
-  kind: StatefulSet
-  # -- Override for the backend fullname. By default, this is generated using the fullname template with "-backend"
-  fullnameOverride: '{{ include "loki.name" . }}-backend'
-  # -- EXPERIMENTAL: Enable creating a Job to recreate the backend StatefulSet when the compactor configuration is changed.
-  ## Only applicable if `compactor.kind` is StatefulSet. Useful for PVC size changes, which require recreating the StatefulSet.
-  statefulSetRecreateJob:
-    enabled: false
-  # -- Number of replicas for the backend
-  replicas: 0
-
 ######################################################################################################################
 #
 # Microservices Mode
@@ -572,7 +599,6 @@ ingester:
   podDisruptionBudget:
     # -- Enable Pod Disruption Budget
     enabled: true
-    minAvailable: 1
   persistence:
     # -- Enable creating PVCs which is required when using boltdb-shipper
     enabled: false
@@ -677,7 +703,7 @@ distributor:
     minReplicas: 1
     # -- Maximum autoscaling replicas for the distributor
     maxReplicas: 3
-    # @schema type:[number, null]
+    # @schema type:[integer, null]
     # -- Target CPU utilisation percentage for the distributor
     targetCPUUtilizationPercentage: 60
   # -- Grace period to allow the distributor to shutdown before it is killed
