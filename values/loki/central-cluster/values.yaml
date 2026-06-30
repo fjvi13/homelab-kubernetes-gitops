@@ -573,14 +573,17 @@ route:
 # Configuration for the write pod(s)
 write:
   enabled: false
+  replicas: 0
 
 # --  Configuration for the read pod(s)
 read:
   enabled: false
+  replicas: 0
 
 # --  Configuration for the backend pod(s)
 backend:
   enabled: false
+  replicas: 0
 ######################################################################################################################
 #
 # Microservices Mode
