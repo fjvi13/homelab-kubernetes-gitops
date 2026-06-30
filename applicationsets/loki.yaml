@@ -24,7 +24,7 @@ spec:
                 matchLabels:
                   env: lab
               values:
-                chartVersion: 17.4.1
+                chartVersion: 18.2.0
   template:
     metadata:
       name: "loki-{{.name}}"
