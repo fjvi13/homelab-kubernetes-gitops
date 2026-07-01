@@ -42,7 +42,7 @@ spec:
             valueFiles:
               - $repo/values/argocd/{{ .name }}/values.yaml
         - repoURL: https://github.com/fjvi13/homelab-kubernetes-gitops.git
-          targetRevision: HEAD
+          targetRevision: refs/heads/prueba2
           ref: repo
       destination:
         name: '{{ .name }}'
