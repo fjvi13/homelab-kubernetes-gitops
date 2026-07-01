@@ -1170,6 +1170,45 @@ collectors:
       kubernetesAttributes:
         enabled: true
     config:
+      extensions:
+        cgroup_runtime: {}
+        file_storage:
+          directory: /var/lib/otelcol
+          timeout: 10s
+          create_directory: true
+      receivers:
+        filelog:
+          retry_on_failure:
+            enabled: true
+          start_at: end
+          storage: file_storage
+          exclude: []
+            # exlude collector logs
+            # - /var/log/pods/*opentelemetry-kube-stack*/*/*.log
+          include:
+            - /var/log/pods/*/*/*.log
+          include_file_name: false
+          include_file_path: true
+          operators:
+            - id: container-parser # Extract container's metadata
+              type: container
+            - id: json-parser # Parse logs in JSON format
+              type: json_parser
+              if: 'body matches "^{.*}$"'
+              parse_from: body
+              severity:
+                parse_from: attributes.level
+                mapping:
+                  debug: [debug, DEBUG, trace, TRACE]
+                  info: [info, INFO]
+                  warn: [warn, WARN, warning, WARNING]
+                  error: [error, ERROR]
+                  fatal: [fatal, FATAL]
+            # - id: timestamp-parser # Parse timestamp from 'ts' field (only if present)
+            #   type: time_parser
+            #   if: 'attributes.ts != nil'
+            #   parse_from: attributes.ts
+            #   layout: '%Y-%m-%dT%H:%M:%S%z'
       processors:
         memory_limiter:
           check_interval: 5s
@@ -1189,6 +1228,7 @@ collectors:
         debug:
           verbosity: basic
       service:
+        extensions: [cgroup_runtime, file_storage]
         pipelines:
           logs:
             processors: [memory_limiter, batch, resource_detection/env]
