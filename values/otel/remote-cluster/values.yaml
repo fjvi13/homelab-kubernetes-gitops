@@ -1169,7 +1169,7 @@ collectors:
         storeCheckpoints: true
       kubernetesAttributes:
         enabled: true
-      hostNetwork: true
+    hostNetwork: true
     config:
       processors:
         memory_limiter:
