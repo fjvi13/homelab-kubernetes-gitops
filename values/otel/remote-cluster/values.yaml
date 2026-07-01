@@ -1179,16 +1179,10 @@ collectors:
           send_batch_size: 2000
           send_batch_max_size: 2000
           timeout: 10s
-        resource/cloud:
-          attributes:
-            - key: cloud.instance.id
-              from_attribute: host.id
-              action: insert
-        resource/cluster-name:
-          attributes:
-            - key: orchestrator.cluster.name
-              from_attribute: k8s-cluster
-              action: upsert
+        k8sattributes:
+          extract:
+            metadata:
+              - "k8s.cluster.name"
       exporters:
         otlphttp/loki:
           endpoint: http://loki.lab/otlp
@@ -1197,7 +1191,7 @@ collectors:
       service:
         pipelines:
           logs:
-            processors: [memory_limiter, batch, resource/cloud, resource/cluster-name]
+            processors: [memory_limiter, batch]
             exporters: [debug, otlphttp/loki]
       
 # For more details on OpenTelemetry's zero-code instrumentation, see:
