@@ -128,6 +128,7 @@ clusterRole:
 # Cluster Name is automatically detected for EKS/GKE/AKS. Add the below value in environments where cluster name cannot be detected.
 clusterName: remote-cluster
 collectors:
+  revisionHistoryLimit: 1
   #  Cluster is a K8s deployment EDOT collector focused on gathering telemetry
   #  at the cluster level (Kubernetes Events and cluster metrics).
   cluster:
