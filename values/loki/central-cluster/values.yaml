@@ -1070,7 +1070,8 @@ monitoring:
     annotations: {}
     # @schema additionalProperties:{"type":"string"}
     # -- Additional ServiceMonitor labels
-    labels: {}
+    labels: 
+      release: prometheus
     # -- ServiceMonitor scrape interval
     # Default is 15s because included recording rules use a 1m rate, and scrape interval needs to be at
     # least 1/4 rate interval.
