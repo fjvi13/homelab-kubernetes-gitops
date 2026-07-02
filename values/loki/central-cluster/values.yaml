@@ -1009,7 +1009,7 @@ monitoring:
   # -- Recording rules for monitoring Loki, required for some dashboards
   rules:
     # -- If enabled, create a PrometheusRule resource with Loki recording rules
-    enabled: false
+    enabled: true
     # @schema additionalProperties:{"type":"string"}
     # -- Additional labels for the PrometheusRule resource
     labels: {}
