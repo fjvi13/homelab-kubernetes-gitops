@@ -1062,7 +1062,7 @@ monitoring:
   # -- ServiceMonitor configuration
   serviceMonitor:
     # -- If enabled, ServiceMonitor resources for Prometheus Operator are created
-    enabled: false
+    enabled: true
     # -- Namespace selector for ServiceMonitor resources
     namespaceSelector: {}
     # @schema additionalProperties:{"type":"string"}
