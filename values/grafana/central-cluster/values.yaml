@@ -876,8 +876,8 @@ dashboards: {}
 ##   example-dashboard.json: |
 ##     RAW_JSON
 ##
-dashboardsConfigMaps: {}
-#  default: ""
+dashboardsConfigMaps:
+  loki: "loki-dashboards-loki-bloom-build"
 
 ## Grafana's primary configuration
 ## NOTE: values in map will be converted to ini format
