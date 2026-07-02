@@ -1012,7 +1012,8 @@ monitoring:
     enabled: true
     # @schema additionalProperties:{"type":"string"}
     # -- Additional labels for the PrometheusRule resource
-    labels: {}
+    labels:
+      release: thanos
     # @schema additionalProperties:{"type":"string"}
     # -- Additional annotations for the PrometheusRule resource
     annotations: {}
