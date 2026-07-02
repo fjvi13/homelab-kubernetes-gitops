@@ -1027,9 +1027,10 @@ monitoring:
   # -- Alert rules for monitoring Loki
   alerts:
     # -- If enabled, create a PrometheusRule resource with Loki alert rules
-    enabled: false
+    enabled: true
     # -- Additional labels for the alerts PrometheusRule resource
-    labels: {}
+    labels: 
+      release: thanos
     # -- Additional annotations for the alerts PrometheusRule resource
     annotations: {}
     # -- Selectively disable individual alerts by name.
