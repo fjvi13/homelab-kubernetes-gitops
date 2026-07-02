@@ -807,18 +807,7 @@ notifiers: {}
 ##
 ## `path` must be /var/lib/grafana/dashboards/<provider_name>
 ##
-dashboardProviders:
-  dashboardproviders.yaml:
-    apiVersion: 1
-    providers:
-    - name: 'default'
-      orgId: 1
-      folder: ''
-      type: file
-      disableDeletion: false
-      editable: true
-      options:
-        path: /var/lib/grafana/dashboards/default
+dashboardProviders: {}
 
 ## Configure how curl fetches remote dashboards. The beginning dash is required.
 ## NOTE: This sets the default short flags for all dashboards, but these
@@ -876,9 +865,7 @@ dashboards: {}
 ##   example-dashboard.json: |
 ##     RAW_JSON
 ##
-dashboardsConfigMaps:
-  default: "loki-dashboards-loki-writes"
-  loki-logs: "loki-dashboards-loki-logs"
+dashboardsConfigMaps: {}
 
 ## Grafana's primary configuration
 ## NOTE: values in map will be converted to ini format
@@ -1076,7 +1063,7 @@ sidecar:
     # Sets the size limit of the alert sidecar emptyDir volume
     sizeLimit: ""
   dashboards:
-    enabled: false
+    enabled: true
     # Additional environment variables for the dashboards sidecar
     env: {}
     ## "valueFrom" environment variable references that will be added to deployment pods. Name is templated.
