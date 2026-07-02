@@ -944,12 +944,12 @@ monitoring:
     # rule aggregations. If clusterName is left empty, only dashboard changes
     # are applied — use this when an external tool (e.g. Grafana Alloy) manages
     # cluster label injection and PromQL rewriting.
-    enabled: true
+    enabled: false
     # -- Value for the 'cluster' label. Supports Helm templating.
     # When empty, recording rules and alerts are not modified — only dashboards
     # show the cluster variable.
     # e.g. clusterName: '{{ .Values.global.clusterName }}'
-    clusterName: "k8s_cluster_name"
+    clusterName: ""
 
   # Dashboards for monitoring Loki
   dashboards:
