@@ -878,6 +878,7 @@ dashboards: {}
 ##
 dashboardsConfigMaps:
   default: "loki-dashboards-loki-writes"
+  loki-logs: "loki-dashboards-loki-logs"
 
 ## Grafana's primary configuration
 ## NOTE: values in map will be converted to ini format
