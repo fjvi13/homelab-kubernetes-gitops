@@ -645,6 +645,13 @@ ingester:
   podDisruptionBudget:
     # -- Enable Pod Disruption Budget
     enabled: true
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: 500m
+      memory: 1024Mi
   persistence:
     # -- Enable creating PVCs which is required when using boltdb-shipper
     enabled: false
@@ -742,6 +749,13 @@ ingester:
 distributor:
   # -- Enable the component. Requires `loki.deploymentMode` to be set to `Distributed`.
   enabled: true
+  resources:
+    requests:
+      cpu: 250m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
   autoscaling:
     # -- Enable autoscaling for the distributor
     enabled: true
@@ -762,6 +776,13 @@ distributor:
 querier:
   # -- Enable the component. Requires `loki.deploymentMode` to be set to `Distributed`.
   enabled: true
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 100m
+      memory: 256Mi
   autoscaling:
     # -- Enable autoscaling for the querier, this is only used if `indexGateway.enabled: true`
     enabled: true
@@ -777,6 +798,13 @@ querier:
 queryFrontend:
   # -- Enable the component. Requires `loki.deploymentMode` to be set to `Distributed`.
   enabled: true
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 100m
+      memory: 256Mi
   autoscaling:
     # -- Enable autoscaling for the query-frontend
     enabled: true
@@ -792,6 +820,13 @@ queryFrontend:
 queryScheduler:
   # -- Enable the component. Requires `loki.deploymentMode` to be set to `Distributed`.
   enabled: true
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 100m
+      memory: 256Mi
   replicas: 1
   podDisruptionBudget:
     # -- Enable Pod Disruption Budget
@@ -802,6 +837,13 @@ indexGateway:
   # -- Enable the component. Requires `loki.deploymentMode` to be set to `Distributed`.
   enabled: true
   replicas: 1
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 100m
+      memory: 256Mi
   podDisruptionBudget:
     # -- Enable Pod Disruption Budget
     enabled: true
@@ -824,6 +866,13 @@ compactor:
   # -- Enable the component. Requires `loki.deploymentMode` to be set to `Distributed`.
   enabled: true
   replicas: 1
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 100m
+      memory: 256Mi
   persistence:
     # -- Enable creating PVCs for the compactor
     enabled: false
@@ -891,6 +940,13 @@ ruler:
   # -- Kind of ruler deployment. StatefulSet and Deployment are supported.
   kind: StatefulSet
   replicas: 0
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 100m
+      memory: 256Mi
 
 # -- Configuration for the overrides-exporter
 overridesExporter:
