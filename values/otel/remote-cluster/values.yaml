@@ -530,14 +530,14 @@ collectors:
               type: json_parser
               if: 'body matches "^{.*}$"'
               parse_from: body
-              severity:
-                parse_from: attributes.level
-                mapping:
-                  debug: [debug, DEBUG, trace, TRACE]
-                  info: [info, INFO]
-                  warn: [warn, WARN, warning, WARNING]
-                  error: [error, ERROR]
-                  fatal: [fatal, FATAL]
+              # severity:
+              #   parse_from: attributes.level
+              #   mapping:
+              #     debug: [debug, DEBUG, trace, TRACE]
+              #     info: [info, INFO]
+              #     warn: [warn, WARN, warning, WARNING]
+              #     error: [error, ERROR]
+              #     fatal: [fatal, FATAL]
             - id: timestamp-parser # Parse timestamp from 'ts' field (only if present)
               type: time_parser
               if: 'attributes.ts != nil'
