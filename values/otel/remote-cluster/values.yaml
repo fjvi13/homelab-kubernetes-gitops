@@ -259,33 +259,44 @@ collectors:
       service:
         extensions: [cgroup_runtime, file_storage]
         telemetry:
-            resource:
-              elastic.collector.group_name: "OTel Collector Group"
-              elastic.collector.group: "otel-collector-group"
-              service.namespace: "otel-system"
-              service.name: "otel-collector-cluster"
-              service.instance.id: "opentelemetry-kube-stack-cluster-stats"
-            metrics:
-              readers:
-                - periodic:
-                    exporter:
-                      otlp:
-                        protocol: "grpc"
-                        endpoint: "http://opentelemetry-kube-stack-gateway-collector-headless:4317"
-            logs:
-              processors:
-                - batch:
-                    exporter:
-                      otlp:
-                        protocol: "grpc"
-                        endpoint: "http://opentelemetry-kube-stack-gateway-collector-headless:4317"
-            traces:
-              processors:
-                - batch:
-                    exporter:
-                      otlp:
-                        protocol: "grpc"
-                        endpoint: "http://opentelemetry-kube-stack-gateway-collector-headless:4317"
+          logs:
+            level: info
+          metrics:
+            level: normal
+            readers:
+              - pull:
+                  exporter:
+                    prometheus:
+                      host: "${env:OTEL_K8S_POD_IP}"
+                      port: 8888
+        # telemetry:
+        #     resource:
+        #       elastic.collector.group_name: "OTel Collector Group"
+        #       elastic.collector.group: "otel-collector-group"
+        #       service.namespace: "otel-system"
+        #       service.name: "otel-collector-cluster"
+        #       service.instance.id: "opentelemetry-kube-stack-cluster-stats"
+        #     metrics:
+        #       readers:
+        #         - periodic:
+        #             exporter:
+        #               otlp:
+        #                 protocol: "grpc"
+        #                 endpoint: "http://opentelemetry-kube-stack-gateway-collector-headless:4317"
+        #     logs:
+        #       processors:
+        #         - batch:
+        #             exporter:
+        #               otlp:
+        #                 protocol: "grpc"
+        #                 endpoint: "http://opentelemetry-kube-stack-gateway-collector-headless:4317"
+        #     traces:
+        #       processors:
+        #         - batch:
+        #             exporter:
+        #               otlp:
+        #                 protocol: "grpc"
+        #                 endpoint: "http://opentelemetry-kube-stack-gateway-collector-headless:4317"
         pipelines:
           metrics:
             exporters:
@@ -666,33 +677,43 @@ collectors:
       service:
         extensions: [cgroup_runtime, file_storage]
         telemetry:
-            resource:
-              elastic.collector.group_name: "OTel Collector Group"
-              elastic.collector.group: "otel-collector-group"
-              service.namespace: "otel-system"
-              service.name: "otel-collector-daemon"
-              service.instance.id: "opentelemetry-kube-stack-daemon"
-            metrics:
-              readers:
-                - periodic:
-                    exporter:
-                      otlp:
-                        protocol: "grpc"
-                        endpoint: "http://opentelemetry-kube-stack-gateway-collector-headless:4317"
-            logs:
-              processors:
-                - batch:
-                    exporter:
-                      otlp:
-                        protocol: "grpc"
-                        endpoint: "http://opentelemetry-kube-stack-gateway-collector-headless:4317"
-            traces:
-              processors:
-                - batch:
-                    exporter:
-                      otlp:
-                        protocol: "grpc"
-                        endpoint: "http://opentelemetry-kube-stack-gateway-collector-headless:4317"
+          logs:
+            level: info
+          metrics:
+            level: normal
+            readers:
+              - pull:
+                  exporter:
+                    prometheus:
+                      host: "${env:OTEL_K8S_POD_IP}"
+                      port: 8889
+            # resource:
+            #   elastic.collector.group_name: "OTel Collector Group"
+            #   elastic.collector.group: "otel-collector-group"
+            #   service.namespace: "otel-system"
+            #   service.name: "otel-collector-daemon"
+            #   service.instance.id: "opentelemetry-kube-stack-daemon"
+            # metrics:
+            #   readers:
+            #     - periodic:
+            #         exporter:
+            #           otlp:
+            #             protocol: "grpc"
+            #             endpoint: "http://opentelemetry-kube-stack-gateway-collector-headless:4317"
+            # logs:
+            #   processors:
+            #     - batch:
+            #         exporter:
+            #           otlp:
+            #             protocol: "grpc"
+            #             endpoint: "http://opentelemetry-kube-stack-gateway-collector-headless:4317"
+            # traces:
+            #   processors:
+            #     - batch:
+            #         exporter:
+            #           otlp:
+            #             protocol: "grpc"
+            #             endpoint: "http://opentelemetry-kube-stack-gateway-collector-headless:4317"
         pipelines:
           # Disable default non used kube-stack Helm Chart pipelines
           logs: null
@@ -891,33 +912,44 @@ collectors:
         # To enable central config in Kibana APM add the extensions bearertokenauth and apmconfig
         extensions: [cgroup_runtime, file_storage]
         telemetry:
-            resource:
-              elastic.collector.group_name: "OTel Collector Group"
-              elastic.collector.group: "otel-collector-group"
-              service.namespace: "otel-system"
-              service.name: "otel-collector-gateway"
-              service.instance.id: "opentelemetry-kube-stack-gateway"
-            metrics:
-              readers:
-                - periodic:
-                    exporter:
-                      otlp:
-                        protocol: "grpc"
-                        endpoint: "http://opentelemetry-kube-stack-gateway-collector-headless:4317"
-            logs:
-              processors:
-                - batch:
-                    exporter:
-                      otlp:
-                        protocol: "grpc"
-                        endpoint: "http://opentelemetry-kube-stack-gateway-collector-headless:4317"
-            traces:
-              processors:
-                - batch:
-                    exporter:
-                      otlp:
-                        protocol: "grpc"
-                        endpoint: "http://opentelemetry-kube-stack-gateway-collector-headless:4317"
+          logs:
+            level: info
+          metrics:
+            level: normal
+            readers:
+              - pull:
+                  exporter:
+                    prometheus:
+                      host: "${env:OTEL_K8S_POD_IP}"
+                      port: 8888
+        # telemetry:
+        #     resource:
+        #       elastic.collector.group_name: "OTel Collector Group"
+        #       elastic.collector.group: "otel-collector-group"
+        #       service.namespace: "otel-system"
+        #       service.name: "otel-collector-gateway"
+        #       service.instance.id: "opentelemetry-kube-stack-gateway"
+        #     metrics:
+        #       readers:
+        #         - periodic:
+        #             exporter:
+        #               otlp:
+        #                 protocol: "grpc"
+        #                 endpoint: "http://opentelemetry-kube-stack-gateway-collector-headless:4317"
+        #     logs:
+        #       processors:
+        #         - batch:
+        #             exporter:
+        #               otlp:
+        #                 protocol: "grpc"
+        #                 endpoint: "http://opentelemetry-kube-stack-gateway-collector-headless:4317"
+        #     traces:
+        #       processors:
+        #         - batch:
+        #             exporter:
+        #               otlp:
+        #                 protocol: "grpc"
+        #                 endpoint: "http://opentelemetry-kube-stack-gateway-collector-headless:4317"
         pipelines:
           metrics:
             receivers: [otlp]
@@ -1142,8 +1174,16 @@ collectors:
             max_elapsed_time: 5m
       service:
         telemetry:
+          logs:
+            level: info
           metrics:
-            level: detailed
+            level: normal
+            readers:
+              - pull:
+                  exporter:
+                    prometheus:
+                      host: "${env:OTEL_K8S_POD_IP}"
+                      port: 8888
         pipelines:
           metrics:
             receivers: [prometheus]
@@ -1192,10 +1232,10 @@ collectors:
           operators:
             - id: container-parser # Extract container's metadata
               type: container
-            - id: json-parser # Parse logs in JSON format
-              type: json_parser
-              if: 'body matches "^{.*}$"'
-              parse_from: body
+            # - id: json-parser # Parse logs in JSON format
+            #   type: json_parser
+            #   if: 'body matches "^{.*}$"'
+            #   parse_from: body
               # severity:
               #   parse_from: attributes.level
               #   mapping:
@@ -1228,6 +1268,17 @@ collectors:
         debug:
           verbosity: basic
       service:
+        telemetry:
+          logs:
+            level: info
+          metrics:
+            level: normal
+            readers:
+              - pull:
+                  exporter:
+                    prometheus:
+                      host: "${env:OTEL_K8S_POD_IP}"
+                      port: 8888
         extensions: [cgroup_runtime, file_storage]
         pipelines:
           logs:
