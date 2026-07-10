@@ -975,6 +975,7 @@ collectors:
           memory: 64Mi
       prometheusCR:
         enabled: true
+        # Prometheus default scrape interval
         scrapeInterval: 60s
         serviceMonitorSelector:
           matchExpressions:
