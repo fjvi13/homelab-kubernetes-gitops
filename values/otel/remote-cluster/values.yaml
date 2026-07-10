@@ -149,7 +149,10 @@ collectors:
         memory: 256Mi
     env:
       - name: ELASTIC_AGENT_OTEL
-        value: '"true"'
+        # Plain "true" (no embedded quotes): the image entrypoint does a literal
+        # [[ "$ELASTIC_AGENT_OTEL" == "true" ]] — with '"true"' it falls through to
+        # `elastic-agent container`, which rejects --feature-gates.
+        value: "true"
     config:
       exporters:
         # [Debug exporter](https://github.com/open-telemetry/opentelemetry-collector/blob/main/exporter/debugexporter/README.md)
@@ -349,7 +352,10 @@ collectors:
         memory: 500Mi
     env:
       - name: ELASTIC_AGENT_OTEL
-        value: '"true"'
+        # Plain "true" (no embedded quotes): the image entrypoint does a literal
+        # [[ "$ELASTIC_AGENT_OTEL" == "true" ]] — with '"true"' it falls through to
+        # `elastic-agent container`, which rejects --feature-gates.
+        value: "true"
       - name: NODE_NAME
         valueFrom:
           fieldRef:
@@ -821,7 +827,10 @@ collectors:
     enabled: true
     env:
       - name: ELASTIC_AGENT_OTEL
-        value: '"true"'
+        # Plain "true" (no embedded quotes): the image entrypoint does a literal
+        # [[ "$ELASTIC_AGENT_OTEL" == "true" ]] — with '"true"' it falls through to
+        # `elastic-agent container`, which rejects --feature-gates.
+        value: "true"
       - name: ELASTIC_ENDPOINT
         valueFrom:
           secretKeyRef:
