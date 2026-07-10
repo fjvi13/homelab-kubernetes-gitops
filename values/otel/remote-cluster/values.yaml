@@ -270,7 +270,7 @@ collectors:
           logs:
             level: info
           metrics:
-            level: normal
+            level: detailed
             readers:
               - pull:
                   exporter:
@@ -694,7 +694,7 @@ collectors:
           logs:
             level: info
           metrics:
-            level: normal
+            level: detailed
             readers:
               - pull:
                   exporter:
@@ -935,7 +935,7 @@ collectors:
           logs:
             level: info
           metrics:
-            level: normal
+            level: detailed
             readers:
               - pull:
                   exporter:
@@ -1197,7 +1197,7 @@ collectors:
           logs:
             level: debug
           metrics:
-            level: normal
+            level: detailed
             readers:
               - pull:
                   exporter:
@@ -1292,7 +1292,7 @@ collectors:
           logs:
             level: info
           metrics:
-            level: normal
+            level: detailed
             readers:
               - pull:
                   exporter:
