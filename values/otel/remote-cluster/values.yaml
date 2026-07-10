@@ -1177,7 +1177,7 @@ collectors:
           logs:
             level: info
           metrics:
-            level: normal
+            level: debug
             readers:
               - pull:
                   exporter:
