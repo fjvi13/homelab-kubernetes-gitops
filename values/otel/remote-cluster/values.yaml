@@ -13,11 +13,11 @@ opentelemetry-operator:
       limits:
         cpu: 500m
         memory: 256Mi
-        ephemeral-storage: 256Mi
+        # ephemeral-storage: 256Mi
       requests:
         cpu: 100m
         memory: 128Mi
-        ephemeral-storage: 128Mi
+        # ephemeral-storage: 128Mi
     extraArgs:
       - --enable-go-instrumentation
   admissionWebhooks:
@@ -975,7 +975,6 @@ collectors:
           memory: 64Mi
       prometheusCR:
         enabled: true
-        # Prometheus default scrape interval
         scrapeInterval: 60s
         serviceMonitorSelector:
           matchExpressions:
