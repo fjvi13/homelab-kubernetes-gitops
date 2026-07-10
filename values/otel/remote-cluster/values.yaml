@@ -134,6 +134,11 @@ collectors:
     enabled: true
     revisionHistoryLimit: 1
     fullnameOverride: "opentelemetry-kube-stack-cluster-stats"
+    # elastic-agent 9.4.2's embedded SDK doesn't disambiguate the new per-component
+    # telemetry metrics by scope, so the internal prometheus endpoint 500s with
+    # "collected before with the same name and label values". Revert to legacy metrics.
+    args:
+      feature-gates: "-telemetry.newPipelineTelemetry"
     replicas: 1
     resources:
       limits:
@@ -332,6 +337,9 @@ collectors:
   daemon:
     enabled: true
     fullnameOverride: "opentelemetry-kube-stack-daemon"
+    # See cluster collector: workaround for duplicate component-telemetry metrics in EDOT 9.4.2.
+    args:
+      feature-gates: "-telemetry.newPipelineTelemetry"
     resources:
       limits:
         cpu: 1500m
@@ -792,6 +800,9 @@ collectors:
   #  forwarding telemetry to an Elasticsearch endpoint.
   gateway:
     fullnameOverride: "opentelemetry-kube-stack-gateway"
+    # See cluster collector: workaround for duplicate component-telemetry metrics in EDOT 9.4.2.
+    args:
+      feature-gates: "-telemetry.newPipelineTelemetry"
     # Uncomment to enable central config in Kibana APM
     # ports:
     #   - name: opamp-http
