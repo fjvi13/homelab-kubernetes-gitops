@@ -963,21 +963,21 @@ overridesExporter:
 # You can use a self hosted memcached by setting enabled to false and providing addresses.
 memcached:
   # -- Enable the built in memcached server provided by the chart
-  enabled: true
+  enabled: false
 
 memcachedExporter:
   # -- Whether memcached metrics should be exported
-  enabled: true
+  enabled: false
 
 resultsCache:
   # -- Specifies whether memcached based results-cache should be enabled
-  enabled: true
+  enabled: false
 
 chunksCache:
   # -- Append to the name of the resources to make names different for l1 and l2
   suffix: ""
   # -- Specifies whether memcached based chunks-cache should be enabled
-  enabled: true
+  enabled: false
   resources:
     requests:
       cpu: 100m
