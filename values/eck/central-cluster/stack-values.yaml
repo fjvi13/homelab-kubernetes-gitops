@@ -7,7 +7,7 @@
 eck-elasticsearch:
   enabled: true
   fullnameOverride: elasticsearch
-  version: 9.4.2
+  version: 9.4.3
   http:
     tls:
       selfSignedCertificate:
@@ -46,7 +46,7 @@ eck-elasticsearch:
 eck-kibana:
   enabled: true
   fullnameOverride: kibana
-  version: 9.4.2
+  version: 9.4.3
   # This is also adjusting the kibana reference to the elasticsearch resource named previously so that
   # both the eck-elasticsearch and the eck-kibana chart work together by default in the eck-stack chart.
   elasticsearchRef:
@@ -79,7 +79,7 @@ eck-agent:
 eck-fleet-server:
   enabled: true
   fullnameOverride: fleet-server
-  version: 9.4.2
+  version: 9.4.3
   policyID: 020c969a-ef88-4319-9780-0a7865276f47
   elasticsearchRefs: 
   - name: elasticsearch
@@ -97,7 +97,7 @@ eck-fleet-server:
 eck-beats:
   enabled: true
   type: metricbeat
-  version: 9.4.2
+  version: 9.4.3
   elasticsearchRef:
     name: elasticsearch
   kibanaRef:
@@ -304,7 +304,7 @@ extraObjects:
       namespace: {{ .Release.Namespace }}
     spec:
       type: metricbeat
-      version: 9.4.2
+      version: 9.4.3
       elasticsearchRef:
         name: elasticsearch
       kibanaRef:
