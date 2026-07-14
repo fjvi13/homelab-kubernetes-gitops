@@ -8,7 +8,7 @@ opentelemetry-operator:
   manager:
     image:
       repository: "ghcr.io/open-telemetry/opentelemetry-operator/opentelemetry-operator"
-      tag: "0.153.0"
+      tag: "0.155.0"
     resources:
       limits:
         cpu: 500m
@@ -31,7 +31,7 @@ crds:
 defaultCRConfig:
   image:
     repository: "docker.elastic.co/elastic-agent/elastic-agent"
-    tag: "9.4.2"
+    tag: "9.4.3"
   targetAllocator:
     enabled: false # Enable/disable the Operator's Target allocator.
     # Refer to: https://github.com/open-telemetry/opentelemetry-operator/tree/main/cmd/otel-allocator
@@ -1002,7 +1002,7 @@ collectors:
     fullnameOverride: "opentelemetry-kube-stack-prometheus"
     image:
       repository: "otel/opentelemetry-collector-contrib"
-      tag: "0.153.0"
+      tag: "0.156.0"
     resources:
       limits:
         cpu: 1
@@ -1215,7 +1215,7 @@ collectors:
     fullnameOverride: "opentelemetry-kube-stack-loki"
     image:
       repository: "otel/opentelemetry-collector-contrib"
-      tag: "0.155.0"
+      tag: "0.156.0"
     resources:
       limits:
         cpu: 1000m
