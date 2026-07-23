@@ -1225,7 +1225,7 @@ collectors:
         memory: 256Mi
     presets:
       logsCollection:
-        enabled: true
+        enabled: false
         storeCheckpoints: true
       kubernetesAttributes:
         enabled: true
