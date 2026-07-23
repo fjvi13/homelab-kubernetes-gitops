@@ -1283,9 +1283,7 @@ collectors:
           timeout: 2s
           override: false
       exporters:
-        # [OTLP HTTP Exporter](https://github.com/open-telemetry/opentelemetry-collector/tree/main/exporter/otlphttpexporter)
-        # [HTTP Configuration Settings] (https://github.com/open-telemetry/opentelemetry-collector/blob/main/config/confighttp/README.md)
-        otlphttp/loki:
+        otlp_http/loki:
           endpoint: http://loki.lab/otlp
           force_attempt_http2: false
           retry_on_failure:
@@ -1316,7 +1314,7 @@ collectors:
           logs:
             receivers: [filelog]
             processors: [memory_limiter, batch, resource_detection/env]
-            exporters: [debug, otlphttp/loki]
+            exporters: [debug, otlp_http/loki]
       
 # For more details on OpenTelemetry's zero-code instrumentation, see:
 # https://opentelemetry.io/docs/concepts/instrumentation/zero-code/
