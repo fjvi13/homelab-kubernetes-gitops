@@ -1237,7 +1237,7 @@ collectors:
           timeout: 10s
           create_directory: true
       receivers:
-        filelog:
+        file_log:
           retry_on_failure:
             enabled: true
           start_at: end
@@ -1292,7 +1292,7 @@ collectors:
           logs:
             level: info
           metrics:
-            level: detailed
+            level: normal
             readers:
               - pull:
                   exporter:
@@ -1302,6 +1302,7 @@ collectors:
         extensions: [cgroup_runtime, file_storage]
         pipelines:
           logs:
+            receivers: [file_log]
             processors: [memory_limiter, batch, resource_detection/env]
             exporters: [debug, otlphttp/loki]
       
