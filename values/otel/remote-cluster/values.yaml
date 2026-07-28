@@ -1185,8 +1185,8 @@ collectors:
             source: "otel"
           remote_write_queue:
             enabled: true
-            queue_size: 20000
-            num_consumers: 10
+            queue_size: 100
+            num_consumers: 5
           retry_on_failure:
             enabled: true
             initial_interval: 100ms
@@ -1283,8 +1283,22 @@ collectors:
           timeout: 2s
           override: false
       exporters:
+        # [OTLP HTTP Exporter](https://github.com/open-telemetry/opentelemetry-collector/tree/main/exporter/otlphttpexporter)
+        # [HTTP Configuration Settings] (https://github.com/open-telemetry/opentelemetry-collector/blob/main/config/confighttp/README.md)
         otlphttp/loki:
           endpoint: http://loki.lab/otlp
+          # force_attempt_http2: false
+          http2_read_idle_timeout: 30s
+          http2_ping_timeout: 15s
+          retry_on_failure:
+            enabled: true
+            initial_interval: 5s
+            max_interval: 30s
+            max_elapsed_time: 2m 
+          sending_queue:
+            enabled: true
+            num_consumers: 10
+            queue_size: 100
         debug:
           verbosity: basic
       service:
