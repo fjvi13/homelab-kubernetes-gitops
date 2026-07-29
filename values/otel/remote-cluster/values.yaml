@@ -1287,9 +1287,7 @@ collectors:
         # [HTTP Configuration Settings] (https://github.com/open-telemetry/opentelemetry-collector/blob/main/config/confighttp/README.md)
         otlphttp/loki:
           endpoint: http://loki.lab/otlp
-          # force_attempt_http2: false
-          http2_read_idle_timeout: 30s
-          http2_ping_timeout: 15s
+          force_attempt_http2: false
           retry_on_failure:
             enabled: true
             initial_interval: 5s
