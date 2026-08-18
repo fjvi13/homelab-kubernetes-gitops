@@ -77,7 +77,7 @@ eck-agent:
 # If enabled, will use the eck-fleet-server chart and deploy a Fleet Server resource.
 #
 eck-fleet-server:
-  enabled: true
+  enabled: false
   fullnameOverride: fleet-server
   version: 9.4.3
   policyID: 020c969a-ef88-4319-9780-0a7865276f47
