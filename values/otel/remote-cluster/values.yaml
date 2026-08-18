@@ -1233,7 +1233,7 @@ collectors:
       extensions:
         cgroup_runtime: {}
         file_storage:
-          directory: /var/lib/otelcol
+          directory: /var/lib/otelcol-scratch
           timeout: 10s
           create_directory: true
       receivers:
