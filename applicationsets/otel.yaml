@@ -51,7 +51,6 @@ spec:
         syncOptions:
         - CreateNamespace=true
         - ServerSideApply=true
-        - RespectIgnoreDifferences=true
       ignoreDifferences:
         - group: admissionregistration.k8s.io
           kind: MutatingWebhookConfiguration
@@ -59,7 +58,3 @@ spec:
         - group: admissionregistration.k8s.io
           kind: ValidatingWebhookConfiguration
           jqPathExpressions: [".webhooks[]?.clientConfig.caBundle"]
-        - group: ""
-          kind: Secret
-          name: otel-opentelemetry-operator-controller-manager-service-cert
-          jsonPointers: ["/data"]
