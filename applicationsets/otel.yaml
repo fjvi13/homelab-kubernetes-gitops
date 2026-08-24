@@ -52,14 +52,14 @@ spec:
         - CreateNamespace=true
         - ServerSideApply=true
         - RespectIgnoreDifferences=true
-    ignoreDifferences:
-      - group: apps
-        kind: MutatingWebhookConfiguration
-        jqPathExpressions: [".webhooks[]?.clientConfig.caBundle"]
-      - group: apps
-        kind: ValidatingWebhookConfiguration
-        jqPathExpressions: [".webhooks[]?.clientConfig.caBundle"]
-      - group: apps
-        kind: Secret
-        name: otel-opentelemetry-operator-controller-manager-service-cert
-        jsonPointers: ["/data"]
+      ignoreDifferences:
+        - group: admissionregistration.k8s.io
+          kind: MutatingWebhookConfiguration
+          jqPathExpressions: [".webhooks[]?.clientConfig.caBundle"]
+        - group: admissionregistration.k8s.io
+          kind: ValidatingWebhookConfiguration
+          jqPathExpressions: [".webhooks[]?.clientConfig.caBundle"]
+        - group: ""
+          kind: Secret
+          name: otel-opentelemetry-operator-controller-manager-service-cert
+          jsonPointers: ["/data"]
