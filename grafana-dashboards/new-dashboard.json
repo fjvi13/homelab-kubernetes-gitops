@@ -149,7 +149,7 @@
                       "spec": {
                         "editorMode": "code",
                         "exemplar": true,
-                        "expr": "sum(kube_node_status_allocatable{cluster=~\"$cluster\",resource=\"memory\", unit=\"byte\", node=~\"^$Node$\"})",
+                        "expr": "sum(kube_node_status_allocatable)",
                         "instant": false,
                         "interval": "",
                         "legendFormat": "Total Node Memory"
