@@ -18,7 +18,7 @@ spec:
                     values: ['true']
               values:
                 chart: grafana
-                chartRepository: https://grafana.github.io/helm-charts
+                chartRepository: https://grafana-community.github.io/helm-charts
           - clusters:
               selector:
                 matchLabels:
