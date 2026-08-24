@@ -26,7 +26,7 @@ opentelemetry-operator:
     autoGenerateCert:
       enabled: true # Enable/disable automatic certificate generation. Set to false if manually managing certificates.
       recreate: false # Force certificate regeneration on updates. Only applicable if autoGenerateCert.enabled is true.
-      certPeriodDays: 3650 # 10 anios: el cert queda congelado por ignoreDifferences y no se renueva solo.
+      certPeriodDays: 3650
 crds:
   create: true # Install the OpenTelemetry Operator CRDs.
 defaultCRConfig:

@@ -24,7 +24,7 @@ spec:
                 matchLabels:
                   env: lab
               values:
-                chartVersion: 10.1.4
+                chartVersion: 12.11.0
   template:
     metadata:
       name: "grafana-{{.name}}"
