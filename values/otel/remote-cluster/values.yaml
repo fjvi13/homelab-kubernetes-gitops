@@ -21,7 +21,8 @@ opentelemetry-operator:
     extraArgs:
       - --enable-go-instrumentation
   admissionWebhooks:
-    secretAnnotations: {}
+    secretAnnotations:
+      argocd.argoproj.io/sync-wave: "-1"
     certManager:
       enabled: false # For production environments, it is [recommended to use cert-manager for better security and scalability](https://github.com/open-telemetry/opentelemetry-helm-charts/tree/main/charts/opentelemetry-operator#tls-certificate-requirement).
     autoGenerateCert:
