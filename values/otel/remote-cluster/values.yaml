@@ -45,7 +45,7 @@ defaultCRConfig:
             storageClassName: topolvm-provisioner
             resources:
               requests:
-                storage: 1Gi
+                storage: 100Mi
   volumeMounts:
     - name: scratch
       mountPath: /var/lib/otelcol-scratch
