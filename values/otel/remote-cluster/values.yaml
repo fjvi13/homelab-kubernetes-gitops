@@ -36,19 +36,19 @@ defaultCRConfig:
   targetAllocator:
     enabled: false # Enable/disable the Operator's Target allocator.
     # Refer to: https://github.com/open-telemetry/opentelemetry-operator/tree/main/cmd/otel-allocator
-  volumes:
-    - name: scratch
-      ephemeral:
-        volumeClaimTemplate:
-          spec:
-            accessModes: ["ReadWriteOnce"]
-            storageClassName: topolvm-provisioner
-            resources:
-              requests:
-                storage: 100Mi
-  volumeMounts:
-    - name: scratch
-      mountPath: /var/lib/otelcol-scratch
+  # volumes:
+  #   - name: scratch
+  #     ephemeral:
+  #       volumeClaimTemplate:
+  #         spec:
+  #           accessModes: ["ReadWriteOnce"]
+  #           storageClassName: topolvm-provisioner
+  #           resources:
+  #             requests:
+  #               storage: 100Mi
+  # volumeMounts:
+  #   - name: scratch
+  #     mountPath: /var/lib/otelcol-scratch
   observability:
     metrics:
       enableMetrics: true
@@ -166,8 +166,8 @@ collectors:
             insecure: true
       extensions:
         cgroup_runtime: {}
-        file_storage:
-          directory: /var/lib/otelcol-scratch
+        # file_storage:
+        #   directory: /var/lib/otelcol-scratch
       processors:
         memory_limiter:
           check_interval: 1s
@@ -266,7 +266,8 @@ collectors:
               enabled: true
       # [Service Section](https://opentelemetry.io/docs/collector/configuration/#service)
       service:
-        extensions: [cgroup_runtime, file_storage]
+        # extensions: [cgroup_runtime, file_storage]
+        extensions: [cgroup_runtime]
         telemetry:
           logs:
             level: info
@@ -686,11 +687,12 @@ collectors:
             - container.id
       extensions:
         cgroup_runtime: {}
-        file_storage:
-          directory: /var/lib/otelcol-scratch
+        # file_storage:
+        #   directory: /var/lib/otelcol-scratch
       # [Service Section](https://opentelemetry.io/docs/collector/configuration/#service)
       service:
-        extensions: [cgroup_runtime, file_storage]
+        # extensions: [cgroup_runtime, file_storage]
+        extensions: [cgroup_runtime]
         telemetry:
           logs:
             level: info
@@ -908,8 +910,8 @@ collectors:
           # logs_index: "akslogs"
       extensions:
         cgroup_runtime: {}
-        file_storage:
-          directory: /var/lib/otelcol-scratch
+        # file_storage:
+        #   directory: /var/lib/otelcol-scratch
         # Uncomment to enable central config in Kibana APM
         # bearertokenauth:
         #   scheme: "APIKey"
@@ -931,7 +933,8 @@ collectors:
 
       service:
         # To enable central config in Kibana APM add the extensions bearertokenauth and apmconfig
-        extensions: [cgroup_runtime, file_storage]
+        # extensions: [cgroup_runtime, file_storage]
+        extensions: [cgroup_runtime]
         telemetry:
           logs:
             level: info
@@ -1233,16 +1236,16 @@ collectors:
     config:
       extensions:
         cgroup_runtime: {}
-        file_storage:
-          directory: /var/lib/otelcol-scratch
-          timeout: 10s
-          create_directory: true
+        # file_storage:
+        #   directory: /var/lib/otelcol-scratch
+        #   timeout: 10s
+        #   create_directory: true
       receivers:
         filelog:
           retry_on_failure:
             enabled: true
           start_at: end
-          storage: file_storage
+          # storage: file_storage
           exclude: []
             # exlude collector logs
             # - /var/log/pods/*opentelemetry-kube-stack*/*/*.log
@@ -1310,7 +1313,8 @@ collectors:
                     prometheus:
                       host: "${env:OTEL_K8S_POD_IP}"
                       port: 8888
-        extensions: [cgroup_runtime, file_storage]
+        # extensions: [cgroup_runtime, file_storage]
+        extensions: [cgroup_runtime]
         pipelines:
           logs:
             receivers: [filelog]
