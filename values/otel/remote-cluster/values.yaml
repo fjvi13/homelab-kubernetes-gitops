@@ -1230,7 +1230,7 @@ collectors:
     presets:
       logsCollection:
         enabled: true
-        storeCheckpoints: false # must stay false while enabled=false: chart 0.15.2 emits a bare `volumes:` (spec.volumes=null) if this is true but logsCollection is off
+        storeCheckpoints: true
       kubernetesAttributes:
         enabled: true
     config:
