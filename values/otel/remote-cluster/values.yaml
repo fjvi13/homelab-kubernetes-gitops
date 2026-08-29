@@ -1251,7 +1251,7 @@ collectors:
     presets:
       logsCollection:
         enabled: true
-        storeCheckpoints: false
+        storeCheckpoints: true
       kubernetesAttributes:
         enabled: true
     config:
