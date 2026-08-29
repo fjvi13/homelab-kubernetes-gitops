@@ -1248,22 +1248,22 @@ collectors:
     presets:
       logsCollection:
         enabled: true
-        storeCheckpoints: true
+        storeCheckpoints: false
       kubernetesAttributes:
         enabled: true
     config:
       extensions:
         cgroup_runtime: {}
-        # file_storage:
-        #   directory: /var/lib/otelcol-scratch
-        #   timeout: 10s
-        #   create_directory: true
+        file_storage:
+          directory: /var/lib/otelcol
+          timeout: 10s
+          create_directory: true
       receivers:
         filelog:
           retry_on_failure:
             enabled: true
           start_at: end
-          # storage: file_storage
+          storage: file_storage
           exclude: []
             # exlude collector logs
             # - /var/log/pods/*opentelemetry-kube-stack*/*/*.log
@@ -1331,8 +1331,7 @@ collectors:
                     prometheus:
                       host: "${env:OTEL_K8S_POD_IP}"
                       port: 8888
-        # extensions: [cgroup_runtime, file_storage]
-        extensions: [cgroup_runtime]
+        extensions: [cgroup_runtime, file_storage]
         pipelines:
           logs:
             receivers: [filelog]
