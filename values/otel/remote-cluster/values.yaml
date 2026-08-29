@@ -1254,8 +1254,8 @@ collectors:
           name: varlibotelcol
           readOnly: true
     securityContext:
-      runAsUser: 0
-      runAsGroup: 0
+      runAsUser: 100
+      runAsGroup: 100
     presets:
       logsCollection:
         enabled: true
