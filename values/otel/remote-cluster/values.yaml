@@ -1227,10 +1227,28 @@ collectors:
       requests:
         cpu: 200m
         memory: 256Mi
+    # TEMPORAL - sidecar de depuracion. La imagen del collector es distroless (sin shell),
+    # asi que `kubectl exec` no sirve para mirar los checkpoints de file_storage.
+    additionalContainers:
+    - name: debug
+      image: busybox:1.37
+      imagePullPolicy: IfNotPresent
+      command: ["/bin/sh", "-c", "while true; do sleep 3600; done"]
+      resources:
+        limits:
+          cpu: 50m
+          memory: 32Mi
+        requests:
+          cpu: 10m
+          memory: 16Mi
+      volumeMounts:
+        - mountPath: /var/lib/otelcol
+          name: varlibotelcol
+          readOnly: true
     presets:
       logsCollection:
         enabled: true
-        storeCheckpoints: false
+        storeCheckpoints: true
       kubernetesAttributes:
         enabled: true
     config:
