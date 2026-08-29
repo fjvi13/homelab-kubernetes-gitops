@@ -1230,7 +1230,7 @@ collectors:
     volumes:
     - name: varlibotelcol
       hostPath:
-        path: /var/lib/otelcol
+        path: /var/lib/otelcol-loki-checkpoints
         type: DirectoryOrCreate
     # volumes:
     #   - name: varlibotelcol
@@ -1244,17 +1244,17 @@ collectors:
     #               storage: 300Mi
     volumeMounts:
     - name: varlibotelcol
-      mountPath: /var/lib/otelcol
+      mountPath: /var/lib/otelcol-loki-checkpoints
     initContainers:
     - name: chown-checkpoints
       image: busybox:1.37
-      command: ["/bin/sh", "-c", "chown -R 10001:10001 /var/lib/otelcol"]
+      command: ["/bin/sh", "-c", "chown -R 10001:10001 /var/lib/otelcol-loki-checkpoints"]
       securityContext:
         runAsUser: 0
         runAsGroup: 0
       volumeMounts:
       - name: varlibotelcol
-        mountPath: /var/lib/otelcol
+        mountPath: /var/lib/otelcol-loki-checkpoints
     # TEMPORAL - sidecar de depuracion. La imagen del collector es distroless (sin shell),
     # asi que `kubectl exec` no sirve para mirar los checkpoints de file_storage.
     additionalContainers:
@@ -1270,7 +1270,7 @@ collectors:
           cpu: 10m
           memory: 16Mi
       volumeMounts:
-        - mountPath: /var/lib/otelcol
+        - mountPath: /var/lib/otelcol-loki-checkpoints
           name: varlibotelcol
           readOnly: true
     # UID/GID por defecto de la imagen otel/opentelemetry-collector-contrib (User: 10001:10001).
@@ -1289,7 +1289,7 @@ collectors:
       extensions:
         cgroup_runtime: {}
         file_storage:
-          directory: /var/lib/otelcol
+          directory: /var/lib/otelcol-loki-checkpoints
           timeout: 10s
           create_directory: true
       receivers:
