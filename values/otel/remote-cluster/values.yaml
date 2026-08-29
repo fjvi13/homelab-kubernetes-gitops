@@ -1252,9 +1252,9 @@ collectors:
     #   securityContext:
     #     runAsUser: 0
     #     runAsGroup: 0
-      volumeMounts:
-      - name: varlibotelcolloki
-        mountPath: /var/lib/otelcol-loki-checkpoints
+    #   volumeMounts:
+    #   - name: varlibotelcolloki
+    #     mountPath: /var/lib/otelcol-loki-checkpoints
     # TEMPORAL - sidecar de depuracion. La imagen del collector es distroless (sin shell),
     # asi que `kubectl exec` no sirve para mirar los checkpoints de file_storage.
     additionalContainers:
