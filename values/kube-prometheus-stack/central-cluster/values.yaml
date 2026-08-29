@@ -343,11 +343,10 @@ prometheus:
     resources:
       limits:
         memory: 1Gi
-        ephemeral-storage: 15Mi
+        ephemeral-storage: 200Mi
       requests:
         cpu: 50m
         memory: 512Mi
-        ephemeral-storage: 10Mi
   podDisruptionBudget:
     enabled: true
     minAvailable: 1
