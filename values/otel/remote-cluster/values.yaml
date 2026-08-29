@@ -539,7 +539,7 @@ collectors:
             http:
               endpoint: 0.0.0.0:4318
         # [File Log Receiver](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/filelogreceiver)
-        file_log:
+        filelog:
           retry_on_failure:
             enabled: true
           start_at: end
@@ -738,7 +738,7 @@ collectors:
           traces: null
           logs/node:
             receivers:
-              - file_log
+              - filelog 
             processors:
               - memory_limiter
               - filter/debug-logs
