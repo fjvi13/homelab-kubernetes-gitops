@@ -1245,13 +1245,13 @@ collectors:
     volumeMounts:
     - name: varlibotelcolloki
       mountPath: /var/lib/otelcol-loki-checkpoints
-    initContainers:
-    - name: chown-checkpoints
-      image: busybox:1.37
-      command: ["/bin/sh", "-c", "chown -R 10001:10001 /var/lib/otelcol-loki-checkpoints"]
-      securityContext:
-        runAsUser: 0
-        runAsGroup: 0
+    # initContainers:
+    # - name: chown-checkpoints
+    #   image: busybox:1.37
+    #   command: ["/bin/sh", "-c", "chown -R 10001:10001 /var/lib/otelcol-loki-checkpoints"]
+    #   securityContext:
+    #     runAsUser: 0
+    #     runAsGroup: 0
       volumeMounts:
       - name: varlibotelcolloki
         mountPath: /var/lib/otelcol-loki-checkpoints
@@ -1273,12 +1273,15 @@ collectors:
         - mountPath: /var/lib/otelcol-loki-checkpoints
           name: varlibotelcolloki
           readOnly: true
-    # UID/GID por defecto de la imagen otel/opentelemetry-collector-contrib (User: 10001:10001).
-    # Explicito a proposito: si securityContext queda vacio y storeCheckpoints pasa a true,
-    # el chart fuerza runAsUser 0.
+    # # UID/GID por defecto de la imagen otel/opentelemetry-collector-contrib (User: 10001:10001).
+    # # Explicito a proposito: si securityContext queda vacio y storeCheckpoints pasa a true,
+    # # el chart fuerza runAsUser 0.
+    # securityContext:
+    #   runAsUser: 10001
+    #   runAsGroup: 10001
     securityContext:
-      runAsUser: 10001
-      runAsGroup: 10001
+      runAsUser: 0
+      runAsGroup: 0
     presets:
       logsCollection:
         enabled: true
