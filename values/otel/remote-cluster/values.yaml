@@ -1227,6 +1227,14 @@ collectors:
       requests:
         cpu: 200m
         memory: 256Mi
+    volumes:
+    - name: varlibotelcol
+      hostPath:
+        path: /var/lib/otelcol
+        type: DirectoryOrCreate
+    volumeMounts:
+    - name: varlibotelcol
+      mountPath: /var/lib/otelcol
     # TEMPORAL - sidecar de depuracion. La imagen del collector es distroless (sin shell),
     # asi que `kubectl exec` no sirve para mirar los checkpoints de file_storage.
     additionalContainers:
