@@ -340,13 +340,14 @@ prometheus:
       remoteTimeout: 30s
       sendExemplars: false
     serviceDiscoveryRole: "EndpointSlice"
-    resources: {}
-      # limits:
-      #   cpu: 1
-      #   memory: 1Gi
-      # requests:
-      #   cpu: 500m
-      #   memory: 512Mi
+    resources:
+      limits:
+        memory: 1Gi
+        ephemeral-storage: 200Mi
+      requests:
+        cpu: 50m
+        memory: 512Mi
+        ephemeral-storage: 50Mi
   podDisruptionBudget:
     enabled: true
     minAvailable: 1
