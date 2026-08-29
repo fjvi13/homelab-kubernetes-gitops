@@ -1228,12 +1228,12 @@ collectors:
         cpu: 200m
         memory: 256Mi
     volumes:
-    - name: varlibotelcol
+    - name: varlibotelcolloki
       hostPath:
         path: /var/lib/otelcol-loki-checkpoints
         type: DirectoryOrCreate
     # volumes:
-    #   - name: varlibotelcol
+    #   - name: varlibotelcolloki
     #     ephemeral:
     #       volumeClaimTemplate:
     #         spec:
@@ -1243,7 +1243,7 @@ collectors:
     #             requests:
     #               storage: 300Mi
     volumeMounts:
-    - name: varlibotelcol
+    - name: varlibotelcolloki
       mountPath: /var/lib/otelcol-loki-checkpoints
     initContainers:
     - name: chown-checkpoints
@@ -1253,7 +1253,7 @@ collectors:
         runAsUser: 0
         runAsGroup: 0
       volumeMounts:
-      - name: varlibotelcol
+      - name: varlibotelcolloki
         mountPath: /var/lib/otelcol-loki-checkpoints
     # TEMPORAL - sidecar de depuracion. La imagen del collector es distroless (sin shell),
     # asi que `kubectl exec` no sirve para mirar los checkpoints de file_storage.
@@ -1271,7 +1271,7 @@ collectors:
           memory: 16Mi
       volumeMounts:
         - mountPath: /var/lib/otelcol-loki-checkpoints
-          name: varlibotelcol
+          name: varlibotelcolloki
           readOnly: true
     # UID/GID por defecto de la imagen otel/opentelemetry-collector-contrib (User: 10001:10001).
     # Explicito a proposito: si securityContext queda vacio y storeCheckpoints pasa a true,
