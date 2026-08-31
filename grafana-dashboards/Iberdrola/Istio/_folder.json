@@ -1,0 +1,10 @@
+{
+  "kind": "Folder",
+  "apiVersion": "folder.grafana.app/v1",
+  "metadata": {
+    "name": "cfwu13otj0hkwc"
+  },
+  "spec": {
+    "title": "Istio"
+  }
+}
