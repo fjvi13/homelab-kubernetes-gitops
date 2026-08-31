@@ -1,0 +1,10 @@
+{
+  "kind": "Folder",
+  "apiVersion": "folder.grafana.app/v1",
+  "metadata": {
+    "name": "afwu0wx3ynjeof"
+  },
+  "spec": {
+    "title": "ArgoCD"
+  }
+}
