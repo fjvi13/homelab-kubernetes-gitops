@@ -1,0 +1,10 @@
+{
+  "kind": "Folder",
+  "apiVersion": "folder.grafana.app/v1",
+  "metadata": {
+    "name": "efwtzu8zzc7i8b"
+  },
+  "spec": {
+    "title": "dashboards_v0"
+  }
+}
