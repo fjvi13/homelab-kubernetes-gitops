@@ -1,0 +1,1167 @@
+{
+  "apiVersion": "dashboard.grafana.app/v0alpha1",
+  "kind": "Dashboard",
+  "metadata": {
+    "annotations": {},
+    "labels": {},
+    "name": "k8s-ns-workloads-deploy-aware",
+    "namespace": "default"
+  },
+  "spec": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "grafana"
+          },
+          "enable": false,
+          "hide": false,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations \u0026 Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "links": [],
+    "panels": [
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PA5392E10C0F059AB"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 25,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 2,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": true,
+              "stacking": {
+                "group": "A",
+                "mode": "normal"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "quota - requests"
+              },
+              "properties": [
+                {
+                  "id": "custom.stacking",
+                  "value": {
+                    "group": "A",
+                    "mode": "none"
+                  }
+                },
+                {
+                  "id": "custom.fillOpacity",
+                  "value": 0
+                },
+                {
+                  "id": "custom.lineWidth",
+                  "value": 2
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "red",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "quota - limits"
+              },
+              "properties": [
+                {
+                  "id": "custom.stacking",
+                  "value": {
+                    "group": "A",
+                    "mode": "none"
+                  }
+                },
+                {
+                  "id": "custom.fillOpacity",
+                  "value": 0
+                },
+                {
+                  "id": "custom.lineWidth",
+                  "value": 2
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "orange",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "quota - requests"
+              },
+              "properties": [
+                {
+                  "id": "custom.stacking",
+                  "value": {
+                    "group": "A",
+                    "mode": "none"
+                  }
+                },
+                {
+                  "id": "custom.fillOpacity",
+                  "value": 0
+                },
+                {
+                  "id": "custom.lineWidth",
+                  "value": 2
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "red",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "quota - limits"
+              },
+              "properties": [
+                {
+                  "id": "custom.stacking",
+                  "value": {
+                    "group": "A",
+                    "mode": "none"
+                  }
+                },
+                {
+                  "id": "custom.fillOpacity",
+                  "value": 0
+                },
+                {
+                  "id": "custom.lineWidth",
+                  "value": 2
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "orange",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "total requests (workloads)"
+              },
+              "properties": [
+                {
+                  "id": "custom.stacking",
+                  "value": {
+                    "group": "A",
+                    "mode": "none"
+                  }
+                },
+                {
+                  "id": "custom.fillOpacity",
+                  "value": 0
+                },
+                {
+                  "id": "custom.lineWidth",
+                  "value": 2
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "green",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "total limits (workloads)"
+              },
+              "properties": [
+                {
+                  "id": "custom.stacking",
+                  "value": {
+                    "group": "A",
+                    "mode": "none"
+                  }
+                },
+                {
+                  "id": "custom.fillOpacity",
+                  "value": 0
+                },
+                {
+                  "id": "custom.lineWidth",
+                  "value": 2
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "red",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 1,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.2.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "expr": "sum by (workload, workload_kind) ((label_replace(\n  label_replace((sum by (namespace,pod) (rate(container_cpu_usage_seconds_total{container!=\"\", image!=\"\", namespace=\"$namespace\", cluster=\"$cluster\"}[$__rate_interval]))) * on (namespace,pod) group_left(deploy_name, deploy_kind) (\n  label_replace(kube_pod_owner{namespace=\"$namespace\", owner_kind=\"ReplicaSet\", cluster=\"$cluster\"}, \"rs_name\", \"$1\", \"owner_name\", \"(.*)\")\n  * on (namespace, rs_name) group_left(deploy_name, deploy_kind)\n  label_replace(\n    label_replace(\n      label_replace(kube_replicaset_owner{namespace=\"$namespace\", owner_kind=~\"$type\", cluster=\"$cluster\"}, \"rs_name\", \"$1\", \"replicaset\", \"(.*)\"),\n      \"deploy_name\", \"$1\", \"owner_name\", \"(.*)\"\n    ),\n    \"deploy_kind\", \"$1\", \"owner_kind\", \"(.*)\"\n  )\n), \"workload\", \"$1\", \"deploy_name\", \"(.*)\"),\n  \"workload_kind\", \"$1\", \"deploy_kind\", \"(.*)\"\n)) OR (label_replace(\n  label_replace((sum by (namespace,pod) (rate(container_cpu_usage_seconds_total{container!=\"\", image!=\"\", namespace=\"$namespace\", cluster=\"$cluster\"}[$__rate_interval]))) * on (namespace,pod) group_left(owner_name, owner_kind) kube_pod_owner{namespace=\"$namespace\", owner_kind!=\"ReplicaSet\", owner_kind=~\"$type\", cluster=\"$cluster\"}, \"workload\", \"$1\", \"owner_name\", \"(.*)\"),\n  \"workload_kind\", \"$1\", \"owner_kind\", \"(.*)\"\n)))",
+            "legendFormat": "{{workload}} - {{workload_kind}}",
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "expr": "sum(kube_resourcequota{namespace=\"$namespace\", type=\"hard\", resource=\"limits.cpu\", cluster=\"$cluster\"})",
+            "legendFormat": "quota - limits",
+            "refId": "C"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "expr": "sum(kube_pod_container_resource_limits{resource=\"cpu\", namespace=\"$namespace\", cluster=\"$cluster\"})",
+            "legendFormat": "total limits (workloads)",
+            "refId": "D"
+          }
+        ],
+        "title": "CPU: uso por workload",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PA5392E10C0F059AB"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "footer": {
+                "reducers": []
+              },
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 24,
+          "x": 0,
+          "y": 8
+        },
+        "id": 2,
+        "options": {
+          "cellHeight": "sm",
+          "showHeader": true
+        },
+        "pluginVersion": "12.2.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "expr": "label_join( sum by (workload, workload_kind) ((label_replace(\n  label_replace((sum by (namespace,pod) (rate(container_cpu_usage_seconds_total{container!=\"\", image!=\"\", namespace=\"$namespace\", cluster=\"$cluster\"}[$__rate_interval]))) * on (namespace,pod) group_left(deploy_name, deploy_kind) (\n  label_replace(kube_pod_owner{namespace=\"$namespace\", owner_kind=\"ReplicaSet\", cluster=\"$cluster\"}, \"rs_name\", \"$1\", \"owner_name\", \"(.*)\")\n  * on (namespace, rs_name) group_left(deploy_name, deploy_kind)\n  label_replace(\n    label_replace(\n      label_replace(kube_replicaset_owner{namespace=\"$namespace\", owner_kind=~\"$type\", cluster=\"$cluster\"}, \"rs_name\", \"$1\", \"replicaset\", \"(.*)\"),\n      \"deploy_name\", \"$1\", \"owner_name\", \"(.*)\"\n    ),\n    \"deploy_kind\", \"$1\", \"owner_kind\", \"(.*)\"\n  )\n), \"workload\", \"$1\", \"deploy_name\", \"(.*)\"),\n  \"workload_kind\", \"$1\", \"deploy_kind\", \"(.*)\"\n)) OR (label_replace(\n  label_replace((sum by (namespace,pod) (rate(container_cpu_usage_seconds_total{container!=\"\", image!=\"\", namespace=\"$namespace\", cluster=\"$cluster\"}[$__rate_interval]))) * on (namespace,pod) group_left(owner_name, owner_kind) kube_pod_owner{namespace=\"$namespace\", owner_kind!=\"ReplicaSet\", owner_kind=~\"$type\", cluster=\"$cluster\"}, \"workload\", \"$1\", \"owner_name\", \"(.*)\"),\n  \"workload_kind\", \"$1\", \"owner_kind\", \"(.*)\"\n))) , \"wk\", \"/\", \"workload_kind\", \"workload\")",
+            "format": "table",
+            "instant": true,
+            "refId": "U"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "expr": "label_join( sum by (workload, workload_kind) ((label_replace(\n  label_replace((sum by (namespace,pod) (kube_pod_container_resource_requests{resource=\"cpu\", namespace=\"$namespace\", cluster=\"$cluster\"})) * on (namespace,pod) group_left(deploy_name, deploy_kind) (\n  label_replace(kube_pod_owner{namespace=\"$namespace\", owner_kind=\"ReplicaSet\", cluster=\"$cluster\"}, \"rs_name\", \"$1\", \"owner_name\", \"(.*)\")\n  * on (namespace, rs_name) group_left(deploy_name, deploy_kind)\n  label_replace(\n    label_replace(\n      label_replace(kube_replicaset_owner{namespace=\"$namespace\", owner_kind=~\"$type\", cluster=\"$cluster\"}, \"rs_name\", \"$1\", \"replicaset\", \"(.*)\"),\n      \"deploy_name\", \"$1\", \"owner_name\", \"(.*)\"\n    ),\n    \"deploy_kind\", \"$1\", \"owner_kind\", \"(.*)\"\n  )\n), \"workload\", \"$1\", \"deploy_name\", \"(.*)\"),\n  \"workload_kind\", \"$1\", \"deploy_kind\", \"(.*)\"\n)) OR (label_replace(\n  label_replace((sum by (namespace,pod) (kube_pod_container_resource_requests{resource=\"cpu\", namespace=\"$namespace\", cluster=\"$cluster\"})) * on (namespace,pod) group_left(owner_name, owner_kind) kube_pod_owner{namespace=\"$namespace\", owner_kind!=\"ReplicaSet\", owner_kind=~\"$type\", cluster=\"$cluster\"}, \"workload\", \"$1\", \"owner_name\", \"(.*)\"),\n  \"workload_kind\", \"$1\", \"owner_kind\", \"(.*)\"\n))) , \"wk\", \"/\", \"workload_kind\", \"workload\")",
+            "format": "table",
+            "instant": true,
+            "refId": "R"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "expr": "label_join( sum by (workload, workload_kind) ((label_replace(\n  label_replace((sum by (namespace,pod) (kube_pod_container_resource_limits{resource=\"cpu\", namespace=\"$namespace\", cluster=\"$cluster\"})) * on (namespace,pod) group_left(deploy_name, deploy_kind) (\n  label_replace(kube_pod_owner{namespace=\"$namespace\", owner_kind=\"ReplicaSet\", cluster=\"$cluster\"}, \"rs_name\", \"$1\", \"owner_name\", \"(.*)\")\n  * on (namespace, rs_name) group_left(deploy_name, deploy_kind)\n  label_replace(\n    label_replace(\n      label_replace(kube_replicaset_owner{namespace=\"$namespace\", owner_kind=~\"$type\", cluster=\"$cluster\"}, \"rs_name\", \"$1\", \"replicaset\", \"(.*)\"),\n      \"deploy_name\", \"$1\", \"owner_name\", \"(.*)\"\n    ),\n    \"deploy_kind\", \"$1\", \"owner_kind\", \"(.*)\"\n  )\n), \"workload\", \"$1\", \"deploy_name\", \"(.*)\"),\n  \"workload_kind\", \"$1\", \"deploy_kind\", \"(.*)\"\n)) OR (label_replace(\n  label_replace((sum by (namespace,pod) (kube_pod_container_resource_limits{resource=\"cpu\", namespace=\"$namespace\", cluster=\"$cluster\"})) * on (namespace,pod) group_left(owner_name, owner_kind) kube_pod_owner{namespace=\"$namespace\", owner_kind!=\"ReplicaSet\", owner_kind=~\"$type\", cluster=\"$cluster\"}, \"workload\", \"$1\", \"owner_name\", \"(.*)\"),\n  \"workload_kind\", \"$1\", \"owner_kind\", \"(.*)\"\n))) , \"wk\", \"/\", \"workload_kind\", \"workload\")",
+            "format": "table",
+            "instant": true,
+            "refId": "L"
+          }
+        ],
+        "title": "CPU por workload (used / request / limits)",
+        "transformations": [
+          {
+            "id": "joinByField",
+            "options": {
+              "byField": "wk",
+              "mode": "outer"
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true,
+                "Time 3": true,
+                "Value #R": false,
+                "wk": true,
+                "workload 2": true,
+                "workload 3": true,
+                "workload_kind 2": true,
+                "workload_kind 3": true
+              },
+              "includeByName": {},
+              "indexByName": {
+                "limits": 4,
+                "request": 3,
+                "used": 2,
+                "workload": 1,
+                "workload_kind": 0
+              },
+              "renameByName": {
+                "Value #L": "limits",
+                "Value #R": "request",
+                "Value #U": "used"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PA5392E10C0F059AB"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 25,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 2,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": true,
+              "stacking": {
+                "group": "A",
+                "mode": "normal"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "bytes"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "quota - requests"
+              },
+              "properties": [
+                {
+                  "id": "custom.stacking",
+                  "value": {
+                    "group": "A",
+                    "mode": "none"
+                  }
+                },
+                {
+                  "id": "custom.fillOpacity",
+                  "value": 0
+                },
+                {
+                  "id": "custom.lineWidth",
+                  "value": 2
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "red",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "quota - limits"
+              },
+              "properties": [
+                {
+                  "id": "custom.stacking",
+                  "value": {
+                    "group": "A",
+                    "mode": "none"
+                  }
+                },
+                {
+                  "id": "custom.fillOpacity",
+                  "value": 0
+                },
+                {
+                  "id": "custom.lineWidth",
+                  "value": 2
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "orange",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "quota - requests"
+              },
+              "properties": [
+                {
+                  "id": "custom.stacking",
+                  "value": {
+                    "group": "A",
+                    "mode": "none"
+                  }
+                },
+                {
+                  "id": "custom.fillOpacity",
+                  "value": 0
+                },
+                {
+                  "id": "custom.lineWidth",
+                  "value": 2
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "red",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "quota - limits"
+              },
+              "properties": [
+                {
+                  "id": "custom.stacking",
+                  "value": {
+                    "group": "A",
+                    "mode": "none"
+                  }
+                },
+                {
+                  "id": "custom.fillOpacity",
+                  "value": 0
+                },
+                {
+                  "id": "custom.lineWidth",
+                  "value": 2
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "orange",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "total requests (workloads)"
+              },
+              "properties": [
+                {
+                  "id": "custom.stacking",
+                  "value": {
+                    "group": "A",
+                    "mode": "none"
+                  }
+                },
+                {
+                  "id": "custom.fillOpacity",
+                  "value": 0
+                },
+                {
+                  "id": "custom.lineWidth",
+                  "value": 2
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "green",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "total limits (workloads)"
+              },
+              "properties": [
+                {
+                  "id": "custom.stacking",
+                  "value": {
+                    "group": "A",
+                    "mode": "none"
+                  }
+                },
+                {
+                  "id": "custom.fillOpacity",
+                  "value": 0
+                },
+                {
+                  "id": "custom.lineWidth",
+                  "value": 2
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "red",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 24,
+          "x": 0,
+          "y": 18
+        },
+        "id": 3,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.2.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "expr": "sum by (workload, workload_kind) ((label_replace(\n  label_replace((sum by (namespace,pod) (container_memory_working_set_bytes{container!=\"\", image!=\"\", namespace=\"$namespace\", cluster=\"$cluster\"})) * on (namespace,pod) group_left(deploy_name, deploy_kind) (\n  label_replace(kube_pod_owner{namespace=\"$namespace\", owner_kind=\"ReplicaSet\", cluster=\"$cluster\"}, \"rs_name\", \"$1\", \"owner_name\", \"(.*)\")\n  * on (namespace, rs_name) group_left(deploy_name, deploy_kind)\n  label_replace(\n    label_replace(\n      label_replace(kube_replicaset_owner{namespace=\"$namespace\", owner_kind=~\"$type\", cluster=\"$cluster\"}, \"rs_name\", \"$1\", \"replicaset\", \"(.*)\"),\n      \"deploy_name\", \"$1\", \"owner_name\", \"(.*)\"\n    ),\n    \"deploy_kind\", \"$1\", \"owner_kind\", \"(.*)\"\n  )\n), \"workload\", \"$1\", \"deploy_name\", \"(.*)\"),\n  \"workload_kind\", \"$1\", \"deploy_kind\", \"(.*)\"\n)) OR (label_replace(\n  label_replace((sum by (namespace,pod) (container_memory_working_set_bytes{container!=\"\", image!=\"\", namespace=\"$namespace\", cluster=\"$cluster\"})) * on (namespace,pod) group_left(owner_name, owner_kind) kube_pod_owner{namespace=\"$namespace\", owner_kind!=\"ReplicaSet\", owner_kind=~\"$type\", cluster=\"$cluster\"}, \"workload\", \"$1\", \"owner_name\", \"(.*)\"),\n  \"workload_kind\", \"$1\", \"owner_kind\", \"(.*)\"\n)))",
+            "legendFormat": "{{workload}} - {{workload_kind}}",
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "expr": "sum(kube_resourcequota{namespace=\"$namespace\", type=\"hard\", resource=\"limits.memory\", cluster=\"$cluster\"})",
+            "legendFormat": "quota - limits",
+            "refId": "C"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "expr": "sum(kube_pod_container_resource_limits{resource=\"memory\", namespace=\"$namespace\", cluster=\"$cluster\"})",
+            "legendFormat": "total limits (workloads)",
+            "refId": "D"
+          }
+        ],
+        "title": "Memoria: uso por workload",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PA5392E10C0F059AB"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "footer": {
+                "reducers": []
+              },
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "bytes"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 24,
+          "x": 0,
+          "y": 26
+        },
+        "id": 4,
+        "options": {
+          "cellHeight": "sm",
+          "showHeader": true
+        },
+        "pluginVersion": "12.2.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "expr": "label_join( sum by (workload, workload_kind) ((label_replace(\n  label_replace((sum by (namespace,pod) (container_memory_working_set_bytes{container!=\"\", image!=\"\", namespace=\"$namespace\", cluster=\"$cluster\"})) * on (namespace,pod) group_left(deploy_name, deploy_kind) (\n  label_replace(kube_pod_owner{namespace=\"$namespace\", owner_kind=\"ReplicaSet\", cluster=\"$cluster\"}, \"rs_name\", \"$1\", \"owner_name\", \"(.*)\")\n  * on (namespace, rs_name) group_left(deploy_name, deploy_kind)\n  label_replace(\n    label_replace(\n      label_replace(kube_replicaset_owner{namespace=\"$namespace\", owner_kind=~\"$type\", cluster=\"$cluster\"}, \"rs_name\", \"$1\", \"replicaset\", \"(.*)\"),\n      \"deploy_name\", \"$1\", \"owner_name\", \"(.*)\"\n    ),\n    \"deploy_kind\", \"$1\", \"owner_kind\", \"(.*)\"\n  )\n), \"workload\", \"$1\", \"deploy_name\", \"(.*)\"),\n  \"workload_kind\", \"$1\", \"deploy_kind\", \"(.*)\"\n)) OR (label_replace(\n  label_replace((sum by (namespace,pod) (container_memory_working_set_bytes{container!=\"\", image!=\"\", namespace=\"$namespace\", cluster=\"$cluster\"})) * on (namespace,pod) group_left(owner_name, owner_kind) kube_pod_owner{namespace=\"$namespace\", owner_kind!=\"ReplicaSet\", owner_kind=~\"$type\", cluster=\"$cluster\"}, \"workload\", \"$1\", \"owner_name\", \"(.*)\"),\n  \"workload_kind\", \"$1\", \"owner_kind\", \"(.*)\"\n))) , \"wk\", \"/\", \"workload_kind\", \"workload\")",
+            "format": "table",
+            "instant": true,
+            "refId": "U"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "expr": "label_join( sum by (workload, workload_kind) ((label_replace(\n  label_replace((sum by (namespace,pod) (kube_pod_container_resource_requests{resource=\"memory\", namespace=\"$namespace\", cluster=\"$cluster\"})) * on (namespace,pod) group_left(deploy_name, deploy_kind) (\n  label_replace(kube_pod_owner{namespace=\"$namespace\", owner_kind=\"ReplicaSet\", cluster=\"$cluster\"}, \"rs_name\", \"$1\", \"owner_name\", \"(.*)\")\n  * on (namespace, rs_name) group_left(deploy_name, deploy_kind)\n  label_replace(\n    label_replace(\n      label_replace(kube_replicaset_owner{namespace=\"$namespace\", owner_kind=~\"$type\", cluster=\"$cluster\"}, \"rs_name\", \"$1\", \"replicaset\", \"(.*)\"),\n      \"deploy_name\", \"$1\", \"owner_name\", \"(.*)\"\n    ),\n    \"deploy_kind\", \"$1\", \"owner_kind\", \"(.*)\"\n  )\n), \"workload\", \"$1\", \"deploy_name\", \"(.*)\"),\n  \"workload_kind\", \"$1\", \"deploy_kind\", \"(.*)\"\n)) OR (label_replace(\n  label_replace((sum by (namespace,pod) (kube_pod_container_resource_requests{resource=\"memory\", namespace=\"$namespace\", cluster=\"$cluster\"})) * on (namespace,pod) group_left(owner_name, owner_kind) kube_pod_owner{namespace=\"$namespace\", owner_kind!=\"ReplicaSet\", owner_kind=~\"$type\", cluster=\"$cluster\"}, \"workload\", \"$1\", \"owner_name\", \"(.*)\"),\n  \"workload_kind\", \"$1\", \"owner_kind\", \"(.*)\"\n))) , \"wk\", \"/\", \"workload_kind\", \"workload\")",
+            "format": "table",
+            "instant": true,
+            "refId": "R"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "expr": "label_join( sum by (workload, workload_kind) ((label_replace(\n  label_replace((sum by (namespace,pod) (kube_pod_container_resource_limits{resource=\"memory\", namespace=\"$namespace\", cluster=\"$cluster\"})) * on (namespace,pod) group_left(deploy_name, deploy_kind) (\n  label_replace(kube_pod_owner{namespace=\"$namespace\", owner_kind=\"ReplicaSet\", cluster=\"$cluster\"}, \"rs_name\", \"$1\", \"owner_name\", \"(.*)\")\n  * on (namespace, rs_name) group_left(deploy_name, deploy_kind)\n  label_replace(\n    label_replace(\n      label_replace(kube_replicaset_owner{namespace=\"$namespace\", owner_kind=~\"$type\", cluster=\"$cluster\"}, \"rs_name\", \"$1\", \"replicaset\", \"(.*)\"),\n      \"deploy_name\", \"$1\", \"owner_name\", \"(.*)\"\n    ),\n    \"deploy_kind\", \"$1\", \"owner_kind\", \"(.*)\"\n  )\n), \"workload\", \"$1\", \"deploy_name\", \"(.*)\"),\n  \"workload_kind\", \"$1\", \"deploy_kind\", \"(.*)\"\n)) OR (label_replace(\n  label_replace((sum by (namespace,pod) (kube_pod_container_resource_limits{resource=\"memory\", namespace=\"$namespace\", cluster=\"$cluster\"})) * on (namespace,pod) group_left(owner_name, owner_kind) kube_pod_owner{namespace=\"$namespace\", owner_kind!=\"ReplicaSet\", owner_kind=~\"$type\", cluster=\"$cluster\"}, \"workload\", \"$1\", \"owner_name\", \"(.*)\"),\n  \"workload_kind\", \"$1\", \"owner_kind\", \"(.*)\"\n))) , \"wk\", \"/\", \"workload_kind\", \"workload\")",
+            "format": "table",
+            "instant": true,
+            "refId": "L"
+          }
+        ],
+        "title": "Memoria por workload (used / request / limits)",
+        "transformations": [
+          {
+            "id": "joinByField",
+            "options": {
+              "byField": "wk",
+              "mode": "outer"
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true,
+                "Time 2": true,
+                "Time 3": true,
+                "wk": true,
+                "workload 2": true,
+                "workload 3": true,
+                "workload_kind 2": true,
+                "workload_kind 3": true
+              },
+              "includeByName": {},
+              "indexByName": {
+                "limits": 4,
+                "request": 3,
+                "used": 2,
+                "workload": 1,
+                "workload_kind": 0
+              },
+              "renameByName": {
+                "Value #L": "limits",
+                "Value #R": "request",
+                "Value #U": "used"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PA5392E10C0F059AB"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 2,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": true,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "Bps"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 24,
+          "x": 0,
+          "y": 36
+        },
+        "id": 5,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.2.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "expr": "sum by (workload) ((label_replace(\n  label_replace((sum by (namespace,pod) (irate(container_network_receive_bytes_total{namespace=\"$namespace\", cluster=\"$cluster\"}[$__rate_interval]))) * on (namespace,pod) group_left(deploy_name, deploy_kind) (\n  label_replace(kube_pod_owner{namespace=\"$namespace\", owner_kind=\"ReplicaSet\", cluster=\"$cluster\"}, \"rs_name\", \"$1\", \"owner_name\", \"(.*)\")\n  * on (namespace, rs_name) group_left(deploy_name, deploy_kind)\n  label_replace(\n    label_replace(\n      label_replace(kube_replicaset_owner{namespace=\"$namespace\", owner_kind=~\"$type\", cluster=\"$cluster\"}, \"rs_name\", \"$1\", \"replicaset\", \"(.*)\"),\n      \"deploy_name\", \"$1\", \"owner_name\", \"(.*)\"\n    ),\n    \"deploy_kind\", \"$1\", \"owner_kind\", \"(.*)\"\n  )\n), \"workload\", \"$1\", \"deploy_name\", \"(.*)\"),\n  \"workload_kind\", \"$1\", \"deploy_kind\", \"(.*)\"\n)) OR (label_replace(\n  label_replace((sum by (namespace,pod) (irate(container_network_receive_bytes_total{namespace=\"$namespace\", cluster=\"$cluster\"}[$__rate_interval]))) * on (namespace,pod) group_left(owner_name, owner_kind) kube_pod_owner{namespace=\"$namespace\", owner_kind!=\"ReplicaSet\", owner_kind=~\"$type\", cluster=\"$cluster\"}, \"workload\", \"$1\", \"owner_name\", \"(.*)\"),\n  \"workload_kind\", \"$1\", \"owner_kind\", \"(.*)\"\n)))",
+            "legendFormat": "{{workload}} RX",
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "expr": "sum by (workload) ((label_replace(\n  label_replace((sum by (namespace,pod) (irate(container_network_transmit_bytes_total{namespace=\"$namespace\", cluster=\"$cluster\"}[$__rate_interval]))) * on (namespace,pod) group_left(deploy_name, deploy_kind) (\n  label_replace(kube_pod_owner{namespace=\"$namespace\", owner_kind=\"ReplicaSet\", cluster=\"$cluster\"}, \"rs_name\", \"$1\", \"owner_name\", \"(.*)\")\n  * on (namespace, rs_name) group_left(deploy_name, deploy_kind)\n  label_replace(\n    label_replace(\n      label_replace(kube_replicaset_owner{namespace=\"$namespace\", owner_kind=~\"$type\", cluster=\"$cluster\"}, \"rs_name\", \"$1\", \"replicaset\", \"(.*)\"),\n      \"deploy_name\", \"$1\", \"owner_name\", \"(.*)\"\n    ),\n    \"deploy_kind\", \"$1\", \"owner_kind\", \"(.*)\"\n  )\n), \"workload\", \"$1\", \"deploy_name\", \"(.*)\"),\n  \"workload_kind\", \"$1\", \"deploy_kind\", \"(.*)\"\n)) OR (label_replace(\n  label_replace((sum by (namespace,pod) (irate(container_network_transmit_bytes_total{namespace=\"$namespace\", cluster=\"$cluster\"}[$__rate_interval]))) * on (namespace,pod) group_left(owner_name, owner_kind) kube_pod_owner{namespace=\"$namespace\", owner_kind!=\"ReplicaSet\", owner_kind=~\"$type\", cluster=\"$cluster\"}, \"workload\", \"$1\", \"owner_name\", \"(.*)\"),\n  \"workload_kind\", \"$1\", \"owner_kind\", \"(.*)\"\n)))",
+            "legendFormat": "{{workload}} TX",
+            "refId": "B"
+          }
+        ],
+        "title": "Red: ancho de banda por workload (RX/TX)",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PA5392E10C0F059AB"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 2,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": true,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "pps"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 24,
+          "x": 0,
+          "y": 44
+        },
+        "id": 6,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.2.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "expr": "sum by (workload) ((label_replace(\n  label_replace((sum by (namespace,pod) (irate(container_network_receive_packets_total{namespace=\"$namespace\", cluster=\"$cluster\"}[$__rate_interval]))) * on (namespace,pod) group_left(deploy_name, deploy_kind) (\n  label_replace(kube_pod_owner{namespace=\"$namespace\", owner_kind=\"ReplicaSet\", cluster=\"$cluster\"}, \"rs_name\", \"$1\", \"owner_name\", \"(.*)\")\n  * on (namespace, rs_name) group_left(deploy_name, deploy_kind)\n  label_replace(\n    label_replace(\n      label_replace(kube_replicaset_owner{namespace=\"$namespace\", owner_kind=~\"$type\", cluster=\"$cluster\"}, \"rs_name\", \"$1\", \"replicaset\", \"(.*)\"),\n      \"deploy_name\", \"$1\", \"owner_name\", \"(.*)\"\n    ),\n    \"deploy_kind\", \"$1\", \"owner_kind\", \"(.*)\"\n  )\n), \"workload\", \"$1\", \"deploy_name\", \"(.*)\"),\n  \"workload_kind\", \"$1\", \"deploy_kind\", \"(.*)\"\n)) OR (label_replace(\n  label_replace((sum by (namespace,pod) (irate(container_network_receive_packets_total{namespace=\"$namespace\", cluster=\"$cluster\"}[$__rate_interval]))) * on (namespace,pod) group_left(owner_name, owner_kind) kube_pod_owner{namespace=\"$namespace\", owner_kind!=\"ReplicaSet\", owner_kind=~\"$type\", cluster=\"$cluster\"}, \"workload\", \"$1\", \"owner_name\", \"(.*)\"),\n  \"workload_kind\", \"$1\", \"owner_kind\", \"(.*)\"\n)))",
+            "legendFormat": "{{workload}} RX pps",
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "expr": "sum by (workload) ((label_replace(\n  label_replace((sum by (namespace,pod) (irate(container_network_transmit_packets_total{namespace=\"$namespace\", cluster=\"$cluster\"}[$__rate_interval]))) * on (namespace,pod) group_left(deploy_name, deploy_kind) (\n  label_replace(kube_pod_owner{namespace=\"$namespace\", owner_kind=\"ReplicaSet\", cluster=\"$cluster\"}, \"rs_name\", \"$1\", \"owner_name\", \"(.*)\")\n  * on (namespace, rs_name) group_left(deploy_name, deploy_kind)\n  label_replace(\n    label_replace(\n      label_replace(kube_replicaset_owner{namespace=\"$namespace\", owner_kind=~\"$type\", cluster=\"$cluster\"}, \"rs_name\", \"$1\", \"replicaset\", \"(.*)\"),\n      \"deploy_name\", \"$1\", \"owner_name\", \"(.*)\"\n    ),\n    \"deploy_kind\", \"$1\", \"owner_kind\", \"(.*)\"\n  )\n), \"workload\", \"$1\", \"deploy_name\", \"(.*)\"),\n  \"workload_kind\", \"$1\", \"deploy_kind\", \"(.*)\"\n)) OR (label_replace(\n  label_replace((sum by (namespace,pod) (irate(container_network_transmit_packets_total{namespace=\"$namespace\", cluster=\"$cluster\"}[$__rate_interval]))) * on (namespace,pod) group_left(owner_name, owner_kind) kube_pod_owner{namespace=\"$namespace\", owner_kind!=\"ReplicaSet\", owner_kind=~\"$type\", cluster=\"$cluster\"}, \"workload\", \"$1\", \"owner_name\", \"(.*)\"),\n  \"workload_kind\", \"$1\", \"owner_kind\", \"(.*)\"\n)))",
+            "legendFormat": "{{workload}} TX pps",
+            "refId": "B"
+          }
+        ],
+        "title": "Red: paquetes por workload (RX/TX)",
+        "type": "timeseries"
+      }
+    ],
+    "preload": false,
+    "refresh": "",
+    "schemaVersion": 42,
+    "tags": [
+      "kubernetes",
+      "prometheus",
+      "workloads"
+    ],
+    "templating": {
+      "list": [
+        {
+          "allValue": ".*",
+          "current": {
+            "text": "aks-kpescorpostarg-dev",
+            "value": "aks-kpescorpostarg-dev"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PA5392E10C0F059AB"
+          },
+          "includeAll": false,
+          "label": "Cluster",
+          "name": "cluster",
+          "options": [],
+          "query": "label_values(kube_pod_info, cluster)",
+          "refresh": 2,
+          "type": "query"
+        },
+        {
+          "current": {
+            "text": "app-routing-system",
+            "value": "app-routing-system"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PA5392E10C0F059AB"
+          },
+          "includeAll": false,
+          "label": "Namespace",
+          "name": "namespace",
+          "options": [],
+          "query": "label_values(kube_pod_info{cluster=\"$cluster\"}, namespace)",
+          "refresh": 2,
+          "type": "query"
+        },
+        {
+          "allValue": ".*",
+          "current": {
+            "text": "$__all",
+            "value": "$__all"
+          },
+          "includeAll": true,
+          "label": "Workload type",
+          "name": "type",
+          "options": [
+            {
+              "selected": false,
+              "text": "Deployment",
+              "value": "Deployment"
+            },
+            {
+              "selected": false,
+              "text": "StatefulSet",
+              "value": "StatefulSet"
+            },
+            {
+              "selected": false,
+              "text": "DaemonSet",
+              "value": "DaemonSet"
+            }
+          ],
+          "query": "Deployment,StatefulSet,DaemonSet",
+          "type": "custom"
+        },
+        {
+          "baseFilters": [],
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PA5392E10C0F059AB"
+          },
+          "filters": [],
+          "name": "Filters",
+          "type": "adhoc"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-15m",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "Kubernetes / Recursos por Namespace (Workloads) — Deployment-aware (cluster-aware)"
+  }
+}
