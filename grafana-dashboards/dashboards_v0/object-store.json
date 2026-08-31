@@ -1,0 +1,1051 @@
+{
+  "apiVersion": "dashboard.grafana.app/v0alpha1",
+  "kind": "Dashboard",
+  "metadata": {
+    "annotations": {
+      "grafana.app/folder": "dftd5fn8ou2gwd"
+    },
+    "labels": {},
+    "name": "object-store",
+    "namespace": "default"
+  },
+  "spec": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations \u0026 Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "links": [
+      {
+        "asDropdown": true,
+        "icon": "external link",
+        "includeVars": true,
+        "keepTime": true,
+        "tags": [
+          "loki"
+        ],
+        "targetBlank": false,
+        "title": "Loki Dashboards",
+        "type": "dashboards"
+      }
+    ],
+    "panels": [
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 10,
+        "panels": [],
+        "title": "Operations",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "uid": "$datasource"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": []
+            },
+            "unit": "reqps"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 0,
+          "y": 1
+        },
+        "id": 1,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "expr": "sum by(operation) (rate(loki_objstore_bucket_operations_total{app_instance=\"$app_instance\", namespace=~\"$namespace\"}[$__rate_interval]))",
+            "format": "time_series",
+            "legendFormat": "{{operation}}",
+            "refId": "A"
+          }
+        ],
+        "title": "RPS / operation",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "uid": "$datasource"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": []
+            },
+            "unit": "reqps"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 8,
+          "y": 1
+        },
+        "id": 2,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "editorMode": "code",
+            "expr": "sum by(operation) (rate(loki_objstore_bucket_operation_failures_total{app_instance=\"$app_instance\", namespace=~\"$namespace\"}[$__rate_interval])) \u003e 0",
+            "format": "time_series",
+            "legendFormat": "{{operation}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Error rate / operation",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "uid": "$datasource"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": []
+            },
+            "unit": "reqps"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 16,
+          "y": 1
+        },
+        "id": 3,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "editorMode": "code",
+            "expr": "sum by (method, status_code) (rate(loki_objstore_bucket_transport_requests_total{app_instance=\"$app_instance\", namespace=~\"$namespace\", status_code!~\"2..\"}[$__rate_interval])) \u003e 0",
+            "format": "time_series",
+            "legendFormat": "{{method}} - {{status_code}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Transport error rate / method and status code",
+        "type": "timeseries"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 8
+        },
+        "id": 11,
+        "panels": [],
+        "title": "",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "uid": "$datasource"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": []
+            },
+            "unit": "ms"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 0,
+          "y": 9
+        },
+        "id": 4,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "expr": "histogram_quantile(0.99, sum(rate(loki_objstore_bucket_operation_duration_seconds_bucket{app_instance=\"$app_instance\", namespace=~\"$namespace\",operation=\"get\"}[$__rate_interval])) by (le)) * 1e3",
+            "format": "time_series",
+            "legendFormat": "99th Percentile",
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "expr": "histogram_quantile(0.50, sum(rate(loki_objstore_bucket_operation_duration_seconds_bucket{app_instance=\"$app_instance\", namespace=~\"$namespace\",operation=\"get\"}[$__rate_interval])) by (le)) * 1e3",
+            "format": "time_series",
+            "legendFormat": "50th Percentile",
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "expr": "sum(rate(loki_objstore_bucket_operation_duration_seconds_sum{app_instance=\"$app_instance\", namespace=~\"$namespace\",operation=\"get\"}[$__rate_interval])) * 1e3 / sum(rate(loki_objstore_bucket_operation_duration_seconds_count{app_instance=\"$app_instance\", namespace=~\"$namespace\",operation=\"get\"}[$__rate_interval]))",
+            "format": "time_series",
+            "legendFormat": "Average",
+            "refId": "C"
+          }
+        ],
+        "title": "Op: Get",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "uid": "$datasource"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": []
+            },
+            "unit": "ms"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 8,
+          "y": 9
+        },
+        "id": 5,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "editorMode": "code",
+            "expr": "histogram_quantile(0.99, sum(rate(loki_objstore_bucket_operation_duration_seconds_bucket{app_instance=\"$app_instance\", namespace=~\"$namespace\",operation=\"get_range\"}[$__rate_interval])) by (le)) * 1e3",
+            "format": "time_series",
+            "legendFormat": "99th Percentile",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "expr": "histogram_quantile(0.50, sum(rate(loki_objstore_bucket_operation_duration_seconds_bucket{app_instance=\"$app_instance\", namespace=~\"$namespace\",operation=\"get_range\"}[$__rate_interval])) by (le)) * 1e3",
+            "format": "time_series",
+            "legendFormat": "50th Percentile",
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "expr": "sum(rate(loki_objstore_bucket_operation_duration_seconds_sum{app_instance=\"$app_instance\", namespace=~\"$namespace\",operation=\"get_range\"}[$__rate_interval])) * 1e3 / sum(rate(loki_objstore_bucket_operation_duration_seconds_count{app_instance=\"$app_instance\", namespace=~\"$namespace\",operation=\"get_range\"}[$__rate_interval]))",
+            "format": "time_series",
+            "legendFormat": "Average",
+            "refId": "C"
+          }
+        ],
+        "title": "Op: GetRange",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "uid": "$datasource"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": []
+            },
+            "unit": "ms"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 16,
+          "y": 9
+        },
+        "id": 6,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "expr": "histogram_quantile(0.99, sum(rate(loki_objstore_bucket_operation_duration_seconds_bucket{app_instance=\"$app_instance\", namespace=~\"$namespace\",operation=\"exists\"}[$__rate_interval])) by (le)) * 1e3",
+            "format": "time_series",
+            "legendFormat": "99th Percentile",
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "expr": "histogram_quantile(0.50, sum(rate(loki_objstore_bucket_operation_duration_seconds_bucket{app_instance=\"$app_instance\", namespace=~\"$namespace\",operation=\"exists\"}[$__rate_interval])) by (le)) * 1e3",
+            "format": "time_series",
+            "legendFormat": "50th Percentile",
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "expr": "sum(rate(loki_objstore_bucket_operation_duration_seconds_sum{app_instance=\"$app_instance\", namespace=~\"$namespace\",operation=\"exists\"}[$__rate_interval])) * 1e3 / sum(rate(loki_objstore_bucket_operation_duration_seconds_count{app_instance=\"$app_instance\", namespace=~\"$namespace\",operation=\"exists\"}[$__rate_interval]))",
+            "format": "time_series",
+            "legendFormat": "Average",
+            "refId": "C"
+          }
+        ],
+        "title": "Op: Exists",
+        "type": "timeseries"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 16
+        },
+        "id": 12,
+        "panels": [],
+        "title": "",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "uid": "$datasource"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": []
+            },
+            "unit": "ms"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 0,
+          "y": 17
+        },
+        "id": 7,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "expr": "histogram_quantile(0.99, sum(rate(loki_objstore_bucket_operation_duration_seconds_bucket{app_instance=\"$app_instance\", namespace=~\"$namespace\",operation=\"attributes\"}[$__rate_interval])) by (le)) * 1e3",
+            "format": "time_series",
+            "legendFormat": "99th Percentile",
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "expr": "histogram_quantile(0.50, sum(rate(loki_objstore_bucket_operation_duration_seconds_bucket{app_instance=\"$app_instance\", namespace=~\"$namespace\",operation=\"attributes\"}[$__rate_interval])) by (le)) * 1e3",
+            "format": "time_series",
+            "legendFormat": "50th Percentile",
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "expr": "sum(rate(loki_objstore_bucket_operation_duration_seconds_sum{app_instance=\"$app_instance\", namespace=~\"$namespace\",operation=\"attributes\"}[$__rate_interval])) * 1e3 / sum(rate(loki_objstore_bucket_operation_duration_seconds_count{app_instance=\"$app_instance\", namespace=~\"$namespace\",operation=\"attributes\"}[$__rate_interval]))",
+            "format": "time_series",
+            "legendFormat": "Average",
+            "refId": "C"
+          }
+        ],
+        "title": "Op: Attributes",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "uid": "$datasource"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": []
+            },
+            "unit": "ms"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 8,
+          "y": 17
+        },
+        "id": 8,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "expr": "histogram_quantile(0.99, sum(rate(loki_objstore_bucket_operation_duration_seconds_bucket{app_instance=\"$app_instance\", namespace=~\"$namespace\",operation=\"upload\"}[$__rate_interval])) by (le)) * 1e3",
+            "format": "time_series",
+            "legendFormat": "99th Percentile",
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "expr": "histogram_quantile(0.50, sum(rate(loki_objstore_bucket_operation_duration_seconds_bucket{app_instance=\"$app_instance\", namespace=~\"$namespace\",operation=\"upload\"}[$__rate_interval])) by (le)) * 1e3",
+            "format": "time_series",
+            "legendFormat": "50th Percentile",
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "expr": "sum(rate(loki_objstore_bucket_operation_duration_seconds_sum{app_instance=\"$app_instance\", namespace=~\"$namespace\",operation=\"upload\"}[$__rate_interval])) * 1e3 / sum(rate(loki_objstore_bucket_operation_duration_seconds_count{app_instance=\"$app_instance\", namespace=~\"$namespace\",operation=\"upload\"}[$__rate_interval]))",
+            "format": "time_series",
+            "legendFormat": "Average",
+            "refId": "C"
+          }
+        ],
+        "title": "Op: Upload",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "uid": "$datasource"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": []
+            },
+            "unit": "ms"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 16,
+          "y": 17
+        },
+        "id": 9,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "expr": "histogram_quantile(0.99, sum(rate(loki_objstore_bucket_operation_duration_seconds_bucket{app_instance=\"$app_instance\", namespace=~\"$namespace\",operation=\"delete\"}[$__rate_interval])) by (le)) * 1e3",
+            "format": "time_series",
+            "legendFormat": "99th Percentile",
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "expr": "histogram_quantile(0.50, sum(rate(loki_objstore_bucket_operation_duration_seconds_bucket{app_instance=\"$app_instance\", namespace=~\"$namespace\",operation=\"delete\"}[$__rate_interval])) by (le)) * 1e3",
+            "format": "time_series",
+            "legendFormat": "50th Percentile",
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "expr": "sum(rate(loki_objstore_bucket_operation_duration_seconds_sum{app_instance=\"$app_instance\", namespace=~\"$namespace\",operation=\"delete\"}[$__rate_interval])) * 1e3 / sum(rate(loki_objstore_bucket_operation_duration_seconds_count{app_instance=\"$app_instance\", namespace=~\"$namespace\",operation=\"delete\"}[$__rate_interval]))",
+            "format": "time_series",
+            "legendFormat": "Average",
+            "refId": "C"
+          }
+        ],
+        "title": "Op: Delete",
+        "type": "timeseries"
+      }
+    ],
+    "preload": false,
+    "refresh": "10s",
+    "schemaVersion": 42,
+    "tags": [
+      "loki"
+    ],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "text": "default",
+            "value": "default"
+          },
+          "label": "Data source",
+          "name": "datasource",
+          "options": [],
+          "query": "prometheus",
+          "refresh": 1,
+          "regex": "",
+          "type": "datasource"
+        },
+        {
+          "current": {
+            "text": "loki",
+            "value": "loki"
+          },
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "includeAll": false,
+          "label": "app_instance",
+          "name": "app_instance",
+          "options": [],
+          "query": "label_values(loki_build_info, app_instance)",
+          "refresh": 1,
+          "regex": "",
+          "sort": 2,
+          "type": "query"
+        },
+        {
+          "current": {
+            "text": "monitoring",
+            "value": "monitoring"
+          },
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "includeAll": false,
+          "label": "namespace",
+          "name": "namespace",
+          "options": [],
+          "query": "label_values(loki_build_info{app_instance=~\"$app_instance\"}, namespace)",
+          "refresh": 1,
+          "regex": "",
+          "sort": 2,
+          "type": "query"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "utc",
+    "title": "Loki / Object Store Thanos"
+  }
+}

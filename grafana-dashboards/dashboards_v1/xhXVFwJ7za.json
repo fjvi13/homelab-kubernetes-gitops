@@ -4,7 +4,7 @@
   "metadata": {
     "annotations": {},
     "labels": {},
-    "name": "xhXVFwJ7zu1",
+    "name": "xhXVFwJ7za",
     "namespace": "default"
   },
   "spec": {
@@ -29,7 +29,7 @@
         }
       ]
     },
-    "description": "This dashboard provides a resource usage overview of the Thanos components Querier, Query-Frontend, Compactor, Store, Receive, Receive-Distributor and Ruler.\r\n\r\nIt includes CPU and Memory requests, limits and usage (filtered to Thanos pods only). In addition, the last termination reason is plotted and the cache hit ratio is available.",
+    "description": "This dashboard provides a resource usage overview of the Thanos components Querier, Query-Frontend, Compacter and Store.\r\n\r\nIt includes CPU and Memory requests, limits and usage. In addition, the last termination reason is plotted and the cache hit ratio is available.",
     "editable": true,
     "fiscalYearStartMonth": 0,
     "graphTooltip": 0,
@@ -225,39 +225,6 @@
                   }
                 }
               ]
-            },
-            {
-              "matcher": {
-                "id": "byRegexp",
-                "options": "/request/"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "#FADE2A",
-                    "mode": "fixed"
-                  }
-                },
-                {
-                  "id": "custom.fillOpacity",
-                  "value": 0
-                },
-                {
-                  "id": "custom.lineWidth",
-                  "value": 2
-                },
-                {
-                  "id": "custom.lineStyle",
-                  "value": {
-                    "dash": [
-                      10,
-                      10
-                    ],
-                    "fill": "dash"
-                  }
-                }
-              ]
             }
           ]
         },
@@ -306,26 +273,14 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "max by (pod) (\n  irate(\n    container_cpu_usage_seconds_total{\n      namespace=\"monitoring\",\n      container=\"query\",\n      pod=~\"thanos-query.*\",\n      pod!~\"thanos-query-frontend.*\"\n    }[$__rate_interval]\n  )\n)",
+            "expr": "max by (pod) (\r\n  irate(container_cpu_usage_seconds_total{container=\"query\"}[$__interval]))",
             "interval": "",
-            "legendFormat": "{{pod}}",
+            "legendFormat": "__auto",
             "range": true,
             "refId": "B"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "PA5392E10C0F059AB"
-            },
-            "editorMode": "code",
-            "expr": "max(\n  sum by (pod) (\n    kube_pod_container_resource_requests{\n      resource=\"cpu\",\n      namespace=\"monitoring\",\n      pod=~\"thanos-query.*\",\n      pod!~\"thanos-query-frontend.*\"\n    }\n  )\n)",
-            "interval": "",
-            "legendFormat": "request",
-            "range": true,
-            "refId": "C"
           }
         ],
-        "title": "CPU Core Usage vs. Request \u0026 Limit",
+        "title": "CPU Core Usage vs. Limit",
         "type": "timeseries"
       },
       {
@@ -421,39 +376,6 @@
                   }
                 }
               ]
-            },
-            {
-              "matcher": {
-                "id": "byRegexp",
-                "options": "/request/"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "#FADE2A",
-                    "mode": "fixed"
-                  }
-                },
-                {
-                  "id": "custom.fillOpacity",
-                  "value": 0
-                },
-                {
-                  "id": "custom.lineWidth",
-                  "value": 2
-                },
-                {
-                  "id": "custom.lineStyle",
-                  "value": {
-                    "dash": [
-                      10,
-                      10
-                    ],
-                    "fill": "dash"
-                  }
-                }
-              ]
             }
           ]
         },
@@ -504,26 +426,14 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "sum by (pod) (\n  max_over_time(\n    container_memory_working_set_bytes{\n      namespace=\"monitoring\",\n      container=\"query\",\n      pod=~\"thanos-query.*\",\n      pod!~\"thanos-query-frontend.*\"\n    }[$__interval]\n  )\n)",
+            "expr": "sum(max_over_time(container_memory_working_set_bytes{container=\"query\"}[$__interval])) by (pod)",
             "interval": "",
             "legendFormat": "{{pod}}",
             "range": true,
             "refId": "B"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "PA5392E10C0F059AB"
-            },
-            "editorMode": "code",
-            "expr": "max(\n  max by (pod) (\n    kube_pod_container_resource_requests{\n      resource=\"memory\",\n      namespace=\"monitoring\",\n      pod=~\"thanos-query.*\",\n      pod!~\"thanos-query-frontend.*\"\n    }\n  )\n)",
-            "interval": "",
-            "legendFormat": "request",
-            "range": true,
-            "refId": "C"
           }
         ],
-        "title": "Memory Usage vs. Request \u0026 Limit",
+        "title": "Memory Usage v. Limit",
         "type": "timeseries"
       },
       {
@@ -699,39 +609,6 @@
                   }
                 }
               ]
-            },
-            {
-              "matcher": {
-                "id": "byRegexp",
-                "options": "/request/"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "#FADE2A",
-                    "mode": "fixed"
-                  }
-                },
-                {
-                  "id": "custom.fillOpacity",
-                  "value": 0
-                },
-                {
-                  "id": "custom.lineWidth",
-                  "value": 2
-                },
-                {
-                  "id": "custom.lineStyle",
-                  "value": {
-                    "dash": [
-                      10,
-                      10
-                    ],
-                    "fill": "dash"
-                  }
-                }
-              ]
             }
           ]
         },
@@ -780,26 +657,14 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "max by (pod) (\n  irate(\n    container_cpu_usage_seconds_total{\n      namespace=\"monitoring\",\n      container=\"query-frontend\",\n      pod=~\"thanos-query-frontend.*\"\n    }[$__rate_interval]\n  )\n)",
+            "expr": "max by (pod) (\r\n  irate(container_cpu_usage_seconds_total{container=\"query-frontend\"}[$__interval]))",
             "interval": "",
-            "legendFormat": "{{pod}}",
+            "legendFormat": "{{container}}",
             "range": true,
             "refId": "B"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "PA5392E10C0F059AB"
-            },
-            "editorMode": "code",
-            "expr": "max(\n  sum by (pod) (\n    kube_pod_container_resource_requests{\n      resource=\"cpu\",\n      namespace=\"monitoring\",\n      pod=~\"thanos-query-frontend.*\"\n    }\n  )\n)",
-            "interval": "",
-            "legendFormat": "request",
-            "range": true,
-            "refId": "C"
           }
         ],
-        "title": "CPU Core Usage vs. Request \u0026 Limit",
+        "title": "CPU Core Usage vs. Limit",
         "type": "timeseries"
       },
       {
@@ -895,39 +760,6 @@
                   }
                 }
               ]
-            },
-            {
-              "matcher": {
-                "id": "byRegexp",
-                "options": "/request/"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "#FADE2A",
-                    "mode": "fixed"
-                  }
-                },
-                {
-                  "id": "custom.fillOpacity",
-                  "value": 0
-                },
-                {
-                  "id": "custom.lineWidth",
-                  "value": 2
-                },
-                {
-                  "id": "custom.lineStyle",
-                  "value": {
-                    "dash": [
-                      10,
-                      10
-                    ],
-                    "fill": "dash"
-                  }
-                }
-              ]
             }
           ]
         },
@@ -977,26 +809,14 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "sum by (pod) (\n  max_over_time(\n    container_memory_working_set_bytes{\n      namespace=\"monitoring\",\n      container=\"query-frontend\",\n      pod=~\"thanos-query-frontend.*\"\n    }[$__interval]\n  )\n)",
+            "expr": "sum(max_over_time(container_memory_working_set_bytes{container=~\"query-frontend.*\"}[$__interval])) by (pod)",
             "interval": "",
             "legendFormat": "{{pod}}",
             "range": true,
             "refId": "B"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "PA5392E10C0F059AB"
-            },
-            "editorMode": "code",
-            "expr": "max(\n  max by (pod) (\n    kube_pod_container_resource_requests{\n      resource=\"memory\",\n      namespace=\"monitoring\",\n      pod=~\"thanos-query-frontend.*\"\n    }\n  )\n)",
-            "interval": "",
-            "legendFormat": "request",
-            "range": true,
-            "refId": "C"
           }
         ],
-        "title": "Memory Usage vs. Request \u0026 Limit",
+        "title": "Memory Usage v. Limit",
         "type": "timeseries"
       },
       {
@@ -1173,39 +993,6 @@
                   }
                 }
               ]
-            },
-            {
-              "matcher": {
-                "id": "byRegexp",
-                "options": "/request/"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "#FADE2A",
-                    "mode": "fixed"
-                  }
-                },
-                {
-                  "id": "custom.fillOpacity",
-                  "value": 0
-                },
-                {
-                  "id": "custom.lineWidth",
-                  "value": 2
-                },
-                {
-                  "id": "custom.lineStyle",
-                  "value": {
-                    "dash": [
-                      10,
-                      10
-                    ],
-                    "fill": "dash"
-                  }
-                }
-              ]
             }
           ]
         },
@@ -1254,26 +1041,14 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "max by (pod) (\n  irate(\n    container_cpu_usage_seconds_total{\n      namespace=\"monitoring\",\n      container=\"compactor\",\n      pod=~\"thanos-compactor.*\"\n    }[$__rate_interval]\n  )\n)",
+            "expr": "max by (pod) (\r\n  irate(container_cpu_usage_seconds_total{container=\"compactor\"}[$__interval]))",
             "interval": "",
-            "legendFormat": "{{pod}}",
+            "legendFormat": "{{container}}",
             "range": true,
             "refId": "B"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "PA5392E10C0F059AB"
-            },
-            "editorMode": "code",
-            "expr": "max(\n  sum by (pod) (\n    kube_pod_container_resource_requests{\n      resource=\"cpu\",\n      namespace=\"monitoring\",\n      pod=~\"thanos-compactor.*\"\n    }\n  )\n)",
-            "interval": "",
-            "legendFormat": "request",
-            "range": true,
-            "refId": "C"
           }
         ],
-        "title": "CPU Core Usage vs. Request \u0026 Limit",
+        "title": "CPU Core Usage vs. Limit",
         "type": "timeseries"
       },
       {
@@ -1369,39 +1144,6 @@
                   }
                 }
               ]
-            },
-            {
-              "matcher": {
-                "id": "byRegexp",
-                "options": "/request/"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "#FADE2A",
-                    "mode": "fixed"
-                  }
-                },
-                {
-                  "id": "custom.fillOpacity",
-                  "value": 0
-                },
-                {
-                  "id": "custom.lineWidth",
-                  "value": 2
-                },
-                {
-                  "id": "custom.lineStyle",
-                  "value": {
-                    "dash": [
-                      10,
-                      10
-                    ],
-                    "fill": "dash"
-                  }
-                }
-              ]
             }
           ]
         },
@@ -1451,26 +1193,14 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "sum by (pod) (\n  container_memory_working_set_bytes{\n    namespace=\"monitoring\",\n    container=\"compactor\",\n    pod=~\"thanos-compactor.*\"\n  }\n)",
+            "expr": "sum(container_memory_working_set_bytes{container=~\"compactor\"}) by (pod)",
             "interval": "",
             "legendFormat": "{{pod}}",
             "range": true,
             "refId": "B"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "PA5392E10C0F059AB"
-            },
-            "editorMode": "code",
-            "expr": "max(\n  max by (pod) (\n    kube_pod_container_resource_requests{\n      resource=\"memory\",\n      namespace=\"monitoring\",\n      pod=~\"thanos-compactor.*\"\n    }\n  )\n)",
-            "interval": "",
-            "legendFormat": "request",
-            "range": true,
-            "refId": "C"
           }
         ],
-        "title": "Memory Usage vs. Request \u0026 Limit",
+        "title": "Memory Usage v. Limit",
         "type": "timeseries"
       },
       {
@@ -1646,39 +1376,6 @@
                   }
                 }
               ]
-            },
-            {
-              "matcher": {
-                "id": "byRegexp",
-                "options": "/request/"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "#FADE2A",
-                    "mode": "fixed"
-                  }
-                },
-                {
-                  "id": "custom.fillOpacity",
-                  "value": 0
-                },
-                {
-                  "id": "custom.lineWidth",
-                  "value": 2
-                },
-                {
-                  "id": "custom.lineStyle",
-                  "value": {
-                    "dash": [
-                      10,
-                      10
-                    ],
-                    "fill": "dash"
-                  }
-                }
-              ]
             }
           ]
         },
@@ -1718,7 +1415,7 @@
             "expr": "max(\r\n  sum by (pod) (\r\n    kube_pod_container_resource_limits{resource=\"cpu\", namespace=\"monitoring\", pod=~\"thanos-store.*\"}\r\n  )\r\n)\r\n",
             "hide": false,
             "interval": "",
-            "legendFormat": "limit",
+            "legendFormat": "{{pod}} limit",
             "range": true,
             "refId": "A"
           },
@@ -1728,27 +1425,15 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "max by (pod) (\n  irate(\n    container_cpu_usage_seconds_total{\n      namespace=\"monitoring\",\n      container=\"storegateway\",\n      pod=~\"thanos-storegateway.*\"\n    }[$__rate_interval]\n  )\n)",
+            "expr": "max by (pod) (\r\n  irate(container_cpu_usage_seconds_total{container=\"storegateway\"}[$__interval]))",
             "hide": false,
             "interval": "",
-            "legendFormat": "{{pod}}",
+            "legendFormat": "{{container}}",
             "range": true,
             "refId": "B"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "PA5392E10C0F059AB"
-            },
-            "editorMode": "code",
-            "expr": "max(\n  sum by (pod) (\n    kube_pod_container_resource_requests{\n      resource=\"cpu\",\n      namespace=\"monitoring\",\n      pod=~\"thanos-storegateway.*\"\n    }\n  )\n)",
-            "interval": "",
-            "legendFormat": "request",
-            "range": true,
-            "refId": "C"
           }
         ],
-        "title": "CPU Core Usage vs. Request \u0026 Limit",
+        "title": "CPU Core Usage vs. Limit",
         "type": "timeseries"
       },
       {
@@ -1844,39 +1529,6 @@
                   }
                 }
               ]
-            },
-            {
-              "matcher": {
-                "id": "byRegexp",
-                "options": "/request/"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "#FADE2A",
-                    "mode": "fixed"
-                  }
-                },
-                {
-                  "id": "custom.fillOpacity",
-                  "value": 0
-                },
-                {
-                  "id": "custom.lineWidth",
-                  "value": 2
-                },
-                {
-                  "id": "custom.lineStyle",
-                  "value": {
-                    "dash": [
-                      10,
-                      10
-                    ],
-                    "fill": "dash"
-                  }
-                }
-              ]
             }
           ]
         },
@@ -1913,7 +1565,7 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "max(\n  max by (pod) (\n    kube_pod_container_resource_limits{\n      resource=\"memory\",\n      namespace=\"monitoring\",\n      pod=~\"thanos-storegateway.*\"\n    }\n  )\n)",
+            "expr": "max(sum(kube_pod_container_resource_limits{container=~\"storegateway\"}) by (pod))",
             "hide": false,
             "interval": "",
             "legendFormat": "limit",
@@ -1926,26 +1578,14 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "sum by (pod) (\n  container_memory_working_set_bytes{\n    namespace=\"monitoring\",\n    container=\"storegateway\",\n    pod=~\"thanos-storegateway.*\"\n  }\n)",
+            "expr": "sum(container_memory_working_set_bytes{container=~\"storegateway\", pod!=\"\"}) by (pod)",
             "interval": "",
             "legendFormat": "{{pod}}",
             "range": true,
             "refId": "B"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "PA5392E10C0F059AB"
-            },
-            "editorMode": "code",
-            "expr": "max(\n  max by (pod) (\n    kube_pod_container_resource_requests{\n      resource=\"memory\",\n      namespace=\"monitoring\",\n      pod=~\"thanos-storegateway.*\"\n    }\n  )\n)",
-            "interval": "",
-            "legendFormat": "request",
-            "range": true,
-            "refId": "C"
           }
         ],
-        "title": "Memory Usage vs. Request \u0026 Limit",
+        "title": "Memory Usage v. Limit",
         "type": "timeseries"
       },
       {
@@ -2420,39 +2060,6 @@
                   }
                 }
               ]
-            },
-            {
-              "matcher": {
-                "id": "byRegexp",
-                "options": "/request/"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "#FADE2A",
-                    "mode": "fixed"
-                  }
-                },
-                {
-                  "id": "custom.fillOpacity",
-                  "value": 0
-                },
-                {
-                  "id": "custom.lineWidth",
-                  "value": 2
-                },
-                {
-                  "id": "custom.lineStyle",
-                  "value": {
-                    "dash": [
-                      10,
-                      10
-                    ],
-                    "fill": "dash"
-                  }
-                }
-              ]
             }
           ]
         },
@@ -2507,21 +2114,9 @@
             "legendFormat": "__auto",
             "range": true,
             "refId": "B"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "PA5392E10C0F059AB"
-            },
-            "editorMode": "code",
-            "expr": "max(\n  sum by (pod) (\n    kube_pod_container_resource_requests{\n      resource=\"cpu\",\n      namespace=\"monitoring\",\n      container=\"receive\",\n      pod=~\"^thanos-receive($|-[0-9]+)$\"\n    }\n  )\n)",
-            "interval": "",
-            "legendFormat": "request",
-            "range": true,
-            "refId": "C"
           }
         ],
-        "title": "CPU Core Usage vs. Request \u0026 Limit",
+        "title": "CPU Core Usage vs. Limit",
         "type": "timeseries"
       },
       {
@@ -2617,39 +2212,6 @@
                   }
                 }
               ]
-            },
-            {
-              "matcher": {
-                "id": "byRegexp",
-                "options": "/request/"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "#FADE2A",
-                    "mode": "fixed"
-                  }
-                },
-                {
-                  "id": "custom.fillOpacity",
-                  "value": 0
-                },
-                {
-                  "id": "custom.lineWidth",
-                  "value": 2
-                },
-                {
-                  "id": "custom.lineStyle",
-                  "value": {
-                    "dash": [
-                      10,
-                      10
-                    ],
-                    "fill": "dash"
-                  }
-                }
-              ]
             }
           ]
         },
@@ -2700,26 +2262,14 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "sum by (pod) (\n  container_memory_working_set_bytes{\n    namespace=\"monitoring\",\n    container=\"receive\",\n    pod=~\"thanos-receive.*\",\n    pod!~\"thanos-receive-distributor.*\"\n  }\n)",
+            "expr": "\r\nsum(container_memory_working_set_bytes{container=~\"receive\",pod=~\"thanos-receive.*\",pod!~\"thanos-receive-distributor.*\"}) by (pod)\r\n",
             "interval": "",
             "legendFormat": "{{pod}}",
             "range": true,
             "refId": "B"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "PA5392E10C0F059AB"
-            },
-            "editorMode": "code",
-            "expr": "max(\n  max by (pod) (\n    kube_pod_container_resource_requests{\n      resource=\"memory\",\n      namespace=\"monitoring\",\n      pod=~\"thanos-receive.*\",\n      pod!~\"thanos-receive-distributor.*\"\n    }\n  )\n)",
-            "interval": "",
-            "legendFormat": "request",
-            "range": true,
-            "refId": "C"
           }
         ],
-        "title": "Memory Usage vs. Request \u0026 Limit",
+        "title": "Memory Usage v. Limit",
         "type": "timeseries"
       },
       {
@@ -2779,7 +2329,7 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "kube_pod_container_status_last_terminated_reason{pod=~\"thanos-receive.*\", pod!~\"thanos-receive-distributor.*\"} != 0",
+            "expr": "kube_pod_container_status_last_terminated_reason{pod=~\"thanos-receive.*\"} != 0",
             "interval": "",
             "legendFormat": "{{reason}} - {{pod}}",
             "range": true,
@@ -2895,39 +2445,6 @@
                   }
                 }
               ]
-            },
-            {
-              "matcher": {
-                "id": "byRegexp",
-                "options": "/request/"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "#FADE2A",
-                    "mode": "fixed"
-                  }
-                },
-                {
-                  "id": "custom.fillOpacity",
-                  "value": 0
-                },
-                {
-                  "id": "custom.lineWidth",
-                  "value": 2
-                },
-                {
-                  "id": "custom.lineStyle",
-                  "value": {
-                    "dash": [
-                      10,
-                      10
-                    ],
-                    "fill": "dash"
-                  }
-                }
-              ]
             }
           ]
         },
@@ -2982,21 +2499,9 @@
             "legendFormat": "__auto",
             "range": true,
             "refId": "B"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "PA5392E10C0F059AB"
-            },
-            "editorMode": "code",
-            "expr": "max(\n  sum by (pod) (\n    kube_pod_container_resource_requests{\n      resource=\"cpu\",\n      namespace=\"monitoring\",\n      container=\"receive\",\n      pod=~\"thanos-receive-distributor.*\"\n    }\n  )\n)",
-            "interval": "",
-            "legendFormat": "request",
-            "range": true,
-            "refId": "C"
           }
         ],
-        "title": "CPU Core Usage vs. Request \u0026 Limit",
+        "title": "CPU Core Usage vs. Limit",
         "type": "timeseries"
       },
       {
@@ -3092,39 +2597,6 @@
                   }
                 }
               ]
-            },
-            {
-              "matcher": {
-                "id": "byRegexp",
-                "options": "/request/"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "#FADE2A",
-                    "mode": "fixed"
-                  }
-                },
-                {
-                  "id": "custom.fillOpacity",
-                  "value": 0
-                },
-                {
-                  "id": "custom.lineWidth",
-                  "value": 2
-                },
-                {
-                  "id": "custom.lineStyle",
-                  "value": {
-                    "dash": [
-                      10,
-                      10
-                    ],
-                    "fill": "dash"
-                  }
-                }
-              ]
             }
           ]
         },
@@ -3180,21 +2652,9 @@
             "legendFormat": "{{pod}}",
             "range": true,
             "refId": "B"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "PA5392E10C0F059AB"
-            },
-            "editorMode": "code",
-            "expr": "max(\n  max by (pod) (\n    kube_pod_container_resource_requests{\n      resource=\"memory\",\n      namespace=\"monitoring\",\n      pod=~\"thanos-receive-distributor.*\"\n    }\n  )\n)",
-            "interval": "",
-            "legendFormat": "request",
-            "range": true,
-            "refId": "C"
           }
         ],
-        "title": "Memory Usage vs. Request \u0026 Limit",
+        "title": "Memory Usage v. Limit",
         "type": "timeseries"
       },
       {
@@ -3370,39 +2830,6 @@
                   }
                 }
               ]
-            },
-            {
-              "matcher": {
-                "id": "byRegexp",
-                "options": "/request/"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "#FADE2A",
-                    "mode": "fixed"
-                  }
-                },
-                {
-                  "id": "custom.fillOpacity",
-                  "value": 0
-                },
-                {
-                  "id": "custom.lineWidth",
-                  "value": 2
-                },
-                {
-                  "id": "custom.lineStyle",
-                  "value": {
-                    "dash": [
-                      10,
-                      10
-                    ],
-                    "fill": "dash"
-                  }
-                }
-              ]
             }
           ]
         },
@@ -3451,26 +2878,14 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "max by (pod) (\n  irate(\n    container_cpu_usage_seconds_total{\n      namespace=\"monitoring\",\n      container=\"thanos-ruler\",\n      pod=~\"thanos-ruler.*\"\n    }[$__rate_interval]\n  )\n)",
+            "expr": "max by (pod) (irate((container_cpu_usage_seconds_total{container=\"thanos-ruler\"}[$__interval])))",
             "interval": "",
-            "legendFormat": "{{pod}}",
+            "legendFormat": "__auto",
             "range": true,
             "refId": "B"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "PA5392E10C0F059AB"
-            },
-            "editorMode": "code",
-            "expr": "max(\n  sum by (pod) (\n    kube_pod_container_resource_requests{\n      resource=\"cpu\",\n      namespace=\"monitoring\",\n      pod=~\"thanos-ruler.*\"\n    }\n  )\n)",
-            "interval": "",
-            "legendFormat": "request",
-            "range": true,
-            "refId": "C"
           }
         ],
-        "title": "CPU Core Usage vs. Request \u0026 Limit",
+        "title": "CPU Core Usage vs. Limit",
         "type": "timeseries"
       },
       {
@@ -3566,39 +2981,6 @@
                   }
                 }
               ]
-            },
-            {
-              "matcher": {
-                "id": "byRegexp",
-                "options": "/request/"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "#FADE2A",
-                    "mode": "fixed"
-                  }
-                },
-                {
-                  "id": "custom.fillOpacity",
-                  "value": 0
-                },
-                {
-                  "id": "custom.lineWidth",
-                  "value": 2
-                },
-                {
-                  "id": "custom.lineStyle",
-                  "value": {
-                    "dash": [
-                      10,
-                      10
-                    ],
-                    "fill": "dash"
-                  }
-                }
-              ]
             }
           ]
         },
@@ -3649,26 +3031,14 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "sum by (pod) (\n  max_over_time(\n    container_memory_working_set_bytes{\n      namespace=\"monitoring\",\n      container=\"thanos-ruler\",\n      pod=~\"thanos-ruler.*\"\n    }[$__interval]\n  )\n)",
+            "expr": "sum(max_over_time(container_memory_working_set_bytes{container=\"thanos-ruler\"}[$__interval])) by (pod)\r\n\r\n",
             "interval": "",
             "legendFormat": "{{pod}}",
             "range": true,
             "refId": "B"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "PA5392E10C0F059AB"
-            },
-            "editorMode": "code",
-            "expr": "max(\n  max by (pod) (\n    kube_pod_container_resource_requests{\n      resource=\"memory\",\n      namespace=\"monitoring\",\n      pod=~\"thanos-ruler.*\"\n    }\n  )\n)",
-            "interval": "",
-            "legendFormat": "request",
-            "range": true,
-            "refId": "C"
           }
         ],
-        "title": "Memory Usage vs. Request \u0026 Limit",
+        "title": "Memory Usage v. Limit",
         "type": "timeseries"
       },
       {
@@ -3740,7 +3110,7 @@
       }
     ],
     "preload": false,
-    "refresh": "",
+    "refresh": "1m",
     "schemaVersion": 42,
     "tags": [
       "thanos"
@@ -3749,7 +3119,7 @@
       "list": []
     },
     "time": {
-      "from": "now-5m",
+      "from": "now-1h",
       "to": "now"
     },
     "timepicker": {
@@ -3766,7 +3136,7 @@
       ]
     },
     "timezone": "",
-    "title": "Thanos Resources / Overview (+ Requests)",
+    "title": "Thanos / Overview",
     "weekStart": ""
   }
 }

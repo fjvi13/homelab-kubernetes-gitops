@@ -1,0 +1,1067 @@
+{
+  "apiVersion": "dashboard.grafana.app/v1",
+  "kind": "Dashboard",
+  "metadata": {
+    "annotations": {},
+    "labels": {},
+    "name": "ingress-nginx-request-handling-jqkw",
+    "namespace": "default"
+  },
+  "spec": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations \u0026 Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "description": "A dashboard that monitors Ingress-nginx. It is created using the (Ingress-Nginx-mixin)[https://github.com/adinhodovic/ingress-nginx-mixin]",
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "links": [
+      {
+        "tags": [
+          "ingress-nginx",
+          "ingress-nginx-mixin"
+        ],
+        "targetBlank": true,
+        "title": "Ingress Nginx Dashboards",
+        "type": "dashboards"
+      }
+    ],
+    "panels": [
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 1,
+        "panels": [],
+        "title": "Ingress Response Times",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "s"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 12,
+          "x": 0,
+          "y": 1
+        },
+        "id": 2,
+        "options": {
+          "legend": {
+            "calcs": [
+              "mean",
+              "max"
+            ],
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true,
+            "sortBy": "Mean",
+            "sortDesc": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "$datasource"
+            },
+            "expr": "histogram_quantile(\n  0.5,\n  sum by (le, ingress, exported_namespace)(\n    rate(\n      nginx_ingress_controller_request_duration_seconds_bucket{\n        cluster=\"$cluster\",\n        job=~\"$job\",\n        exported_namespace=~\"$exported_namespace\",\n        ingress =~ \"$ingress\"\n      }[$__rate_interval]\n    )\n  )\n)\n",
+            "legendFormat": ".5 - {{ ingress }}/{{ exported_namespace }}",
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "$datasource"
+            },
+            "expr": "histogram_quantile(\n  0.95,\n  sum by (le, ingress, exported_namespace)(\n    rate(\n      nginx_ingress_controller_request_duration_seconds_bucket{\n        cluster=\"$cluster\",\n        job=~\"$job\",\n        exported_namespace=~\"$exported_namespace\",\n        ingress =~ \"$ingress\"\n      }[$__rate_interval]\n    )\n  )\n)\n",
+            "legendFormat": ".95 - {{ ingress }}/{{ exported_namespace }}",
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "$datasource"
+            },
+            "expr": "histogram_quantile(\n  0.99,\n  sum by (le, ingress, exported_namespace)(\n    rate(\n      nginx_ingress_controller_request_duration_seconds_bucket{\n        cluster=\"$cluster\",\n        job=~\"$job\",\n        exported_namespace=~\"$exported_namespace\",\n        ingress =~ \"$ingress\"\n      }[$__rate_interval]\n    )\n  )\n)\n",
+            "legendFormat": ".99 - {{ ingress }}/{{ exported_namespace }}",
+            "refId": "C"
+          }
+        ],
+        "title": "Total Request Time",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "s"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 12,
+          "x": 12,
+          "y": 1
+        },
+        "id": 3,
+        "options": {
+          "legend": {
+            "calcs": [
+              "mean",
+              "max"
+            ],
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true,
+            "sortBy": "Mean",
+            "sortDesc": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "$datasource"
+            },
+            "expr": "histogram_quantile(\n  0.5,\n  sum by (le, ingress, exported_namespace)(\n    rate(\n      nginx_ingress_controller_response_duration_seconds_bucket{\n        cluster=\"$cluster\",\n        job=~\"$job\",\n        exported_namespace=~\"$exported_namespace\",\n        ingress =~ \"$ingress\"\n      }[$__rate_interval]\n    )\n  )\n)\n",
+            "legendFormat": ".5 - {{ ingress }}/{{ exported_namespace }}",
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "$datasource"
+            },
+            "expr": "histogram_quantile(\n  0.95,\n  sum by (le, ingress, exported_namespace)(\n    rate(\n      nginx_ingress_controller_response_duration_seconds_bucket{\n        cluster=\"$cluster\",\n        job=~\"$job\",\n        exported_namespace=~\"$exported_namespace\",\n        ingress =~ \"$ingress\"\n      }[$__rate_interval]\n    )\n  )\n)\n",
+            "legendFormat": ".95 - {{ ingress }}/{{ exported_namespace }}",
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "$datasource"
+            },
+            "expr": "histogram_quantile(\n  0.99,\n  sum by (le, ingress, exported_namespace)(\n    rate(\n      nginx_ingress_controller_response_duration_seconds_bucket{\n        cluster=\"$cluster\",\n        job=~\"$job\",\n        exported_namespace=~\"$exported_namespace\",\n        ingress =~ \"$ingress\"\n      }[$__rate_interval]\n    )\n  )\n)\n",
+            "legendFormat": ".99 - {{ ingress }}/{{ exported_namespace }}",
+            "refId": "C"
+          }
+        ],
+        "title": "Upstream Response Time",
+        "type": "timeseries"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 7
+        },
+        "id": 4,
+        "panels": [],
+        "title": "Ingress Paths",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 100,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "value"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "reqps"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 12,
+          "x": 0,
+          "y": 8
+        },
+        "id": 5,
+        "options": {
+          "legend": {
+            "calcs": [
+              "mean",
+              "max"
+            ],
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true,
+            "sortBy": "Mean",
+            "sortDesc": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "$datasource"
+            },
+            "expr": "sum by (path, ingress, exported_namespace)(\n  rate(\n    nginx_ingress_controller_request_duration_seconds_count{\n      cluster=\"$cluster\",\n      job=~\"$job\",\n      exported_namespace=~\"$exported_namespace\",\n      ingress =~ \"$ingress\"\n    }[$__rate_interval]\n  )\n)\n",
+            "legendFormat": "{{ path }} - {{ ingress }}/{{ exported_namespace }}",
+            "refId": "A"
+          }
+        ],
+        "title": "Request Volume",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "s"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 12,
+          "x": 12,
+          "y": 8
+        },
+        "id": 6,
+        "options": {
+          "legend": {
+            "calcs": [
+              "mean",
+              "max"
+            ],
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true,
+            "sortBy": "Mean",
+            "sortDesc": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "$datasource"
+            },
+            "expr": "histogram_quantile(\n  .5,\n  sum by (le, path, ingress, exported_namespace)(\n    rate(\n      nginx_ingress_controller_response_duration_seconds_bucket{\n        cluster=\"$cluster\",\n        job=~\"$job\",\n        exported_namespace=~\"$exported_namespace\",\n        ingress =~ \"$ingress\"\n      }[$__rate_interval]\n    )\n  )\n)\n",
+            "legendFormat": "{{ path }} - {{ ingress }}/{{ exported_namespace }}",
+            "refId": "A"
+          }
+        ],
+        "title": "Median upstream response time",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 100,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "value"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "percentunit"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 12,
+          "x": 0,
+          "y": 14
+        },
+        "id": 7,
+        "options": {
+          "legend": {
+            "calcs": [
+              "mean",
+              "max"
+            ],
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true,
+            "sortBy": "Mean",
+            "sortDesc": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "$datasource"
+            },
+            "expr": "sum by (path, ingress, exported_namespace) (\n  rate(\n    nginx_ingress_controller_requests{\n      cluster=\"$cluster\",\n      job=~\"$job\",\n      exported_namespace=~\"$exported_namespace\",\n      ingress=~\"$ingress\",\n      status=~\"[$error_codes].*\"\n    }[$__rate_interval]\n  )\n)\n/\nsum by (path, ingress, exported_namespace) (\n  rate(\n    nginx_ingress_controller_requests{\n      cluster=\"$cluster\",\n      job=~\"$job\",\n      exported_namespace =~ \"$exported_namespace\",\n      ingress =~ \"$ingress\"\n    }[$__rate_interval]\n  )\n)\n",
+            "legendFormat": "{{ path }} - {{ ingress }}/{{ exported_namespace }}",
+            "refId": "A"
+          }
+        ],
+        "title": "Response error rate",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "s"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 12,
+          "x": 12,
+          "y": 14
+        },
+        "id": 8,
+        "options": {
+          "legend": {
+            "calcs": [
+              "mean",
+              "max"
+            ],
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true,
+            "sortBy": "Mean",
+            "sortDesc": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "$datasource"
+            },
+            "expr": "sum by (path, ingress, exported_namespace) (\n  rate(\n    nginx_ingress_controller_response_duration_seconds_sum{\n      cluster=\"$cluster\",\n      job=~\"$job\",\n      exported_namespace =~ \"$exported_namespace\",\n      ingress =~ \"$ingress\"\n    }[$__rate_interval]\n  )\n)\n",
+            "legendFormat": "{{ path }} - {{ ingress }}/{{ exported_namespace }}",
+            "refId": "A"
+          }
+        ],
+        "title": "Upstream time consumed",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 100,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "value"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "reqps"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 12,
+          "x": 0,
+          "y": 20
+        },
+        "id": 9,
+        "options": {
+          "legend": {
+            "calcs": [
+              "mean",
+              "max"
+            ],
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true,
+            "sortBy": "Mean",
+            "sortDesc": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "$datasource"
+            },
+            "expr": "sum (\n  rate(\n    nginx_ingress_controller_request_duration_seconds_count{\n      cluster=\"$cluster\",\n      job=~\"$job\",\n      exported_namespace=~\"$exported_namespace\",\n      ingress=~\"$ingress\",\n      status=~\"[$error_codes].*\"\n    }[$__rate_interval]\n  )\n) by(path, ingress, exported_namespace, status)\n",
+            "legendFormat": "{{ status }} {{ path }} - {{ ingress }}/{{ exported_namespace }}",
+            "refId": "A"
+          }
+        ],
+        "title": "Response error volume",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 100,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "value"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "decbytes"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 12,
+          "x": 12,
+          "y": 20
+        },
+        "id": 10,
+        "options": {
+          "legend": {
+            "calcs": [
+              "mean",
+              "max"
+            ],
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true,
+            "sortBy": "Mean",
+            "sortDesc": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "$datasource"
+            },
+            "expr": "sum (\n  rate (\n    nginx_ingress_controller_response_size_sum {\n      cluster=\"$cluster\",\n      job=~\"$job\",\n      exported_namespace=~\"$exported_namespace\",\n      ingress=~\"$ingress\"\n    }[$__rate_interval]\n  )\n)  by (path, ingress, exported_namespace)\n/\nsum (\n  rate(\n    nginx_ingress_controller_response_size_count {\n      cluster=\"$cluster\",\n      job=~\"$job\",\n      exported_namespace=~\"$exported_namespace\",\n      ingress=~\"$ingress\"\n    }[$__rate_interval]\n  )\n) by (path, ingress, exported_namespace)\n",
+            "legendFormat": "{{ path }} - {{ ingress }}/{{ exported_namespace }}",
+            "refId": "A"
+          }
+        ],
+        "title": "Average response size",
+        "type": "timeseries"
+      }
+    ],
+    "preload": false,
+    "refresh": "",
+    "schemaVersion": 42,
+    "tags": [
+      "ingress-nginx",
+      "ingress-nginx-mixin"
+    ],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "text": "Thanos Querier",
+            "value": "PA5392E10C0F059AB"
+          },
+          "label": "Data source",
+          "name": "datasource",
+          "options": [],
+          "query": "prometheus",
+          "refresh": 1,
+          "regex": "/^Thanos/",
+          "type": "datasource"
+        },
+        {
+          "current": {
+            "text": "aks-opesrenstonl-dev",
+            "value": "aks-opesrenstonl-dev"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "definition": "label_values(kube_pod_info,cluster)",
+          "label": "Cluster",
+          "name": "cluster",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(kube_pod_info,cluster)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 2,
+          "sort": 1,
+          "type": "query"
+        },
+        {
+          "current": {
+            "text": "ingress-nginx-intranet-ingress-nginx-intranet-metrics",
+            "value": "ingress-nginx-intranet-ingress-nginx-intranet-metrics"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "includeAll": false,
+          "label": "Job",
+          "name": "job",
+          "options": [],
+          "query": "label_values(nginx_ingress_controller_config_hash{cluster=\"$cluster\"}, job)",
+          "refresh": 2,
+          "sort": 1,
+          "type": "query"
+        },
+        {
+          "current": {
+            "text": "All",
+            "value": "$__all"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "includeAll": true,
+          "label": "Ingress Namespace",
+          "multi": true,
+          "name": "exported_namespace",
+          "options": [],
+          "query": "label_values(nginx_ingress_controller_requests{cluster=\"$cluster\", job=\"$job\"}, exported_namespace)",
+          "refresh": 2,
+          "sort": 1,
+          "type": "query"
+        },
+        {
+          "current": {
+            "text": [
+              "aspacnfi"
+            ],
+            "value": [
+              "aspacnfi"
+            ]
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "includeAll": false,
+          "label": "Ingress",
+          "multi": true,
+          "name": "ingress",
+          "options": [],
+          "query": "label_values(nginx_ingress_controller_requests{cluster=\"$cluster\", job=\"$job\", exported_namespace=~\"$exported_namespace\"}, ingress)",
+          "refresh": 2,
+          "sort": 1,
+          "type": "query"
+        },
+        {
+          "allValue": "4-5",
+          "current": {
+            "text": [
+              "$__all"
+            ],
+            "value": [
+              "$__all"
+            ]
+          },
+          "description": "4 represents all 4xx codes, 5 represents all 5xx codes",
+          "includeAll": true,
+          "label": "Error Codes",
+          "multi": true,
+          "name": "error_codes",
+          "options": [
+            {
+              "selected": false,
+              "text": "4",
+              "value": "4"
+            },
+            {
+              "selected": false,
+              "text": "5",
+              "value": "5"
+            }
+          ],
+          "query": "4 : 4,5 : 5",
+          "type": "custom"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "utc",
+    "title": "Ingress Nginx / Request Handling Performance",
+    "weekStart": ""
+  }
+}

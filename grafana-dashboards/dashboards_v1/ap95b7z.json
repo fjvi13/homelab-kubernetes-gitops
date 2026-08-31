@@ -1,0 +1,1711 @@
+{
+  "apiVersion": "dashboard.grafana.app/v1",
+  "kind": "Dashboard",
+  "metadata": {
+    "annotations": {
+      "grafana.app/folder": "efq2oxowa8t8gb"
+    },
+    "labels": {},
+    "name": "ap95b7z",
+    "namespace": "default"
+  },
+  "spec": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations \u0026 Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "links": [],
+    "panels": [
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "afsa3ku3qt0xsc"
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 1,
+        "options": {
+          "dedupStrategy": "none",
+          "enableInfiniteScrolling": false,
+          "enableLogDetails": true,
+          "showControls": false,
+          "showTime": true,
+          "sortOrder": "Descending",
+          "wrapLogMessage": false
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "loki",
+              "uid": "afsa3ku3qt0xsc"
+            },
+            "direction": "backward",
+            "editorMode": "code",
+            "expr": "{k8s_cluster_name=~\"$cluster\", k8s_container_name=\"server\"} |= `` | label_format level=detected_level |= \"$filter\"",
+            "queryType": "range",
+            "refId": "A"
+          }
+        ],
+        "title": "ArgoCD Server logs",
+        "type": "logs"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 10
+        },
+        "id": 11,
+        "panels": [],
+        "title": "ArgoCD Syncs",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "afsa3ku3qt0xsc"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "axisSoftMin": 0,
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "bars",
+              "fillOpacity": 100,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "normal"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "fieldMinMax": false,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 19,
+          "x": 0,
+          "y": 11
+        },
+        "id": 16,
+        "interval": "30s",
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "loki",
+              "uid": "afsa3ku3qt0xsc"
+            },
+            "direction": "backward",
+            "editorMode": "code",
+            "expr": "sum by (user,dest_namespace,application) (\r\n  count_over_time(\r\n    {k8s_cluster_name=~\"$cluster\", k8s_container_name=\"server\"} |= `` | label_format level=detected_level | json | user=\"argocd\", msg =~ `.*initiated sync.*` |= \"$filter\"\r\n    [$__auto]\r\n  )\r\n) ",
+            "legendFormat": "{{user}}/{{dest_namespace}}/{{application}}",
+            "queryType": "range",
+            "refId": "A"
+          }
+        ],
+        "title": "ArgoCD \"argocd\" syncs",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "afsa3ku3qt0xsc"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "blue",
+              "mode": "fixed"
+            },
+            "fieldMinMax": false,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": "/.*Total/"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": "/.*AKS/"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "blue",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": "/.*EKS/"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "orange",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": "/.*OCP/"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "red",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 5,
+          "x": 19,
+          "y": 11
+        },
+        "id": 21,
+        "interval": "30s",
+        "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "sum"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "loki",
+              "uid": "afsa3ku3qt0xsc"
+            },
+            "direction": "backward",
+            "editorMode": "code",
+            "expr": "sum(\r\n  count_over_time(\r\n  {k8s_cluster_name=~\"$cluster\", k8s_container_name=\"server\"}\r\n    |= `` \r\n    | label_format level=detected_level \r\n    | json \r\n    | user=\"argocd\", application!=\"\", msg =~ `.*initiated sync.*`\r\n    |= \"$filter\"\r\n  [$__auto]\r\n  )\r\n)",
+            "hide": false,
+            "legendFormat": "Total",
+            "queryType": "range",
+            "refId": "Total Deployments"
+          },
+          {
+            "datasource": {
+              "type": "loki",
+              "uid": "afsa3ku3qt0xsc"
+            },
+            "direction": "backward",
+            "editorMode": "code",
+            "expr": "sum(\r\n  count_over_time(\r\n  {k8s_cluster_name=~\"$cluster\", k8s_container_name=\"server\"}\r\n    |= `` \r\n    | label_format level=detected_level \r\n    | json \r\n    | user=\"argocd\", application=~\".*-aks-.*\", msg =~ `.*initiated sync.*`\r\n    |= \"$filter\"\r\n  [$__auto]\r\n  )\r\n)",
+            "legendFormat": "AKS",
+            "queryType": "range",
+            "refId": "AKS"
+          },
+          {
+            "datasource": {
+              "type": "loki",
+              "uid": "afsa3ku3qt0xsc"
+            },
+            "direction": "backward",
+            "editorMode": "code",
+            "expr": "sum(\r\n  count_over_time(\r\n  {k8s_cluster_name=~\"$cluster\", k8s_container_name=\"server\"}\r\n    |= `` \r\n    | label_format level=detected_level \r\n    | json \r\n    | user=\"argocd\", application=~\".*-eks-.*\", msg =~ `.*initiated sync.*`\r\n    |= \"$filter\"\r\n  [$__auto]\r\n  )\r\n)",
+            "hide": false,
+            "legendFormat": "EKS",
+            "queryType": "range",
+            "refId": "EKS"
+          },
+          {
+            "datasource": {
+              "type": "loki",
+              "uid": "afsa3ku3qt0xsc"
+            },
+            "direction": "backward",
+            "editorMode": "code",
+            "expr": "sum(\r\n  count_over_time(\r\n  {k8s_cluster_name=~\"$cluster\", k8s_container_name=\"server\"}\r\n    |= `` \r\n    | label_format level=detected_level \r\n    | json \r\n    | user=\"argocd\", application=~\".*-ocp-.*\", msg =~ `.*initiated sync.*`\r\n    |= \"$filter\"\r\n  [$__auto]\r\n  )\r\n)",
+            "hide": false,
+            "legendFormat": "OCP",
+            "queryType": "range",
+            "refId": "OCP"
+          }
+        ],
+        "title": "ArgoCD syncs",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "afsa3ku3qt0xsc"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "axisSoftMin": 0,
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "bars",
+              "fillOpacity": 100,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "normal"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "fieldMinMax": false,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 12,
+          "x": 0,
+          "y": 16
+        },
+        "id": 8,
+        "interval": "30s",
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "loki",
+              "uid": "afsa3ku3qt0xsc"
+            },
+            "direction": "backward",
+            "editorMode": "code",
+            "expr": "sum by (user,dest_namespace,application) (\r\n  count_over_time(\r\n    {k8s_cluster_name=~\"$cluster\", k8s_container_name=\"server\"} |= `` | label_format level=detected_level | json | user!=\"argocd\", msg =~ `.*initiated sync.*` |= \"$filter\"\r\n    [$__auto]\r\n  )\r\n) ",
+            "legendFormat": "{{user}}/{{dest_namespace}}/{{application}}",
+            "queryType": "range",
+            "refId": "A"
+          }
+        ],
+        "title": "ArgoCD \"human\" syncs",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "afsa3ku3qt0xsc"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "axisSoftMin": 0,
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "bars",
+              "fillOpacity": 100,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "normal"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "fieldMinMax": false,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 12,
+          "x": 12,
+          "y": 16
+        },
+        "id": 23,
+        "interval": "30s",
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "loki",
+              "uid": "afsa3ku3qt0xsc"
+            },
+            "direction": "backward",
+            "editorMode": "code",
+            "expr": "sum by (user,dest_namespace,application) (\r\n  count_over_time(\r\n    {k8s_cluster_name=~\"$cluster\", k8s_container_name=\"server\"} |= `` | label_format level=detected_level | json | user!=\"argocd\", msg =~ `.*initiated partial sync.*` |= \"$filter\"\r\n    [$__auto]\r\n  )\r\n) ",
+            "legendFormat": "{{user}}/{{dest_namespace}}/{{application}}",
+            "queryType": "range",
+            "refId": "A"
+          }
+        ],
+        "title": "ArgoCD \"human\" partial syncs",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "afsa3ku3qt0xsc"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "blue",
+              "mode": "fixed"
+            },
+            "fieldMinMax": false,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": "/.*Total/"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": "/.*AKS/"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "blue",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": "/.*EKS/"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "orange",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": "/.*OCP/"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "red",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 12,
+          "x": 0,
+          "y": 20
+        },
+        "id": 22,
+        "interval": "30s",
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "sum"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "loki",
+              "uid": "afsa3ku3qt0xsc"
+            },
+            "direction": "backward",
+            "editorMode": "code",
+            "expr": "sum(\r\n  count_over_time(\r\n  {k8s_cluster_name=~\"$cluster\", k8s_container_name=\"server\"}\r\n    |= `` \r\n    | label_format level=detected_level \r\n    | json \r\n    | user!=\"argocd\", application!=\"\", msg =~ `.*initiated sync.*`\r\n    |= \"$filter\"\r\n  [$__auto]\r\n  )\r\n)",
+            "hide": false,
+            "legendFormat": "Total",
+            "queryType": "range",
+            "refId": "Total Deployments"
+          },
+          {
+            "datasource": {
+              "type": "loki",
+              "uid": "afsa3ku3qt0xsc"
+            },
+            "direction": "backward",
+            "editorMode": "code",
+            "expr": "sum(\r\n  count_over_time(\r\n  {k8s_cluster_name=~\"$cluster\", k8s_container_name=\"server\"}\r\n    |= `` \r\n    | label_format level=detected_level \r\n    | json \r\n    | user!=\"argocd\", application=~\".*-aks-.*\", msg =~ `.*initiated sync.*`\r\n    |= \"$filter\"\r\n  [$__auto]\r\n  )\r\n)",
+            "legendFormat": "AKS",
+            "queryType": "range",
+            "refId": "AKS"
+          },
+          {
+            "datasource": {
+              "type": "loki",
+              "uid": "afsa3ku3qt0xsc"
+            },
+            "direction": "backward",
+            "editorMode": "code",
+            "expr": "sum(\r\n  count_over_time(\r\n  {k8s_cluster_name=~\"$cluster\", k8s_container_name=\"server\"}\r\n    |= `` \r\n    | label_format level=detected_level \r\n    | json \r\n    | user!=\"argocd\", application=~\".*-eks-.*\", msg =~ `.*initiated sync.*`\r\n    |= \"$filter\"\r\n  [$__auto]\r\n  )\r\n)",
+            "hide": false,
+            "legendFormat": "EKS",
+            "queryType": "range",
+            "refId": "EKS"
+          },
+          {
+            "datasource": {
+              "type": "loki",
+              "uid": "afsa3ku3qt0xsc"
+            },
+            "direction": "backward",
+            "editorMode": "code",
+            "expr": "sum(\r\n  count_over_time(\r\n  {k8s_cluster_name=~\"$cluster\", k8s_container_name=\"server\"}\r\n    |= `` \r\n    | label_format level=detected_level \r\n    | json \r\n    | user!=\"argocd\", application=~\".*-ocp-.*\", msg =~ `.*initiated sync.*`\r\n    |= \"$filter\"\r\n  [$__auto]\r\n  )\r\n)",
+            "hide": false,
+            "legendFormat": "OCP",
+            "queryType": "range",
+            "refId": "OCP"
+          }
+        ],
+        "title": "Human syncs",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "afsa3ku3qt0xsc"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "blue",
+              "mode": "fixed"
+            },
+            "fieldMinMax": false,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": "/.*Total/"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": "/.*AKS/"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "blue",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": "/.*EKS/"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "orange",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": "/.*OCP/"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "red",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 12,
+          "x": 12,
+          "y": 20
+        },
+        "id": 24,
+        "interval": "30s",
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "sum"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "loki",
+              "uid": "afsa3ku3qt0xsc"
+            },
+            "direction": "backward",
+            "editorMode": "code",
+            "expr": "sum(\r\n  count_over_time(\r\n  {k8s_cluster_name=~\"$cluster\", k8s_container_name=\"server\"}\r\n    |= `` \r\n    | label_format level=detected_level \r\n    | json \r\n    | user!=\"argocd\", application!=\"\", msg =~ `.*initiated partial sync.*`\r\n    |= \"$filter\"\r\n  [$__auto]\r\n  )\r\n)",
+            "hide": false,
+            "legendFormat": "Total",
+            "queryType": "range",
+            "refId": "Total Deployments"
+          },
+          {
+            "datasource": {
+              "type": "loki",
+              "uid": "afsa3ku3qt0xsc"
+            },
+            "direction": "backward",
+            "editorMode": "code",
+            "expr": "sum(\r\n  count_over_time(\r\n  {k8s_cluster_name=~\"$cluster\", k8s_container_name=\"server\"}\r\n    |= `` \r\n    | label_format level=detected_level \r\n    | json \r\n    | user!=\"argocd\", application=~\".*-aks-.*\", msg =~ `.*initiated partial sync.*`\r\n    |= \"$filter\"\r\n  [$__auto]\r\n  )\r\n)",
+            "legendFormat": "AKS",
+            "queryType": "range",
+            "refId": "AKS"
+          },
+          {
+            "datasource": {
+              "type": "loki",
+              "uid": "afsa3ku3qt0xsc"
+            },
+            "direction": "backward",
+            "editorMode": "code",
+            "expr": "sum(\r\n  count_over_time(\r\n  {k8s_cluster_name=~\"$cluster\", k8s_container_name=\"server\"}\r\n    |= `` \r\n    | label_format level=detected_level \r\n    | json \r\n    | user!=\"argocd\", application=~\".*-eks-.*\", msg =~ `.*initiated partial sync.*`\r\n    |= \"$filter\"\r\n  [$__auto]\r\n  )\r\n)",
+            "hide": false,
+            "legendFormat": "EKS",
+            "queryType": "range",
+            "refId": "EKS"
+          },
+          {
+            "datasource": {
+              "type": "loki",
+              "uid": "afsa3ku3qt0xsc"
+            },
+            "direction": "backward",
+            "editorMode": "code",
+            "expr": "sum(\r\n  count_over_time(\r\n  {k8s_cluster_name=~\"$cluster\", k8s_container_name=\"server\"}\r\n    |= `` \r\n    | label_format level=detected_level \r\n    | json \r\n    | user!=\"argocd\", application=~\".*-ocp-.*\", msg =~ `.*initiated partial sync.*`\r\n    |= \"$filter\"\r\n  [$__auto]\r\n  )\r\n)",
+            "hide": false,
+            "legendFormat": "OCP",
+            "queryType": "range",
+            "refId": "OCP"
+          }
+        ],
+        "title": "Human partial syncs",
+        "type": "stat"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 23
+        },
+        "id": 6,
+        "panels": [],
+        "title": "User activity",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "afsa3ku3qt0xsc"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "axisSoftMin": 0,
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 50,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 24,
+          "x": 0,
+          "y": 24
+        },
+        "id": 13,
+        "interval": "30s",
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "loki",
+              "uid": "afsa3ku3qt0xsc"
+            },
+            "direction": "backward",
+            "editorMode": "code",
+            "expr": "count(\r\n  count by (email) (\r\n    count_over_time(\r\n      {k8s_cluster_name=~\"$cluster\", k8s_container_name=\"server\"}\r\n      | json\r\n      | line_format \"{{.grpc_request_claims}}\"\r\n      | json\r\n      | email!=\"\"\r\n      |= \"$filter\"\r\n      [1m]\r\n    )\r\n  )\r\n)",
+            "legendFormat": "Users",
+            "queryType": "range",
+            "refId": "A"
+          }
+        ],
+        "title": "Total users",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "afsa3ku3qt0xsc"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "axisSoftMin": 0,
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "bars",
+              "fillOpacity": 100,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "showValues": false,
+              "spanNulls": true,
+              "stacking": {
+                "group": "A",
+                "mode": "normal"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 31
+        },
+        "id": 12,
+        "interval": "30s",
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "loki",
+              "uid": "afsa3ku3qt0xsc"
+            },
+            "direction": "backward",
+            "editorMode": "code",
+            "expr": "sum by (email) (\r\n  count_over_time(\r\n\t\t{k8s_cluster_name=~\"$cluster\", k8s_container_name=\"server\"} | json | line_format \"{{.grpc_request_claims}}\" | json | email!=\"\" |= \"$filter\"\r\n    [$__auto]\r\n  )\r\n)",
+            "legendFormat": "{{email}}",
+            "queryType": "range",
+            "refId": "A"
+          }
+        ],
+        "title": "User activity",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "afsa3ku3qt0xsc"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "axisSoftMin": 0,
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "bars",
+              "fillOpacity": 100,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineStyle": {
+                "fill": "solid"
+              },
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "showValues": false,
+              "spanNulls": true,
+              "stacking": {
+                "group": "A",
+                "mode": "normal"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 31
+        },
+        "id": 3,
+        "interval": "30s",
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "loki",
+              "uid": "afsa3ku3qt0xsc"
+            },
+            "direction": "backward",
+            "editorMode": "code",
+            "expr": "sum(\r\n  count_over_time(\r\n    {k8s_cluster_name=~\"$cluster\", k8s_container_name=\"server\"}\r\n    | json\r\n    | line_format \"{{.grpc_request_claims}}\"\r\n    | json\r\n    | email=~\".*iberdrola.*\"\r\n    |= \"$filter\"\r\n    [$__auto]\r\n  )\r\n)",
+            "legendFormat": "Iberdrola",
+            "queryType": "range",
+            "refId": "Iberdrola"
+          },
+          {
+            "datasource": {
+              "type": "loki",
+              "uid": "afsa3ku3qt0xsc"
+            },
+            "direction": "backward",
+            "editorMode": "code",
+            "expr": "sum(\r\n  count_over_time(\r\n    {k8s_cluster_name=~\"$cluster\", k8s_container_name=\"server\"}\r\n    | json\r\n    | line_format \"{{.grpc_request_claims}}\"\r\n    | json\r\n    | email=~\".*scottishpower.*\"\r\n    |= \"$filter\"\r\n    [$__auto]\r\n  )\r\n)",
+            "hide": false,
+            "legendFormat": "Scottish Power",
+            "queryType": "range",
+            "refId": "ScottishPower"
+          }
+        ],
+        "title": "User activity by company",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "afsa3ku3qt0xsc"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "bars",
+              "fillOpacity": 100,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "showValues": false,
+              "spanNulls": true,
+              "stacking": {
+                "group": "A",
+                "mode": "normal"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 39
+        },
+        "id": 5,
+        "interval": "30s",
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "loki",
+              "uid": "afsa3ku3qt0xsc"
+            },
+            "direction": "backward",
+            "editorMode": "code",
+            "expr": "sum by (grpc_request_content_name) (\r\n  count_over_time(\r\n\t\t{k8s_cluster_name=~\"$cluster\", k8s_container_name=\"server\"} | json | line_format \"{{.grpc_request_claims}}\" | json | grpc_request_content_name!=\"\" |=\"$filter\"\r\n    [$__auto]\r\n  )\r\n)",
+            "legendFormat": "{{email}}",
+            "queryType": "range",
+            "refId": "A"
+          }
+        ],
+        "title": "User activity by application",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "afsa3ku3qt0xsc"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "bars",
+              "fillOpacity": 100,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "showValues": false,
+              "spanNulls": true,
+              "stacking": {
+                "group": "A",
+                "mode": "normal"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 39
+        },
+        "id": 7,
+        "interval": "30s",
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "loki",
+              "uid": "afsa3ku3qt0xsc"
+            },
+            "direction": "backward",
+            "editorMode": "code",
+            "expr": "sum by (msg) (\r\n  count_over_time(\r\n\t\t{k8s_cluster_name=~\"$cluster\", k8s_container_name=\"server\"} | json | msg!=\"\" | msg!~\".*TotalAlloc.*\" | msg!~\".*argocd-notifications.*\" |= \"$filter\"\r\n    [$__auto]\r\n  )\r\n)",
+            "legendFormat": "{{email}}",
+            "queryType": "range",
+            "refId": "A"
+          }
+        ],
+        "title": "User activity by action",
+        "type": "timeseries"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 47
+        },
+        "id": 10,
+        "panels": [],
+        "title": "Cluster deletions",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "afsa3ku3qt0xsc"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "axisSoftMin": 0,
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "bars",
+              "fillOpacity": 100,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "showValues": false,
+              "spanNulls": true,
+              "stacking": {
+                "group": "A",
+                "mode": "normal"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 0,
+          "y": 48
+        },
+        "id": 4,
+        "interval": "30s",
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "loki",
+              "uid": "afsa3ku3qt0xsc"
+            },
+            "direction": "backward",
+            "editorMode": "code",
+            "expr": "sum by (email, cluster) (\r\n  count_over_time(\r\n    {k8s_cluster_name=~\"$cluster\", k8s_container_name=\"server\"}\r\n    | json\r\n    | msg=\"received unary call /cluster.ClusterService/Delete\"\r\n    | label_format cluster=\"{{.grpc_request_content_id_value}}\"\r\n    | line_format \"{{.grpc_request_claims}}\"\r\n    | json\r\n    | email!=\"\"\r\n    [$__auto]\r\n  )\r\n)",
+            "legendFormat": "{{cluster}} deleted by {{email}}",
+            "queryType": "range",
+            "refId": "A"
+          }
+        ],
+        "title": "Cluster deletion activity (by user)",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "afsa3ku3qt0xsc"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "bars",
+              "fillOpacity": 100,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "normal"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 12,
+          "y": 48
+        },
+        "id": 9,
+        "interval": "30s",
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "loki",
+              "uid": "afsa3ku3qt0xsc"
+            },
+            "direction": "backward",
+            "editorMode": "code",
+            "expr": "sum by (sub, cluster) (\r\n  count_over_time(\r\n    {k8s_cluster_name=~\"$cluster\", k8s_container_name=\"server\"}\r\n    | json\r\n    | msg=\"received unary call /cluster.ClusterService/Delete\"\r\n    | grpc_request_content_name!=\"\"\r\n    | label_format cluster=\"{{.grpc_request_content_name}}\"\r\n    | line_format \"{{.grpc_request_claims}}\"\r\n    | json\r\n    | sub!=\"\"\r\n    [$__auto]\r\n  )\r\n)",
+            "legendFormat": "{{cluster}} deleted by {{sub}}",
+            "queryType": "range",
+            "refId": "A"
+          }
+        ],
+        "title": "Cluster deletion activity (by Service Account)",
+        "type": "timeseries"
+      }
+    ],
+    "preload": false,
+    "schemaVersion": 42,
+    "tags": [
+      "argocd",
+      "iberdrola"
+    ],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "text": "aks-kpescorpostarg-dev",
+            "value": "aks-kpescorpostarg-dev"
+          },
+          "datasource": {
+            "type": "loki",
+            "uid": "afsa3ku3qt0xsc"
+          },
+          "definition": "",
+          "includeAll": true,
+          "label": "cluster",
+          "name": "cluster",
+          "options": [],
+          "query": {
+            "label": "k8s_cluster_name",
+            "refId": "LokiVariableQueryEditor-VariableQuery",
+            "stream": "",
+            "type": 1
+          },
+          "refresh": 1,
+          "regex": ".*arg|arl.*",
+          "type": "query"
+        },
+        {
+          "current": {
+            "text": "",
+            "value": ""
+          },
+          "name": "filter",
+          "options": [
+            {
+              "selected": true,
+              "text": "",
+              "value": ""
+            }
+          ],
+          "query": "",
+          "type": "textbox"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-15m",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "browser",
+    "title": "ArgoCD Audit",
+    "weekStart": ""
+  }
+}

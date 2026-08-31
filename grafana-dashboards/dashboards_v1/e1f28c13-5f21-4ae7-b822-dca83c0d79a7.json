@@ -136,7 +136,7 @@
           "text": {},
           "valueMode": "color"
         },
-        "pluginVersion": "12.2.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -253,7 +253,7 @@
           "text": {},
           "valueMode": "color"
         },
-        "pluginVersion": "12.2.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -366,7 +366,7 @@
           "text": {},
           "valueMode": "color"
         },
-        "pluginVersion": "12.2.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -540,7 +540,7 @@
             }
           ]
         },
-        "pluginVersion": "12.2.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -745,7 +745,7 @@
             "sort": "desc"
           }
         },
-        "pluginVersion": "12.2.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -848,7 +848,7 @@
           "text": {},
           "valueMode": "color"
         },
-        "pluginVersion": "12.2.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -966,7 +966,7 @@
           "text": {},
           "valueMode": "color"
         },
-        "pluginVersion": "12.2.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -1136,7 +1136,7 @@
           "text": {},
           "valueMode": "color"
         },
-        "pluginVersion": "12.2.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -1244,7 +1244,7 @@
           "textMode": "auto",
           "wideLayout": true
         },
-        "pluginVersion": "12.2.1",
+        "pluginVersion": "12.3.0",
         "repeat": "cluster",
         "repeatDirection": "v",
         "targets": [
@@ -1334,7 +1334,6 @@
             "refId": "A"
           }
         ],
-        "title": "",
         "transformations": [
           {
             "id": "renameByRegex",
@@ -1448,7 +1447,7 @@
             "sort": "desc"
           }
         },
-        "pluginVersion": "12.2.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -1609,7 +1608,7 @@
             "sort": "desc"
           }
         },
-        "pluginVersion": "12.2.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -1802,7 +1801,7 @@
             "sort": "desc"
           }
         },
-        "pluginVersion": "12.2.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -1950,7 +1949,7 @@
             "sort": "desc"
           }
         },
-        "pluginVersion": "12.2.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -2056,7 +2055,7 @@
             "sort": "desc"
           }
         },
-        "pluginVersion": "12.2.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -2176,7 +2175,7 @@
             "sort": "desc"
           }
         },
-        "pluginVersion": "12.2.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -2481,7 +2480,7 @@
               "properties": [
                 {
                   "id": "custom.width",
-                  "value": 119
+                  "value": 58
                 }
               ]
             },
@@ -2544,18 +2543,6 @@
                   "value": 102
                 }
               ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "kubelet_version"
-              },
-              "properties": [
-                {
-                  "id": "custom.width",
-                  "value": 170
-                }
-              ]
             }
           ]
         },
@@ -2577,7 +2564,7 @@
             }
           ]
         },
-        "pluginVersion": "12.2.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -2598,7 +2585,6 @@
               "type": "prometheus",
               "uid": "PA5392E10C0F059AB"
             },
-            "editorMode": "code",
             "exemplar": false,
             "expr": "kube_node_status_condition{cluster=~\"$cluster\",status=\"true\",node=~\"^$Node$\"}  == 1",
             "format": "table",
@@ -2851,7 +2837,6 @@
               "type": "prometheus",
               "uid": "PA5392E10C0F059AB"
             },
-            "editorMode": "code",
             "exemplar": false,
             "expr": "sum(kube_node_status_allocatable{cluster=~\"$cluster\",resource=\"pods\", unit=\"integer\",node=~\"^$Node$\"})by (node)",
             "format": "table",
@@ -2872,7 +2857,6 @@
             "format": "table",
             "hide": false,
             "instant": true,
-            "interval": "",
             "legendFormat": "__auto",
             "range": false,
             "refId": "U"
@@ -3014,7 +2998,41 @@
           },
           {
             "id": "filterFieldsByName",
-            "options": {}
+            "options": {
+              "include": {
+                "names": [
+                  "Node",
+                  "Pod Limit",
+                  "Pod Number of",
+                  "CPU Usage%",
+                  "Memory Usage%",
+                  "Disk Usage%",
+                  "CPU Total Cores",
+                  "CPU Core Usage",
+                  "Total Memory",
+                  "Memory Usage",
+                  "Disk Total",
+                  "Disk Usage",
+                  "CPU Requests%",
+                  "Memory Requests%",
+                  "CPU Limit%",
+                  "Memory Limit%",
+                  "CPU Requests",
+                  "CPU Limit",
+                  "Memory Requests",
+                  "Memory Limit",
+                  "container",
+                  "endpoint",
+                  "namespace",
+                  "pod",
+                  "prometheus",
+                  "receive",
+                  "service",
+                  "tenant_id",
+                  "kubelet_version"
+                ]
+              }
+            }
           }
         ],
         "type": "table"
@@ -3200,7 +3218,7 @@
             }
           ]
         },
-        "pluginVersion": "12.2.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -3393,7 +3411,7 @@
             "sort": "desc"
           }
         },
-        "pluginVersion": "12.2.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -3505,7 +3523,7 @@
             "sort": "desc"
           }
         },
-        "pluginVersion": "12.2.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -3987,7 +4005,7 @@
             }
           ]
         },
-        "pluginVersion": "12.2.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -4500,7 +4518,7 @@
             "sort": "desc"
           }
         },
-        "pluginVersion": "12.2.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -4610,7 +4628,7 @@
             "sort": "desc"
           }
         },
-        "pluginVersion": "12.2.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -4752,7 +4770,7 @@
             "sort": "desc"
           }
         },
-        "pluginVersion": "12.2.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -5317,12 +5335,333 @@
         "type": "timeseries"
       },
       {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PA5392E10C0F059AB"
+        },
+        "description": "CPU throttling (limiting) in Kubernetes is considered problematic, or “bad,” when it starts affecting application latency and performance. This typically becomes noticeable when sustained values exceed 5%–10% of available CPU time.\nAlthough any value above zero indicates that the container has been artificially paused by the Linux scheduler (CFS), the usual alert thresholds are:\n\n\u003c 5% (Normal): Acceptable. Small spikes in throttling may occur due to the nature of the Completely Fair Scheduler (CFS).\n10% – 20% (Concerning): Indicates the application is frequently hitting its limit. Intermittent latency is likely.\n\u003e 20% (High): Will noticeably impact performance. The application is being severely restricted even if the node might still have idle CPU capacity.\n\n\nWhy is throttling bad?\nThrottling pauses the process when the configured CPU limit (limits.cpu) is reached, even if the node still has available CPU. This causes “random slowness” and latency spikes, not because the CPU is saturated, but because Kubernetes is enforcing a usage cap.\n\nRecommendations to avoid it\n\nPrioritize Requests over Limits: Properly configure requests.cpu to guarantee resources, and consider not setting CPU limits (or setting them very high) for standard workloads, allowing applications to use available CPU.\nMonitor container_cpu_cfs_throttled_seconds_total: Use Prometheus to track this metric.\nAdjust limits: If throttling is high, increase or remove the CPU limit if cost containment is not a concern.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": true,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "dashed+area"
+              }
+            },
+            "links": [],
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 5
+                },
+                {
+                  "color": "red",
+                  "value": 20
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 8,
+          "x": 0,
+          "y": 68
+        },
+        "id": 94,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "editorMode": "code",
+            "expr": "rate(container_cpu_cfs_throttled_periods_total{cluster=\"$cluster\", namespace=~\"$NameSpace\", pod=~\"$Pod\", container=~\"$Container\", container!=\"\"}[5m]) /\r\nrate(container_cpu_cfs_periods_total{cluster=\"$cluster\", namespace=~\"$NameSpace\", pod=~\"$Pod\", container=~\"$Container\", container!=\"\"}[5m]) * 100",
+            "hide": false,
+            "instant": false,
+            "legendFormat": "{{pod}}",
+            "range": true,
+            "refId": "CPU throttling"
+          }
+        ],
+        "title": "CPU Throttling percentage",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PA5392E10C0F059AB"
+        },
+        "description": "CPU throttling (limiting) in Kubernetes is considered problematic, or “bad,” when it starts affecting application latency and performance. This typically becomes noticeable when sustained values exceed 5%–10% of available CPU time.\nAlthough any value above zero indicates that the container has been artificially paused by the Linux scheduler (CFS), the usual alert thresholds are:\n\n\u003c 5% (Normal): Acceptable. Small spikes in throttling may occur due to the nature of the Completely Fair Scheduler (CFS).\n10% – 20% (Concerning): Indicates the application is frequently hitting its limit. Intermittent latency is likely.\n\u003e 20% (High): Will noticeably impact performance. The application is being severely restricted even if the node might still have idle CPU capacity.\n\n\nWhy is throttling bad?\nThrottling pauses the process when the configured CPU limit (limits.cpu) is reached, even if the node still has available CPU. This causes “random slowness” and latency spikes, not because the CPU is saturated, but because Kubernetes is enforcing a usage cap.\n\nRecommendations to avoid it\n\nPrioritize Requests over Limits: Properly configure requests.cpu to guarantee resources, and consider not setting CPU limits (or setting them very high) for standard workloads, allowing applications to use available CPU.\nMonitor container_cpu_cfs_throttled_seconds_total: Use Prometheus to track this metric.\nAdjust limits: If throttling is high, increase or remove the CPU limit if cost containment is not a concern.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": true,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "dashed+area"
+              }
+            },
+            "links": [],
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 5
+                },
+                {
+                  "color": "red",
+                  "value": 20
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 8,
+          "x": 8,
+          "y": 68
+        },
+        "id": 95,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "editorMode": "code",
+            "expr": "(\r\n    rate(container_cpu_cfs_throttled_periods_total{cluster=\"$cluster\", namespace=~\"$NameSpace\", pod=~\"$Pod\", container=~\"$Container\", container!=\"\"}[5m]) /\r\n    rate(container_cpu_cfs_periods_total{cluster=\"$cluster\", namespace=~\"$NameSpace\", pod=~\"$Pod\", container=~\"$Container\", container!=\"\"}[5m]) * 100\r\n) \u003e 50",
+            "hide": false,
+            "instant": false,
+            "legendFormat": "{{pod}}",
+            "range": true,
+            "refId": "CPU throttling"
+          }
+        ],
+        "title": "CPU Throttling percentage (\u003e50%)",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PA5392E10C0F059AB"
+        },
+        "description": "CPU throttling (limiting) in Kubernetes is considered problematic, or “bad,” when it starts affecting application latency and performance. This typically becomes noticeable when sustained values exceed 5%–10% of available CPU time.\nAlthough any value above zero indicates that the container has been artificially paused by the Linux scheduler (CFS), the usual alert thresholds are:\n\n\u003c 5% (Normal): Acceptable. Small spikes in throttling may occur due to the nature of the Completely Fair Scheduler (CFS).\n10% – 20% (Concerning): Indicates the application is frequently hitting its limit. Intermittent latency is likely.\n\u003e 20% (High): Will noticeably impact performance. The application is being severely restricted even if the node might still have idle CPU capacity.\n\n\nWhy is throttling bad?\nThrottling pauses the process when the configured CPU limit (limits.cpu) is reached, even if the node still has available CPU. This causes “random slowness” and latency spikes, not because the CPU is saturated, but because Kubernetes is enforcing a usage cap.\n\nRecommendations to avoid it\n\nPrioritize Requests over Limits: Properly configure requests.cpu to guarantee resources, and consider not setting CPU limits (or setting them very high) for standard workloads, allowing applications to use available CPU.\nMonitor container_cpu_cfs_throttled_seconds_total: Use Prometheus to track this metric.\nAdjust limits: If throttling is high, increase or remove the CPU limit if cost containment is not a concern.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": true,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "dashed+area"
+              }
+            },
+            "links": [],
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 5
+                },
+                {
+                  "color": "red",
+                  "value": 20
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 8,
+          "x": 16,
+          "y": 68
+        },
+        "id": 96,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "editorMode": "code",
+            "expr": "(\r\n    rate(container_cpu_cfs_throttled_periods_total{cluster=\"$cluster\", namespace=~\"$NameSpace\", pod=~\"$Pod\", container=~\"$Container\", container!=\"\"}[5m]) /\r\n    rate(container_cpu_cfs_periods_total{cluster=\"$cluster\", namespace=~\"$NameSpace\", pod=~\"$Pod\", container=~\"$Container\", container!=\"\"}[5m]) * 100\r\n) \u003e 20\r\nand\r\n(\r\n    rate(container_cpu_cfs_throttled_periods_total{cluster=\"$cluster\", namespace=~\"$NameSpace\", pod=~\"$Pod\", container=~\"$Container\", container!=\"\"}[5m]) /\r\n    rate(container_cpu_cfs_periods_total{cluster=\"$cluster\", namespace=~\"$NameSpace\", pod=~\"$Pod\", container=~\"$Container\", container!=\"\"}[5m]) * 100\r\n) \u003c 50",
+            "hide": false,
+            "instant": false,
+            "legendFormat": "{{pod}}",
+            "range": true,
+            "refId": "CPU throttling"
+          }
+        ],
+        "title": "CPU Throttling percentage (20%-50%)",
+        "type": "timeseries"
+      },
+      {
         "collapsed": false,
         "gridPos": {
           "h": 1,
           "w": 24,
           "x": 0,
-          "y": 68
+          "y": 76
         },
         "id": 61,
         "panels": [],
@@ -5681,7 +6020,7 @@
           "h": 9,
           "w": 24,
           "x": 0,
-          "y": 69
+          "y": 77
         },
         "id": 87,
         "options": {
@@ -6022,7 +6361,7 @@
           "h": 7,
           "w": 8,
           "x": 0,
-          "y": 78
+          "y": 86
         },
         "id": 24,
         "options": {
@@ -6132,7 +6471,7 @@
           "h": 7,
           "w": 8,
           "x": 8,
-          "y": 78
+          "y": 86
         },
         "id": 89,
         "options": {
@@ -6255,7 +6594,7 @@
           "h": 7,
           "w": 8,
           "x": 16,
-          "y": 78
+          "y": 86
         },
         "id": 16,
         "options": {
@@ -6425,7 +6764,7 @@
           "h": 8,
           "w": 8,
           "x": 0,
-          "y": 85
+          "y": 93
         },
         "id": 91,
         "options": {
@@ -6570,7 +6909,7 @@
           "h": 8,
           "w": 8,
           "x": 8,
-          "y": 85
+          "y": 93
         },
         "id": 90,
         "options": {
@@ -6711,7 +7050,7 @@
           "h": 8,
           "w": 8,
           "x": 16,
-          "y": 85
+          "y": 93
         },
         "id": 59,
         "options": {
@@ -6898,6 +7237,7 @@
       ]
     },
     "timezone": "browser",
-    "title": "K8S Dashboard"
+    "title": "K8S Dashboard",
+    "weekStart": ""
   }
 }

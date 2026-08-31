@@ -1,0 +1,247 @@
+{
+  "apiVersion": "dashboard.grafana.app/v0alpha1",
+  "kind": "Dashboard",
+  "metadata": {
+    "annotations": {
+      "grafana.app/folder": "cfdphm7j54gzka"
+    },
+    "labels": {},
+    "name": "apvvpk6",
+    "namespace": "default"
+  },
+  "spec": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations \u0026 Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "description": "This dashboard displays all deployments running in namespaces that start with \"ab-\" across the Open Platforms clusters. It provides a real‑time visual status overview, highlighting deployment readiness and operational health at a glance.",
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "links": [],
+    "panels": [
+      {
+        "description": "Info",
+        "fieldConfig": {
+          "defaults": {},
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 2,
+        "options": {
+          "code": {
+            "language": "plaintext",
+            "showLineNumbers": false,
+            "showMiniMap": false
+          },
+          "content": "This dashboard displays all deployments running in namespaces that start with *\"ab-\"* across the Open Platforms clusters. It provides a real‑time visual status overview, highlighting deployment readiness and operational health at a glance.",
+          "mode": "markdown"
+        },
+        "pluginVersion": "12.3.0",
+        "title": "Info",
+        "transparent": true,
+        "type": "text"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PA5392E10C0F059AB"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": []
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 24,
+          "x": 0,
+          "y": 3
+        },
+        "id": 1,
+        "maxPerRow": 2,
+        "options": {
+          "autoSizeColumns": true,
+          "autoSizePolygons": true,
+          "autoSizeRows": true,
+          "compositeConfig": {
+            "animationSpeed": "1500",
+            "composites": [],
+            "enabled": true
+          },
+          "compositeGlobalAliasingEnabled": false,
+          "ellipseCharacters": 18,
+          "ellipseEnabled": false,
+          "globalAutoScaleFonts": true,
+          "globalClickthrough": "",
+          "globalClickthroughCustomTarget": "",
+          "globalClickthroughCustomTargetEnabled": false,
+          "globalClickthroughNewTabEnabled": true,
+          "globalClickthroughSanitizedEnabled": true,
+          "globalCompositeValueFontSize": 14,
+          "globalDecimals": 2,
+          "globalDisplayMode": "all",
+          "globalDisplayTextTriggeredEmpty": "OK",
+          "globalFillColor": "semi-dark-blue",
+          "globalGradientsEnabled": true,
+          "globalLabelFontSize": 12,
+          "globalOperator": "mean",
+          "globalPolygonBorderColor": "rgba(0, 0, 0, 0)",
+          "globalPolygonBorderSize": 2,
+          "globalPolygonSize": "25",
+          "globalRegexPattern": "",
+          "globalShape": "hexagon_pointed_top",
+          "globalShowTimestampEnabled": false,
+          "globalShowTimestampFontSize": 12,
+          "globalShowTimestampFormat": "YYYY-MM-DD HH:mm:ss",
+          "globalShowTimestampPosition": "below_value",
+          "globalShowTimestampYOffset": 0,
+          "globalShowTooltipColumnHeadersEnabled": true,
+          "globalShowValueEnabled": false,
+          "globalTextFontAutoColorEnabled": true,
+          "globalTextFontColor": "#000000",
+          "globalTextFontFamily": "Roboto",
+          "globalThresholdsConfig": [
+            {
+              "color": "#f53636",
+              "state": 2,
+              "value": 0
+            },
+            {
+              "color": "#ed8128",
+              "state": 1,
+              "value": 0.2
+            },
+            {
+              "color": "#299c46",
+              "state": 0,
+              "value": 1
+            }
+          ],
+          "globalTooltipsEnabled": true,
+          "globalTooltipsFontFamily": "Roboto",
+          "globalTooltipsShowTimestampEnabled": true,
+          "globalTooltipsShowValueEnabled": true,
+          "globalUnitFormat": "short",
+          "globalValueFontSize": 14,
+          "layoutDisplayLimit": 100,
+          "layoutNumColumns": 8,
+          "layoutNumRows": 8,
+          "overrideConfig": {
+            "overrides": [
+              {
+                "alias": "",
+                "clickThrough": "",
+                "clickThroughCustomTarget": "",
+                "clickThroughCustomTargetEnabled": false,
+                "clickThroughOpenNewTab": true,
+                "clickThroughSanitize": true,
+                "colors": [
+                  "#299c46",
+                  "#ed8128",
+                  "#f53636",
+                  "#0a55a1"
+                ],
+                "decimals": "2",
+                "enabled": true,
+                "label": "Override-0",
+                "metricName": "",
+                "operatorName": "mean",
+                "order": 0,
+                "prefix": "",
+                "showTimestampEnabled": false,
+                "showTimestampFormat": "HH:mm:ss",
+                "showTimestampYOffset": 0,
+                "suffix": "",
+                "thresholds": [],
+                "unitFormat": "short"
+              }
+            ]
+          },
+          "sortByDirection": 1,
+          "sortByField": "name",
+          "tooltipDisplayMode": "all",
+          "tooltipDisplayTextTriggeredEmpty": "OK",
+          "tooltipPrimarySortByField": "thresholdLevel",
+          "tooltipPrimarySortDirection": 1,
+          "tooltipSecondarySortByField": "value",
+          "tooltipSecondarySortDirection": 1
+        },
+        "pluginVersion": "2.1.16",
+        "repeat": "cluster",
+        "repeatDirection": "h",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "kube_deployment_status_replicas_available{cluster=\"$cluster\", namespace=~\"ab-.*\"}\r\n/\r\nkube_deployment_spec_replicas{cluster=\"$cluster\", namespace=~\"ab-.*\"}",
+            "instant": false,
+            "interval": "",
+            "legendFormat": "{{deployment}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "$cluster",
+        "type": "grafana-polystat-panel"
+      }
+    ],
+    "preload": false,
+    "schemaVersion": 42,
+    "tags": [
+      "iberdrola"
+    ],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "text": "All",
+            "value": "$__all"
+          },
+          "definition": "label_values(kube_node_info,cluster)",
+          "includeAll": true,
+          "label": "Cluster",
+          "name": "cluster",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(kube_node_info,cluster)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": ".*op.*",
+          "type": "query"
+        }
+      ]
+    },
+    "time": {
+      "from": "now",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "browser",
+    "title": "[Iberdrola] [OP] Deployment status"
+  }
+}

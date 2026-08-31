@@ -1,0 +1,1152 @@
+{
+  "apiVersion": "dashboard.grafana.app/v1",
+  "kind": "Dashboard",
+  "metadata": {
+    "annotations": {
+      "grafana.app/folder": "efq2oxowa8t8gb"
+    },
+    "labels": {},
+    "name": "qPkgGHg7k01",
+    "namespace": "default"
+  },
+  "spec": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations \u0026 Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "description": "Official ArgoCD Dashboard as of June 2021",
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "links": [],
+    "panels": [
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 130,
+        "panels": [],
+        "title": "Overview",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PA5392E10C0F059AB"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineStyle": {
+                "fill": "solid"
+              },
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 24,
+          "x": 0,
+          "y": 1
+        },
+        "id": 124,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "sum(\n  (max by (server) (\n    argocd_cluster_connection_status{\n      cluster=~\"$argocd_instance\",\n      server=~\"$cluster\"\n    }\n  )) \u003e 0\n)",
+            "legendFormat": "Total of clusters",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PA5392E10C0F059AB"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              }
+            },
+            "links": [],
+            "mappings": []
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 5,
+          "x": 0,
+          "y": 11
+        },
+        "id": 125,
+        "options": {
+          "displayLabels": [
+            "value"
+          ],
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "pieType": "pie",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "sort": "desc",
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "count(count by (name) (argocd_cluster_info{cluster=~\"$argocd_instance\", name=~\".*eks.*\"}== 1))",
+            "legendFormat": "EKS clusters",
+            "range": true,
+            "refId": "EKS"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "editorMode": "code",
+            "expr": "count(count by (name) (argocd_cluster_info{cluster=~\"$argocd_instance\", name=~\".*aks.*\"}== 1))",
+            "hide": false,
+            "legendFormat": "AKS clusters",
+            "range": true,
+            "refId": "AKS"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "editorMode": "code",
+            "expr": "count(count by (name) (argocd_cluster_info{cluster=~\"$argocd_instance\", name=~\".*ocp.*\"}== 1))",
+            "hide": false,
+            "legendFormat": "OCP clusters",
+            "range": true,
+            "refId": "OCP"
+          }
+        ],
+        "title": "Infrastructure",
+        "type": "piechart"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PA5392E10C0F059AB"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              }
+            },
+            "mappings": []
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 5,
+          "x": 5,
+          "y": 11
+        },
+        "id": 126,
+        "options": {
+          "displayLabels": [
+            "value"
+          ],
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "pieType": "pie",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "sort": "desc",
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "editorMode": "code",
+            "expr": "count(count by (name) (argocd_cluster_info{cluster=~\"$argocd_instance\", name=~\".*-cdv.*\"}== 1))",
+            "hide": false,
+            "legendFormat": "CDV",
+            "range": true,
+            "refId": "CDV"
+          },
+          {
+            "editorMode": "code",
+            "expr": "count(count by (name) (argocd_cluster_info{cluster=~\"$argocd_instance\", name=~\".*-dev.*\"}== 1))",
+            "legendFormat": "DEV",
+            "range": true,
+            "refId": "DEV"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "editorMode": "code",
+            "expr": "count(count by (name) (argocd_cluster_info{cluster=~\"$argocd_instance\", name=~\".*-int.*\"}== 1))",
+            "hide": false,
+            "legendFormat": "INT",
+            "range": true,
+            "refId": "INT"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "editorMode": "code",
+            "expr": "count(count by (name) (argocd_cluster_info{cluster=~\"$argocd_instance\", name=~\".*-pre.*\"}== 1))",
+            "hide": false,
+            "legendFormat": "PRE",
+            "range": true,
+            "refId": "PRE"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "editorMode": "code",
+            "expr": "count(count by (name) (argocd_cluster_info{cluster=~\"$argocd_instance\", name=~\".*-pro.*\"}== 1))",
+            "hide": false,
+            "legendFormat": "PRO",
+            "range": true,
+            "refId": "PRO"
+          }
+        ],
+        "title": "Environments",
+        "type": "piechart"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PA5392E10C0F059AB"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              }
+            },
+            "mappings": []
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 5,
+          "x": 10,
+          "y": 11
+        },
+        "id": 128,
+        "options": {
+          "displayLabels": [
+            "value"
+          ],
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "pieType": "pie",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "sort": "desc",
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "editorMode": "code",
+            "expr": "count(count by (name) (argocd_cluster_info{cluster=~\"$argocd_instance\", name=~\".*op.*\"}== 1))",
+            "hide": false,
+            "legendFormat": "OP Clusters",
+            "range": true,
+            "refId": "OP"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "editorMode": "code",
+            "expr": "count(count by (name) (argocd_cluster_info{cluster=~\"$argocd_instance\", name=~\".*(kp|4p).*\"}== 1))",
+            "hide": false,
+            "legendFormat": "Package Clusters",
+            "range": true,
+            "refId": "Package"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "editorMode": "code",
+            "expr": "count(count by (name) (argocd_cluster_info{cluster=~\"$argocd_instance\", name=~\".*ocp.*\"}== 1))",
+            "hide": false,
+            "legendFormat": "OCP Clusters",
+            "range": true,
+            "refId": "OCP Clsuters"
+          }
+        ],
+        "title": "Cluster type",
+        "type": "piechart"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PA5392E10C0F059AB"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              }
+            },
+            "mappings": []
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 5,
+          "x": 15,
+          "y": 11
+        },
+        "id": 127,
+        "options": {
+          "displayLabels": [
+            "value"
+          ],
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "pieType": "pie",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "sort": "desc",
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "count by (k8s_version) (argocd_cluster_info{cluster=~\"$argocd_instance\"})",
+            "legendFormat": "{{k8s_version}}",
+            "range": true,
+            "refId": "DEV"
+          }
+        ],
+        "title": "K8S versions",
+        "type": "piechart"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PA5392E10C0F059AB"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              }
+            },
+            "mappings": []
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 4,
+          "x": 20,
+          "y": 11
+        },
+        "id": 129,
+        "options": {
+          "displayLabels": [
+            "value"
+          ],
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "pieType": "pie",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "sort": "desc",
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "editorMode": "code",
+            "expr": "count(count by (name) (argocd_cluster_info{cluster=~\"$argocd_instance\", name=~\".*(es|-ib-|-ibe-|).*\"}== 1))",
+            "hide": false,
+            "legendFormat": "Iberdrola",
+            "range": true,
+            "refId": "IBE"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "editorMode": "code",
+            "expr": "count(count by (name) (argocd_cluster_info{cluster=~\"$argocd_instance\", name=~\".*(uk|-sp-|-spw-).*\"}== 1))",
+            "hide": false,
+            "legendFormat": "Scottish Power",
+            "range": true,
+            "refId": "SPW"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "editorMode": "code",
+            "expr": "count(count by (name) (argocd_cluster_info{cluster=~\"$argocd_instance\", name=~\".*(-ne-).*\"}== 1))",
+            "hide": false,
+            "legendFormat": "Neoenergia",
+            "range": true,
+            "refId": "NEO"
+          }
+        ],
+        "title": "Company",
+        "type": "piechart"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 18
+        },
+        "id": 68,
+        "panels": [],
+        "title": "Clusters list",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PA5392E10C0F059AB"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "blue",
+              "mode": "fixed"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 8,
+          "x": 0,
+          "y": 19
+        },
+        "id": 121,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "value_and_name",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "count(\r\n  max by (server) (\r\n    argocd_cluster_connection_status{\r\n      cluster=~\"$argocd_instance\",\r\n      server=~\"$cluster\"\r\n    }\r\n  )\r\n)\r\n",
+            "legendFormat": "Total",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Total managed clusters",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PA5392E10C0F059AB"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "green",
+              "mode": "fixed"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 8,
+          "x": 8,
+          "y": 19
+        },
+        "id": 120,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "value_and_name",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "sum(\r\n  (max by (server) (\r\n    argocd_cluster_connection_status{\r\n      cluster=~\"$argocd_instance\",\r\n      server=~\"$cluster\"\r\n    }\r\n  )) \u003e 0\r\n)",
+            "legendFormat": "Connected",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Connected clusters",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PA5392E10C0F059AB"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "red",
+              "mode": "fixed"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 1
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 8,
+          "x": 16,
+          "y": 19
+        },
+        "id": 119,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "value_and_name",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "sum((1 - max by (server) (argocd_cluster_connection_status{cluster=~\"$argocd_instance\", server=~\"$cluster\"})) \u003e 0)",
+            "legendFormat": "Disconnected",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Disconnected clusters",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PA5392E10C0F059AB"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "continuous-GrYlRd"
+            },
+            "custom": {
+              "axisPlacement": "auto",
+              "fillOpacity": 100,
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineWidth": 0,
+              "spanNulls": false
+            },
+            "mappings": [
+              {
+                "options": {
+                  "0": {
+                    "color": "red",
+                    "index": 0,
+                    "text": "Disconnected"
+                  },
+                  "1": {
+                    "color": "green",
+                    "index": 1,
+                    "text": "Connected"
+                  }
+                },
+                "type": "value"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 25,
+          "w": 24,
+          "x": 0,
+          "y": 22
+        },
+        "id": 131,
+        "options": {
+          "alignValue": "center",
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "mergeValues": true,
+          "perPage": 50,
+          "rowHeight": 0.9,
+          "showValue": "auto",
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "max by (server, name) (\r\n  argocd_cluster_connection_status{cluster=~\"$argocd_instance\", server=~\"$cluster\"}\r\n  * on (cluster, server) group_left(name)\r\n  argocd_cluster_info{cluster=~\"$argocd_instance\", server=~\"$cluster\"}\r\n)",
+            "legendFormat": "{{name}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Managed cluster health",
+        "type": "state-timeline"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PA5392E10C0F059AB"
+        },
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "center",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "filterable": false,
+              "footer": {
+                "reducers": []
+              },
+              "inspect": false,
+              "wrapHeaderText": false,
+              "wrapText": false
+            },
+            "fieldMinMax": false,
+            "mappings": [
+              {
+                "options": {
+                  "0": {
+                    "color": "red",
+                    "index": 1,
+                    "text": "DOWN"
+                  },
+                  "1": {
+                    "color": "green",
+                    "index": 0,
+                    "text": "UP"
+                  }
+                },
+                "type": "value"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "K8s Version"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 415
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "server"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 626
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 18,
+          "w": 24,
+          "x": 0,
+          "y": 47
+        },
+        "id": 123,
+        "options": {
+          "cellHeight": "md",
+          "enablePagination": true,
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": false,
+              "displayName": "used"
+            }
+          ]
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "editorMode": "code",
+            "expr": "max by (server) (argocd_cluster_connection_status{cluster=~\"$argocd_instance\", server=~\"$cluster\"})",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "__auto",
+            "refId": "U"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "group by (server, name, k8s_version) (argocd_cluster_info{cluster=~\"$argocd_instance\", server=~\"$cluster\"})",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "A"
+          }
+        ],
+        "title": "ArgoCD Child Clusters List",
+        "transformations": [
+          {
+            "id": "joinByField",
+            "options": {
+              "byField": "server",
+              "mode": "outer"
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true,
+                "Time 3": true,
+                "Value #A": true,
+                "Value #R": false,
+                "wk": true,
+                "workload 2": true,
+                "workload 3": true,
+                "workload_kind 2": true,
+                "workload_kind 3": true
+              },
+              "includeByName": {},
+              "indexByName": {
+                "Time 1": 3,
+                "Time 2": 5,
+                "Value #A": 6,
+                "Value #U": 4,
+                "k8s_version": 1,
+                "name": 0,
+                "server": 2
+              },
+              "renameByName": {
+                "Value #L": "limits",
+                "Value #R": "request",
+                "Value #U": "used",
+                "k8s_version": "K8s Version"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      }
+    ],
+    "preload": false,
+    "refresh": "",
+    "schemaVersion": 42,
+    "tags": [
+      "argocd",
+      "iberdrola"
+    ],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "text": "Thanos Querier",
+            "value": "PA5392E10C0F059AB"
+          },
+          "includeAll": false,
+          "name": "datasource",
+          "options": [],
+          "query": "prometheus",
+          "refresh": 1,
+          "regex": "",
+          "type": "datasource"
+        },
+        {
+          "allowCustomValue": false,
+          "current": {
+            "text": "All",
+            "value": "$__all"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "definition": "label_values({cluster=~\"aks-kpescorpostarg-dev|aks-kpescorpostarg-pre|aks-kpescorpostarg-pro|aks-kpescorpostarl-dev|aks-kpesitmstarg-pro\"},cluster)",
+          "includeAll": true,
+          "name": "argocd_instance",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values({cluster=~\"aks-kpescorpostarg-dev|aks-kpescorpostarg-pre|aks-kpescorpostarg-pro|aks-kpescorpostarl-dev|aks-kpesitmstarg-pro\"},cluster)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "type": "query"
+        },
+        {
+          "allValue": ".*",
+          "current": {
+            "text": "All",
+            "value": "$__all"
+          },
+          "datasource": "$datasource",
+          "definition": "label_values(argocd_cluster_info{cluster=~\"$argocd_instance\"},server)",
+          "includeAll": true,
+          "multi": true,
+          "name": "cluster",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(argocd_cluster_info{cluster=~\"$argocd_instance\"},server)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "sort": 1,
+          "type": "query"
+        },
+        {
+          "baseFilters": [],
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PA5392E10C0F059AB"
+          },
+          "filters": [],
+          "name": "Filters",
+          "type": "adhoc"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-30m",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "ArgoCD Table",
+    "weekStart": ""
+  }
+}

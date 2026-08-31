@@ -1,5 +1,5 @@
 {
-  "apiVersion": "dashboard.grafana.app/v0alpha1",
+  "apiVersion": "dashboard.grafana.app/v1",
   "kind": "Dashboard",
   "metadata": {
     "annotations": {},
@@ -1423,6 +1423,7 @@
     },
     "timepicker": {},
     "timezone": "",
-    "title": "Kubernetes / System / API Server"
+    "title": "Kubernetes / System / API Server",
+    "weekStart": ""
   }
 }

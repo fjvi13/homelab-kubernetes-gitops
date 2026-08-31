@@ -30,10 +30,9 @@
         }
       ]
     },
-    "description": "Visualize OpenTelemetry (OTEL) collector metrics (tested with OTEL contrib v0.125.0)",
+    "description": "Visualize OpenTelemetry (OTEL) collector metrics",
     "editable": true,
     "fiscalYearStartMonth": 0,
-    "gnetId": 15983,
     "graphTooltip": 1,
     "links": [],
     "panels": [
@@ -85,6 +84,7 @@
                 "type": "linear"
               },
               "showPoints": "never",
+              "showValues": false,
               "spanNulls": true,
               "stacking": {
                 "group": "A",
@@ -101,7 +101,8 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "green"
+                  "color": "green",
+                  "value": 0
                 },
                 {
                   "color": "red",
@@ -158,7 +159,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "11.6.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -230,6 +231,7 @@
                 "type": "linear"
               },
               "showPoints": "never",
+              "showValues": false,
               "spanNulls": true,
               "stacking": {
                 "group": "A",
@@ -246,7 +248,8 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "green"
+                  "color": "green",
+                  "value": 0
                 },
                 {
                   "color": "red",
@@ -303,7 +306,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "11.6.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -375,6 +378,7 @@
                 "type": "linear"
               },
               "showPoints": "never",
+              "showValues": false,
               "spanNulls": true,
               "stacking": {
                 "group": "A",
@@ -391,7 +395,8 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "green"
+                  "color": "green",
+                  "value": 0
                 },
                 {
                   "color": "red",
@@ -448,7 +453,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "11.6.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -533,6 +538,7 @@
                 "type": "linear"
               },
               "showPoints": "never",
+              "showValues": false,
               "spanNulls": true,
               "stacking": {
                 "group": "A",
@@ -548,7 +554,8 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "green"
+                  "color": "green",
+                  "value": 0
                 },
                 {
                   "color": "red",
@@ -624,7 +631,7 @@
             "sort": "desc"
           }
         },
-        "pluginVersion": "11.6.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -696,6 +703,7 @@
                 "type": "linear"
               },
               "showPoints": "never",
+              "showValues": false,
               "spanNulls": true,
               "stacking": {
                 "group": "A",
@@ -711,7 +719,8 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "green"
+                  "color": "green",
+                  "value": 0
                 },
                 {
                   "color": "red",
@@ -787,7 +796,7 @@
             "sort": "desc"
           }
         },
-        "pluginVersion": "11.6.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -796,7 +805,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "sum(${metric:value}(otelcol_processor_incoming_items${suffix_total}{processor=~\"$processor\",job=\"$job\",\"otel${divider:raw}signal\"=\"metrics\"}[$__rate_interval])) by (processor $grouping)",
+            "expr": "sum(${metric:value}(otelcol_processor_incoming_items${suffix_total}{processor=~\"$processor\",job=\"$job\",\"otel_signal\"=\"metrics\"}[$__rate_interval])) by (processor $grouping)",
             "format": "time_series",
             "interval": "$minstep",
             "intervalFactor": 1,
@@ -811,7 +820,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "0-sum(${metric:value}(otelcol_processor_outgoing_items${suffix_total}{processor=~\"$processor\",job=\"$job\",\"otel${divider:raw}signal\"=\"metrics\"}[$__rate_interval])) by (processor $grouping)",
+            "expr": "0-sum(${metric:value}(otelcol_processor_outgoing_items${suffix_total}{processor=~\"$processor\",job=\"$job\",\"otel_signal\"=\"metrics\"}[$__rate_interval])) by (processor $grouping)",
             "format": "time_series",
             "hide": false,
             "interval": "$minstep",
@@ -859,6 +868,7 @@
                 "type": "linear"
               },
               "showPoints": "never",
+              "showValues": false,
               "spanNulls": true,
               "stacking": {
                 "group": "A",
@@ -874,7 +884,8 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "green"
+                  "color": "green",
+                  "value": 0
                 },
                 {
                   "color": "red",
@@ -950,7 +961,7 @@
             "sort": "desc"
           }
         },
-        "pluginVersion": "11.6.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -959,7 +970,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "sum(${metric:value}(otelcol_processor_incoming_items${suffix_total}{processor=~\"$processor\",job=\"$job\",\"otel${divider:raw}signal\"=\"logs\"}[$__rate_interval])) by (processor $grouping)",
+            "expr": "sum(${metric:value}(otelcol_processor_incoming_items${suffix_total}{processor=~\"$processor\",job=\"$job\",\"otel_signal\"=\"logs\"}[$__rate_interval])) by (processor $grouping)",
             "format": "time_series",
             "interval": "$minstep",
             "intervalFactor": 1,
@@ -1022,6 +1033,7 @@
                 "type": "linear"
               },
               "showPoints": "never",
+              "showValues": false,
               "spanNulls": true,
               "stacking": {
                 "group": "A",
@@ -1038,7 +1050,8 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "green"
+                  "color": "green",
+                  "value": 0
                 },
                 {
                   "color": "red",
@@ -1114,7 +1127,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "11.6.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -1202,6 +1215,7 @@
                 "type": "linear"
               },
               "showPoints": "never",
+              "showValues": false,
               "spanNulls": true,
               "stacking": {
                 "group": "A",
@@ -1218,7 +1232,8 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "green"
+                  "color": "green",
+                  "value": 0
                 },
                 {
                   "color": "red",
@@ -1294,7 +1309,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "11.6.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -1382,6 +1397,7 @@
                 "type": "linear"
               },
               "showPoints": "never",
+              "showValues": false,
               "spanNulls": true,
               "stacking": {
                 "group": "A",
@@ -1398,7 +1414,8 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "green"
+                  "color": "green",
+                  "value": 0
                 },
                 {
                   "color": "red",
@@ -1474,7 +1491,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "11.6.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -1592,7 +1609,7 @@
             "reverse": false
           }
         },
-        "pluginVersion": "11.6.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -1649,6 +1666,7 @@
                 "type": "linear"
               },
               "showPoints": "never",
+              "showValues": false,
               "spanNulls": true,
               "stacking": {
                 "group": "A",
@@ -1665,7 +1683,8 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "green"
+                  "color": "green",
+                  "value": 0
                 },
                 {
                   "color": "red",
@@ -1715,7 +1734,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "11.6.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -1724,13 +1743,13 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "sum(${metric:value}(otelcol_processor_batch_batch_send_size_count{processor=~\"$processor\",job=\"$job\"}[$__rate_interval])) by (processor $grouping)",
+            "expr": "sum(${metric:value}(otelcol_processor_batch_batch_send_size_count{processor=~\"$processor\",job=\"$job\"}[$__rate_interval])) by (processor $grouping, service)",
             "format": "time_series",
             "hide": false,
             "instant": false,
             "interval": "$minstep",
             "intervalFactor": 1,
-            "legendFormat": "Batch send size count: {{processor}} {{service_instance_id}}{{service.instance.id}}",
+            "legendFormat": "Batch send size count: {{processor}} {{service}}",
             "refId": "B"
           },
           {
@@ -1740,13 +1759,13 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "sum(${metric:value}(otelcol_processor_batch_batch_send_size_sum{processor=~\"$processor\",job=\"$job\"}[$__rate_interval])) by (processor $grouping)",
+            "expr": "sum(${metric:value}(otelcol_processor_batch_batch_send_size_sum{processor=~\"$processor\",job=\"$job\"}[$__rate_interval])) by (processor $grouping, service)",
             "format": "time_series",
             "hide": false,
             "instant": false,
             "interval": "$minstep",
             "intervalFactor": 1,
-            "legendFormat": "Batch send size sum: {{processor}} {{service_instance_id}}{{service.instance.id}}",
+            "legendFormat": "Batch send size sum: {{processor}} {{service}}",
             "refId": "A"
           }
         ],
@@ -1788,6 +1807,7 @@
                 "type": "linear"
               },
               "showPoints": "never",
+              "showValues": false,
               "spanNulls": true,
               "stacking": {
                 "group": "A",
@@ -1804,7 +1824,8 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "green"
+                  "color": "green",
+                  "value": 0
                 },
                 {
                   "color": "red",
@@ -1854,7 +1875,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "11.6.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -1863,13 +1884,13 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "sum(${metric:value}(otelcol_processor_batch_batch_size_trigger_send${suffix_total}{processor=~\"$processor\",job=\"$job\"}[$__rate_interval])) by (processor $grouping)",
+            "expr": "sum(${metric:value}(otelcol_processor_batch_batch_size_trigger_send${suffix_total}{processor=~\"$processor\",job=\"$job\"}[$__rate_interval])) by (processor $grouping, service)",
             "format": "time_series",
             "hide": false,
             "instant": false,
             "interval": "$minstep",
             "intervalFactor": 1,
-            "legendFormat": "Batch sent due to a size trigger: {{processor}}",
+            "legendFormat": "Batch sent due to a size trigger: {{processor}} {{service}}",
             "refId": "B"
           },
           {
@@ -1879,13 +1900,13 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "sum(${metric:value}(otelcol_processor_batch_timeout_trigger_send${suffix_total}{processor=~\"$processor\",job=\"$job\"}[$__rate_interval])) by (processor $grouping)",
+            "expr": "sum(${metric:value}(otelcol_processor_batch_timeout_trigger_send${suffix_total}{processor=~\"$processor\",job=\"$job\"}[$__rate_interval])) by (processor $grouping,service)",
             "format": "time_series",
             "hide": false,
             "instant": false,
             "interval": "$minstep",
             "intervalFactor": 1,
-            "legendFormat": "Batch sent due to a timeout trigger: {{processor}} {{service_instance_id}}{{service.instance.id}}",
+            "legendFormat": "Batch sent due to a timeout trigger: {{processor}} {{service}}",
             "refId": "A"
           }
         ],
@@ -1940,6 +1961,7 @@
                 "type": "linear"
               },
               "showPoints": "never",
+              "showValues": false,
               "spanNulls": true,
               "stacking": {
                 "group": "A",
@@ -1956,7 +1978,8 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "green"
+                  "color": "green",
+                  "value": 0
                 },
                 {
                   "color": "red",
@@ -2013,7 +2036,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "11.6.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -2101,6 +2124,7 @@
                 "type": "linear"
               },
               "showPoints": "never",
+              "showValues": false,
               "spanNulls": true,
               "stacking": {
                 "group": "A",
@@ -2117,7 +2141,8 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "green"
+                  "color": "green",
+                  "value": 0
                 },
                 {
                   "color": "red",
@@ -2174,7 +2199,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "11.6.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -2262,6 +2287,7 @@
                 "type": "linear"
               },
               "showPoints": "never",
+              "showValues": false,
               "spanNulls": true,
               "stacking": {
                 "group": "A",
@@ -2278,7 +2304,8 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "green"
+                  "color": "green",
+                  "value": 0
                 },
                 {
                   "color": "red",
@@ -2335,7 +2362,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "11.6.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -2423,6 +2450,7 @@
                 "type": "linear"
               },
               "showPoints": "never",
+              "showValues": false,
               "spanNulls": true,
               "stacking": {
                 "group": "A",
@@ -2438,7 +2466,8 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "green"
+                  "color": "green",
+                  "value": 0
                 },
                 {
                   "color": "red",
@@ -2474,7 +2503,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "11.6.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -2530,6 +2559,7 @@
                 "type": "linear"
               },
               "showPoints": "never",
+              "showValues": false,
               "spanNulls": true,
               "stacking": {
                 "group": "A",
@@ -2545,7 +2575,8 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "green"
+                  "color": "green",
+                  "value": 0
                 },
                 {
                   "color": "red",
@@ -2581,7 +2612,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "11.6.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -2637,6 +2668,7 @@
                 "type": "linear"
               },
               "showPoints": "never",
+              "showValues": false,
               "spanNulls": true,
               "stacking": {
                 "group": "A",
@@ -2653,7 +2685,8 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "green"
+                  "color": "green",
+                  "value": 0
                 },
                 {
                   "color": "red",
@@ -2689,7 +2722,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "11.6.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -2758,6 +2791,7 @@
                 "type": "linear"
               },
               "showPoints": "never",
+              "showValues": false,
               "spanNulls": true,
               "stacking": {
                 "group": "A",
@@ -2774,7 +2808,8 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "green"
+                  "color": "green",
+                  "value": 0
                 },
                 {
                   "color": "red",
@@ -2881,7 +2916,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "11.6.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -2969,6 +3004,7 @@
                 "type": "linear"
               },
               "showPoints": "never",
+              "showValues": false,
               "spanNulls": true,
               "stacking": {
                 "group": "A",
@@ -2985,7 +3021,8 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "green"
+                  "color": "green",
+                  "value": 0
                 },
                 {
                   "color": "red",
@@ -3092,7 +3129,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "11.6.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -3180,6 +3217,7 @@
                 "type": "linear"
               },
               "showPoints": "never",
+              "showValues": false,
               "spanNulls": true,
               "stacking": {
                 "group": "A",
@@ -3196,7 +3234,8 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "green"
+                  "color": "green",
+                  "value": 0
                 },
                 {
                   "color": "red",
@@ -3303,7 +3342,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "11.6.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -3391,6 +3430,7 @@
                 "type": "linear"
               },
               "showPoints": "never",
+              "showValues": false,
               "spanNulls": true,
               "stacking": {
                 "group": "A",
@@ -3407,7 +3447,8 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "green"
+                  "color": "green",
+                  "value": 0
                 },
                 {
                   "color": "red",
@@ -3510,7 +3551,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "11.6.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -3599,6 +3640,7 @@
                 "type": "linear"
               },
               "showPoints": "never",
+              "showValues": false,
               "spanNulls": true,
               "stacking": {
                 "group": "A",
@@ -3616,7 +3658,8 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "green"
+                  "color": "green",
+                  "value": 0
                 },
                 {
                   "color": "red",
@@ -3653,7 +3696,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "11.6.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -3710,6 +3753,7 @@
                 "type": "linear"
               },
               "showPoints": "never",
+              "showValues": false,
               "spanNulls": true,
               "stacking": {
                 "group": "A",
@@ -3726,7 +3770,8 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "green"
+                  "color": "green",
+                  "value": 0
                 },
                 {
                   "color": "red",
@@ -3763,7 +3808,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "11.6.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -3801,6 +3846,9 @@
               "cellOptions": {
                 "type": "auto"
               },
+              "footer": {
+                "reducers": []
+              },
               "inspect": false
             },
             "links": [],
@@ -3810,7 +3858,8 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "green"
+                  "color": "green",
+                  "value": 0
                 },
                 {
                   "color": "red",
@@ -3832,17 +3881,9 @@
         "interval": "$minstep",
         "options": {
           "cellHeight": "sm",
-          "footer": {
-            "countRows": false,
-            "fields": "",
-            "reducer": [
-              "sum"
-            ],
-            "show": false
-          },
           "showHeader": true
         },
-        "pluginVersion": "11.6.1",
+        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
@@ -3851,7 +3892,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "max(otelcol_process_uptime${suffix_seconds}${suffix_total}{\"service${divider:raw}instance${divider:raw}id\"=~\".*\",job=\"$job\",\"service${divider:raw}version\"=\".+\"}) by (\"service${divider:raw}instance${divider:raw}id\",\"service${divider:raw}name\",\"service${divider:raw}version\")\r\nor\r\nmax(\r\n  otelcol_process_uptime${suffix_seconds}${suffix_total}{\"service${divider:raw}instance${divider:raw}id\"=~\".*\",job=\"$job\"} \r\n  * on(job, instance) \r\n  group_left(\"service${divider:raw}version\") \r\n  (\r\n    target_info \r\n    * on(job, instance) \r\n    group_left \r\n    label_replace(target_info{}, \"service${divider:raw}instance${divider:raw}id\", \"$1\", \"instance\", \"(.*)\")\r\n  )\r\n) by (\"service${divider:raw}instance${divider:raw}id\", \"service${divider:raw}name\", \"service${divider:raw}version\")",
+            "expr": "max(otelcol_process_uptime${suffix_seconds}${suffix_total}{\"service_instance_id\"=~\".*\",job=\"$job\",\"service_version\"=\".+\"}) by (\"service_instance_id\",\"service_name\",\"service_version\")\r\nor\r\nmax(\r\n  otelcol_process_uptime${suffix_seconds}${suffix_total}{\"service_instance_id\"=~\".*\",job=\"$job\"} \r\n  * on(job, instance) \r\n  group_left(\"service_version\") \r\n  (\r\n    target_info \r\n    * on(job, instance) \r\n    group_left \r\n    label_replace(target_info{}, \"service_instance_id\", \"$1\", \"instance\", \"(.*)\")\r\n  )\r\n) by (\"service_instance_id\", \"pod\", \"service_name\", \"service_version\")",
             "format": "table",
             "hide": false,
             "instant": true,
@@ -3877,2123 +3918,21 @@
           }
         ],
         "type": "table"
-      },
-      {
-        "collapsed": false,
-        "gridPos": {
-          "h": 1,
-          "w": 24,
-          "x": 0,
-          "y": 77
-        },
-        "id": 59,
-        "panels": [],
-        "title": "Signal flows",
-        "type": "row"
-      },
-      {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "$datasource"
-        },
-        "description": "Receivers -\u003e Processor(s) -\u003e Exporters (Node Graph panel is beta, so this panel may not show data correctly).",
-        "gridPos": {
-          "h": 9,
-          "w": 8,
-          "x": 0,
-          "y": 78
-        },
-        "id": 58,
-        "options": {
-          "edges": {},
-          "nodes": {
-            "mainStatUnit": "flops"
-          },
-          "zoomMode": "cooperative"
-        },
-        "pluginVersion": "11.6.1",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "$datasource"
-            },
-            "editorMode": "code",
-            "exemplar": false,
-            "expr": "# receivers\nlabel_replace(\n  label_join(\n    label_join(\n      sum(${metric:value}(\n        otelcol_receiver_accepted_spans${suffix_total}{job=\"$job\"}[$__rate_interval])\n      ) by (receiver)\n      , \"id\", \"-rcv-\", \"transport\", \"receiver\"\n    )\n    , \"title\", \"\", \"transport\", \"receiver\"\n  )\n  , \"icon\", \"arrow-to-right\", \"\", \"\"\n)\n\n# dummy processor\nor\nlabel_replace(\n  label_replace(\n    label_replace(\n      (sum(rate(otelcol_process_uptime${suffix_seconds}${suffix_total}{job=\"$job\"}[$__rate_interval])))\n      , \"id\", \"processor\", \"\", \"\"\n    )\n    , \"title\", \"Processor(s)\", \"\", \"\"\n  )\n  , \"icon\", \"arrow-random\", \"\", \"\"\n)\n\n# exporters\nor\nlabel_replace(\n  label_join(\n    label_join(\n      sum(${metric:value}(\n        otelcol_exporter_sent_spans${suffix_total}{job=\"$job\"}[$__rate_interval])\n      ) by (exporter)\n      , \"id\", \"-exp-\", \"transport\", \"exporter\"\n    )\n    , \"title\", \"\", \"transport\", \"exporter\"\n  )\n  , \"icon\", \"arrow-from-right\", \"\", \"\"\n)",
-            "format": "table",
-            "hide": false,
-            "instant": true,
-            "legendFormat": "__auto",
-            "range": false,
-            "refId": "nodes"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "$datasource"
-            },
-            "editorMode": "code",
-            "exemplar": false,
-            "expr": "# receivers -\u003e processor\r\nlabel_join(\r\n    label_replace(\r\n        label_join(\r\n            (sum(rate(otelcol_receiver_accepted_spans${suffix_total}{job=\"$job\"}[$__rate_interval])) by (receiver))\r\n            ,\"source\", \"-rcv-\", \"transport\", \"receiver\"\r\n        )\r\n        ,\"target\", \"processor\", \"\", \"\"\r\n    )\r\n    , \"id\", \"-\", \"source\", \"target\"\r\n)\r\n\r\n# processor -\u003e exporters\r\nor\r\nlabel_join(\r\n    label_replace(\r\n        label_join(\r\n            (sum(rate(otelcol_exporter_sent_spans${suffix_total}{job=\"$job\"}[$__rate_interval])) by (exporter))\r\n            , \"target\", \"-exp-\", \"transport\", \"exporter\"\r\n        )\r\n        , \"source\", \"processor\", \"\", \"\"\r\n    )\r\n    , \"id\", \"-\", \"source\", \"target\"\r\n)",
-            "format": "table",
-            "hide": false,
-            "instant": true,
-            "legendFormat": "__auto",
-            "range": false,
-            "refId": "edges"
-          }
-        ],
-        "title": "Spans Flow",
-        "transformations": [
-          {
-            "id": "renameByRegex",
-            "options": {
-              "regex": "Value",
-              "renamePattern": "mainstat"
-            }
-          },
-          {
-            "disabled": true,
-            "id": "calculateField",
-            "options": {
-              "alias": "secondarystat",
-              "mode": "reduceRow",
-              "reduce": {
-                "include": [
-                  "mainstat"
-                ],
-                "reducer": "sum"
-              }
-            }
-          }
-        ],
-        "type": "nodeGraph"
-      },
-      {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "$datasource"
-        },
-        "description": "Receivers -\u003e Processor(s) -\u003e Exporters (Node Graph panel is beta, so this panel may not show data correctly).",
-        "gridPos": {
-          "h": 9,
-          "w": 8,
-          "x": 8,
-          "y": 78
-        },
-        "id": 60,
-        "options": {
-          "edges": {},
-          "nodes": {
-            "mainStatUnit": "none"
-          },
-          "zoomMode": "cooperative"
-        },
-        "pluginVersion": "11.6.1",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "$datasource"
-            },
-            "editorMode": "code",
-            "exemplar": false,
-            "expr": "# receivers\nlabel_replace(\n  label_join(\n    label_join(\n      (sum(\n        ${metric:value}(otelcol_receiver_accepted_metric_points${suffix_total}{job=\"$job\"}[$__rate_interval])\n      ) by (receiver))\n      , \"id\", \"-rcv-\", \"transport\", \"receiver\"\n    )\n    , \"title\", \"\", \"transport\", \"receiver\"\n  )\n  , \"icon\", \"arrow-to-right\", \"\", \"\"\n)\n\n# dummy processor\nor\nlabel_replace(\n  label_replace(\n    label_replace(\n      (sum(rate(otelcol_process_uptime${suffix_seconds}${suffix_total}{job=\"$job\"}[$__rate_interval])))\n      , \"id\", \"processor\", \"\", \"\"\n    )\n    , \"title\", \"Processor(s)\", \"\", \"\"\n  )\n  , \"icon\", \"arrow-random\", \"\", \"\"\n)\n\n# exporters\nor\nlabel_replace(\n  label_join(\n    label_join(\n      (sum(\n        ${metric:value}(otelcol_exporter_sent_metric_points${suffix_total}{job=\"$job\"}[$__rate_interval])\n      ) by (exporter))\n      , \"id\", \"-exp-\", \"transport\", \"exporter\"\n    )\n    , \"title\", \"\", \"transport\", \"exporter\"\n  )\n  , \"icon\", \"arrow-from-right\", \"\", \"\"\n)",
-            "format": "table",
-            "hide": false,
-            "instant": true,
-            "legendFormat": "__auto",
-            "range": false,
-            "refId": "nodes"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "$datasource"
-            },
-            "editorMode": "code",
-            "exemplar": false,
-            "expr": "# receivers -\u003e processor\r\nlabel_join(\r\n    label_replace(\r\n        label_join(\r\n            (sum(rate(otelcol_receiver_accepted_metric_points${suffix_total}{job=\"$job\"}[$__rate_interval])) by (receiver))\r\n            , \"source\", \"-rcv-\", \"transport\", \"receiver\"\r\n        )\r\n        , \"target\", \"processor\", \"\", \"\"\r\n    )\r\n    , \"id\", \"-\", \"source\", \"target\"\r\n)\r\n\r\n# processor -\u003e exporters\r\nor \r\nlabel_join(\r\n    label_replace(\r\n        label_join(\r\n            (sum(rate(otelcol_exporter_sent_metric_points${suffix_total}{job=\"$job\"}[$__rate_interval])) by (exporter))\r\n            , \"target\", \"-exp-\", \"transport\", \"exporter\"\r\n        )\r\n        , \"source\", \"processor\", \"\", \"\"\r\n    )\r\n    , \"id\", \"-\", \"source\", \"target\"\r\n)",
-            "format": "table",
-            "hide": false,
-            "instant": true,
-            "legendFormat": "__auto",
-            "range": false,
-            "refId": "edges"
-          }
-        ],
-        "title": "Metric Points Flow",
-        "transformations": [
-          {
-            "id": "renameByRegex",
-            "options": {
-              "regex": "Value",
-              "renamePattern": "mainstat"
-            }
-          },
-          {
-            "disabled": true,
-            "id": "calculateField",
-            "options": {
-              "alias": "secondarystat",
-              "mode": "reduceRow",
-              "reduce": {
-                "include": [
-                  "Value #nodes"
-                ],
-                "reducer": "sum"
-              }
-            }
-          }
-        ],
-        "type": "nodeGraph"
-      },
-      {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "$datasource"
-        },
-        "description": "Receivers -\u003e Processor(s) -\u003e Exporters (Node Graph panel is beta, so this panel may not show data correctly).",
-        "gridPos": {
-          "h": 9,
-          "w": 8,
-          "x": 16,
-          "y": 78
-        },
-        "id": 61,
-        "options": {
-          "edges": {},
-          "nodes": {
-            "mainStatUnit": "flops"
-          },
-          "zoomMode": "cooperative"
-        },
-        "pluginVersion": "11.6.1",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "$datasource"
-            },
-            "editorMode": "code",
-            "exemplar": false,
-            "expr": "# receivers\nlabel_replace(\n  label_join(\n    label_join(\n      sum(${metric:value}(\n        otelcol_receiver_accepted_log_records${suffix_total}{job=\"$job\"}[$__rate_interval])\n      ) by (receiver)\n      , \"id\", \"-rcv-\", \"transport\", \"receiver\"\n    )\n    , \"title\", \"\", \"transport\", \"receiver\"\n  )\n  , \"icon\", \"arrow-to-right\", \"\", \"\"\n)\n\n# dummy processor\nor\nlabel_replace(\n  label_replace(\n    label_replace(\n      (sum(rate(otelcol_process_uptime${suffix_seconds}${suffix_total}{job=\"$job\"}[$__rate_interval])))\n      , \"id\", \"processor\", \"\", \"\"\n    )\n    , \"title\", \"Processor(s)\", \"\", \"\"\n  )\n  , \"icon\", \"arrow-random\", \"\", \"\"\n)\n\n# exporters\nor\nlabel_replace(\n  label_join(\n    label_join(\n      sum(${metric:value}(\n        otelcol_exporter_sent_log_records${suffix_total}{job=\"$job\"}[$__rate_interval])\n      ) by (exporter)\n      , \"id\", \"-exp-\", \"transport\", \"exporter\"\n    )\n    , \"title\", \"\", \"transport\", \"exporter\"\n  )\n  , \"icon\", \"arrow-from-right\", \"\", \"\"\n)",
-            "format": "table",
-            "hide": false,
-            "instant": true,
-            "legendFormat": "__auto",
-            "range": false,
-            "refId": "nodes"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "$datasource"
-            },
-            "editorMode": "code",
-            "exemplar": false,
-            "expr": "# receivers -\u003e processor\r\nlabel_join(\r\n    label_replace(\r\n        label_join(\r\n            (sum(rate(otelcol_receiver_accepted_log_records${suffix_total}{job=\"$job\"}[$__rate_interval])) by (receiver))\r\n            , \"source\", \"-rcv-\", \"transport\", \"receiver\"\r\n        )\r\n        , \"target\", \"processor\", \"\", \"\"\r\n    )\r\n    , \"id\", \"-edg-\", \"source\", \"target\"\r\n)\r\n\r\n# processor -\u003e exporters\r\nor \r\nlabel_join(\r\n    label_replace(\r\n        label_join(\r\n            (sum(rate(otelcol_exporter_sent_log_records${suffix_total}{job=\"$job\"}[$__rate_interval])) by (exporter))\r\n            ,\"target\",\"-exp-\",\"transport\",\"exporter\"\r\n        )\r\n        ,\"source\",\"processor\",\"\",\"\"\r\n    )\r\n    ,\"id\",\"-edg-\",\"source\",\"target\"\r\n)",
-            "format": "table",
-            "hide": false,
-            "instant": true,
-            "legendFormat": "__auto",
-            "range": false,
-            "refId": "edges"
-          }
-        ],
-        "title": "Log Records Flow",
-        "transformations": [
-          {
-            "id": "renameByRegex",
-            "options": {
-              "regex": "Value",
-              "renamePattern": "mainstat"
-            }
-          },
-          {
-            "disabled": true,
-            "id": "calculateField",
-            "options": {
-              "alias": "secondarystat",
-              "mode": "reduceRow",
-              "reduce": {
-                "include": [
-                  "mainstat"
-                ],
-                "reducer": "sum"
-              }
-            }
-          }
-        ],
-        "type": "nodeGraph"
-      },
-      {
-        "collapsed": true,
-        "gridPos": {
-          "h": 1,
-          "w": 24,
-          "x": 0,
-          "y": 87
-        },
-        "id": 79,
-        "panels": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "$datasource"
-            },
-            "description": "",
-            "fieldConfig": {
-              "defaults": {
-                "color": {
-                  "mode": "palette-classic"
-                },
-                "custom": {
-                  "axisBorderShow": false,
-                  "axisCenteredZero": false,
-                  "axisColorMode": "text",
-                  "axisLabel": "",
-                  "axisPlacement": "auto",
-                  "barAlignment": 0,
-                  "barWidthFactor": 0.6,
-                  "drawStyle": "line",
-                  "fillOpacity": 0,
-                  "gradientMode": "none",
-                  "hideFrom": {
-                    "legend": false,
-                    "tooltip": false,
-                    "viz": false
-                  },
-                  "insertNulls": false,
-                  "lineInterpolation": "linear",
-                  "lineWidth": 1,
-                  "pointSize": 5,
-                  "scaleDistribution": {
-                    "type": "linear"
-                  },
-                  "showPoints": "never",
-                  "spanNulls": true,
-                  "stacking": {
-                    "group": "A",
-                    "mode": "none"
-                  },
-                  "thresholdsStyle": {
-                    "mode": "off"
-                  }
-                },
-                "links": [],
-                "mappings": [],
-                "min": 0,
-                "thresholds": {
-                  "mode": "absolute",
-                  "steps": [
-                    {
-                      "color": "green"
-                    },
-                    {
-                      "color": "red",
-                      "value": 80
-                    }
-                  ]
-                },
-                "unit": "short"
-              },
-              "overrides": []
-            },
-            "gridPos": {
-              "h": 8,
-              "w": 8,
-              "x": 0,
-              "y": 88
-            },
-            "id": 32,
-            "interval": "$minstep",
-            "options": {
-              "legend": {
-                "calcs": [
-                  "min",
-                  "max",
-                  "mean"
-                ],
-                "displayMode": "table",
-                "placement": "bottom",
-                "showLegend": true
-              },
-              "tooltip": {
-                "hideZeros": false,
-                "mode": "multi",
-                "sort": "none"
-              }
-            },
-            "pluginVersion": "11.6.1",
-            "targets": [
-              {
-                "datasource": {
-                  "type": "prometheus",
-                  "uid": "$datasource"
-                },
-                "editorMode": "code",
-                "exemplar": false,
-                "expr": "sum(${metric:value}(otelcol_processor_filter_spans_filtered${suffix_total}{job=\"$job\"}[$__rate_interval])) by (filter $grouping)",
-                "format": "time_series",
-                "interval": "$minstep",
-                "intervalFactor": 1,
-                "legendFormat": "Filtered: {{filter}} {{transport}} {{service_instance_id}}{{service.instance.id}}",
-                "range": true,
-                "refId": "A"
-              }
-            ],
-            "title": "Spans ${metric:text}",
-            "type": "timeseries"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "$datasource"
-            },
-            "description": "",
-            "fieldConfig": {
-              "defaults": {
-                "color": {
-                  "mode": "palette-classic"
-                },
-                "custom": {
-                  "axisBorderShow": false,
-                  "axisCenteredZero": false,
-                  "axisColorMode": "text",
-                  "axisLabel": "",
-                  "axisPlacement": "auto",
-                  "barAlignment": 0,
-                  "barWidthFactor": 0.6,
-                  "drawStyle": "line",
-                  "fillOpacity": 0,
-                  "gradientMode": "none",
-                  "hideFrom": {
-                    "legend": false,
-                    "tooltip": false,
-                    "viz": false
-                  },
-                  "insertNulls": false,
-                  "lineInterpolation": "linear",
-                  "lineWidth": 1,
-                  "pointSize": 5,
-                  "scaleDistribution": {
-                    "type": "linear"
-                  },
-                  "showPoints": "never",
-                  "spanNulls": true,
-                  "stacking": {
-                    "group": "A",
-                    "mode": "none"
-                  },
-                  "thresholdsStyle": {
-                    "mode": "off"
-                  }
-                },
-                "links": [],
-                "mappings": [],
-                "min": 0,
-                "thresholds": {
-                  "mode": "absolute",
-                  "steps": [
-                    {
-                      "color": "green"
-                    },
-                    {
-                      "color": "red",
-                      "value": 80
-                    }
-                  ]
-                },
-                "unit": "short"
-              },
-              "overrides": []
-            },
-            "gridPos": {
-              "h": 8,
-              "w": 8,
-              "x": 8,
-              "y": 88
-            },
-            "id": 81,
-            "interval": "$minstep",
-            "options": {
-              "legend": {
-                "calcs": [
-                  "min",
-                  "max",
-                  "mean"
-                ],
-                "displayMode": "table",
-                "placement": "bottom",
-                "showLegend": true
-              },
-              "tooltip": {
-                "hideZeros": false,
-                "mode": "multi",
-                "sort": "none"
-              }
-            },
-            "pluginVersion": "11.6.1",
-            "targets": [
-              {
-                "datasource": {
-                  "type": "prometheus",
-                  "uid": "$datasource"
-                },
-                "editorMode": "code",
-                "exemplar": false,
-                "expr": "sum(${metric:value}(otelcol_processor_filter_datapoints_filtered${suffix_total}{job=\"$job\"}[$__rate_interval])) by (filter $grouping)",
-                "format": "time_series",
-                "interval": "$minstep",
-                "intervalFactor": 1,
-                "legendFormat": "Filtered: {{filter}} {{transport}} {{service_instance_id}}{{service.instance.id}}",
-                "range": true,
-                "refId": "A"
-              }
-            ],
-            "title": "Metric Points ${metric:text}",
-            "type": "timeseries"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "$datasource"
-            },
-            "description": "",
-            "fieldConfig": {
-              "defaults": {
-                "color": {
-                  "mode": "palette-classic"
-                },
-                "custom": {
-                  "axisBorderShow": false,
-                  "axisCenteredZero": false,
-                  "axisColorMode": "text",
-                  "axisLabel": "",
-                  "axisPlacement": "auto",
-                  "barAlignment": 0,
-                  "barWidthFactor": 0.6,
-                  "drawStyle": "line",
-                  "fillOpacity": 0,
-                  "gradientMode": "none",
-                  "hideFrom": {
-                    "legend": false,
-                    "tooltip": false,
-                    "viz": false
-                  },
-                  "insertNulls": false,
-                  "lineInterpolation": "linear",
-                  "lineWidth": 1,
-                  "pointSize": 5,
-                  "scaleDistribution": {
-                    "type": "linear"
-                  },
-                  "showPoints": "never",
-                  "spanNulls": true,
-                  "stacking": {
-                    "group": "A",
-                    "mode": "none"
-                  },
-                  "thresholdsStyle": {
-                    "mode": "off"
-                  }
-                },
-                "links": [],
-                "mappings": [],
-                "min": 0,
-                "thresholds": {
-                  "mode": "absolute",
-                  "steps": [
-                    {
-                      "color": "green"
-                    },
-                    {
-                      "color": "red",
-                      "value": 80
-                    }
-                  ]
-                },
-                "unit": "short"
-              },
-              "overrides": []
-            },
-            "gridPos": {
-              "h": 8,
-              "w": 8,
-              "x": 16,
-              "y": 88
-            },
-            "id": 82,
-            "interval": "$minstep",
-            "options": {
-              "legend": {
-                "calcs": [
-                  "min",
-                  "max",
-                  "mean"
-                ],
-                "displayMode": "table",
-                "placement": "bottom",
-                "showLegend": true
-              },
-              "tooltip": {
-                "hideZeros": false,
-                "mode": "multi",
-                "sort": "none"
-              }
-            },
-            "pluginVersion": "11.6.1",
-            "targets": [
-              {
-                "datasource": {
-                  "type": "prometheus",
-                  "uid": "$datasource"
-                },
-                "editorMode": "code",
-                "exemplar": false,
-                "expr": "sum(${metric:value}(otelcol_processor_filter_log_records_filtered${suffix_total}{job=\"$job\"}[$__rate_interval])) by (filter $grouping)",
-                "format": "time_series",
-                "interval": "$minstep",
-                "intervalFactor": 1,
-                "legendFormat": "Filtered: {{filter}} {{transport}} {{service_instance_id}}{{service.instance.id}}",
-                "range": true,
-                "refId": "A"
-              }
-            ],
-            "title": "Log Records ${metric:text}",
-            "type": "timeseries"
-          }
-        ],
-        "title": "Filter processors",
-        "type": "row"
-      },
-      {
-        "collapsed": true,
-        "gridPos": {
-          "h": 1,
-          "w": 24,
-          "x": 0,
-          "y": 88
-        },
-        "id": 68,
-        "panels": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "$datasource"
-            },
-            "description": "Measures the number of messages received per RPC. Should be 1 for all non-streaming RPCs. GRPC status codes: https://grpc.github.io/grpc/core/md_doc_statuscodes.html",
-            "fieldConfig": {
-              "defaults": {
-                "color": {
-                  "mode": "palette-classic"
-                },
-                "custom": {
-                  "axisBorderShow": false,
-                  "axisCenteredZero": false,
-                  "axisColorMode": "text",
-                  "axisLabel": "",
-                  "axisPlacement": "auto",
-                  "barAlignment": 0,
-                  "barWidthFactor": 0.6,
-                  "drawStyle": "line",
-                  "fillOpacity": 0,
-                  "gradientMode": "none",
-                  "hideFrom": {
-                    "legend": false,
-                    "tooltip": false,
-                    "viz": false
-                  },
-                  "insertNulls": false,
-                  "lineInterpolation": "linear",
-                  "lineWidth": 1,
-                  "pointSize": 5,
-                  "scaleDistribution": {
-                    "type": "linear"
-                  },
-                  "showPoints": "never",
-                  "spanNulls": true,
-                  "stacking": {
-                    "group": "A",
-                    "mode": "none"
-                  },
-                  "thresholdsStyle": {
-                    "mode": "off"
-                  }
-                },
-                "mappings": [],
-                "thresholds": {
-                  "mode": "absolute",
-                  "steps": [
-                    {
-                      "color": "green"
-                    },
-                    {
-                      "color": "red",
-                      "value": 80
-                    }
-                  ]
-                }
-              },
-              "overrides": [
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "0"
-                  },
-                  "properties": [
-                    {
-                      "id": "custom.axisPlacement",
-                      "value": "right"
-                    },
-                    {
-                      "id": "displayName",
-                      "value": "0 - OK"
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "1"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "1 - CANCELLED"
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "2"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "2 - UNKNOWN"
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "3"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "3 - INVALID_ARGUMENT"
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "4"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "4 - DEADLINE_EXCEEDED"
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "5"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "5 - NOT_FOUND"
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "6"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "6 - ALREADY_EXISTS"
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "7"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "7 - PERMISSION_DENIED"
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "8"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "8 - RESOURCE_EXHAUSTED"
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "9"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "9 - FAILED_PRECONDITION"
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "10"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "10 - ABORTED"
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "11"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "11 - OUT_OF_RANGE"
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "12"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "12 - UNIMPLEMENTED"
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "13"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "13 - INTERNAL"
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "14"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "14 - UNAVAILABLE"
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "15"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "15 - DATA_LOSS"
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "16"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "16 - UNAUTHENTICATED"
-                    }
-                  ]
-                }
-              ]
-            },
-            "gridPos": {
-              "h": 9,
-              "w": 12,
-              "x": 0,
-              "y": 89
-            },
-            "id": 69,
-            "interval": "$minstep",
-            "options": {
-              "legend": {
-                "calcs": [
-                  "min",
-                  "max",
-                  "mean"
-                ],
-                "displayMode": "table",
-                "placement": "bottom",
-                "showLegend": true
-              },
-              "tooltip": {
-                "hideZeros": false,
-                "mode": "multi",
-                "sort": "none"
-              }
-            },
-            "pluginVersion": "11.6.1",
-            "targets": [
-              {
-                "datasource": {
-                  "type": "prometheus",
-                  "uid": "$datasource"
-                },
-                "editorMode": "code",
-                "expr": "sum by(rpc_grpc_status_code) (${metric:value}(${prefix:raw}rpc_server_responses_per_rpc_count{job=\"$job\"}[$__rate_interval]))",
-                "instant": false,
-                "legendFormat": "__auto",
-                "range": true,
-                "refId": "A"
-              }
-            ],
-            "title": "RPC server responses by GRPC status code (receivers)",
-            "type": "timeseries"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "$datasource"
-            },
-            "description": "Measures the number of messages received per RPC. Should be 1 for all non-streaming RPCs. GRPC status codes: https://grpc.github.io/grpc/core/md_doc_statuscodes.html",
-            "fieldConfig": {
-              "defaults": {
-                "color": {
-                  "mode": "palette-classic"
-                },
-                "custom": {
-                  "axisBorderShow": false,
-                  "axisCenteredZero": false,
-                  "axisColorMode": "text",
-                  "axisLabel": "",
-                  "axisPlacement": "auto",
-                  "barAlignment": 0,
-                  "barWidthFactor": 0.6,
-                  "drawStyle": "line",
-                  "fillOpacity": 0,
-                  "gradientMode": "none",
-                  "hideFrom": {
-                    "legend": false,
-                    "tooltip": false,
-                    "viz": false
-                  },
-                  "insertNulls": false,
-                  "lineInterpolation": "linear",
-                  "lineWidth": 1,
-                  "pointSize": 5,
-                  "scaleDistribution": {
-                    "type": "linear"
-                  },
-                  "showPoints": "never",
-                  "spanNulls": true,
-                  "stacking": {
-                    "group": "A",
-                    "mode": "none"
-                  },
-                  "thresholdsStyle": {
-                    "mode": "off"
-                  }
-                },
-                "mappings": [],
-                "thresholds": {
-                  "mode": "absolute",
-                  "steps": [
-                    {
-                      "color": "green"
-                    },
-                    {
-                      "color": "red",
-                      "value": 80
-                    }
-                  ]
-                }
-              },
-              "overrides": [
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "0"
-                  },
-                  "properties": [
-                    {
-                      "id": "custom.axisPlacement",
-                      "value": "right"
-                    },
-                    {
-                      "id": "displayName",
-                      "value": "0 - OK"
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "1"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "1 - CANCELLED"
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "2"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "2 - UNKNOWN"
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "3"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "3 - INVALID_ARGUMENT"
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "4"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "4 - DEADLINE_EXCEEDED"
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "5"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "5 - NOT_FOUND"
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "6"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "6 - ALREADY_EXISTS"
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "7"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "7 - PERMISSION_DENIED"
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "8"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "8 - RESOURCE_EXHAUSTED"
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "9"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "9 - FAILED_PRECONDITION"
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "10"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "10 - ABORTED"
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "11"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "11 - OUT_OF_RANGE"
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "12"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "12 - UNIMPLEMENTED"
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "13"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "13 - INTERNAL"
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "14"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "14 - UNAVAILABLE"
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "15"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "15 - DATA_LOSS"
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "16"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "16 - UNAUTHENTICATED"
-                    }
-                  ]
-                }
-              ]
-            },
-            "gridPos": {
-              "h": 9,
-              "w": 12,
-              "x": 12,
-              "y": 89
-            },
-            "id": 70,
-            "interval": "$minstep",
-            "options": {
-              "legend": {
-                "calcs": [
-                  "min",
-                  "max",
-                  "mean"
-                ],
-                "displayMode": "table",
-                "placement": "bottom",
-                "showLegend": true
-              },
-              "tooltip": {
-                "hideZeros": false,
-                "mode": "multi",
-                "sort": "none"
-              }
-            },
-            "pluginVersion": "11.6.1",
-            "targets": [
-              {
-                "datasource": {
-                  "type": "prometheus",
-                  "uid": "$datasource"
-                },
-                "editorMode": "code",
-                "expr": "sum by(rpc_grpc_status_code) (${metric:value}(${prefix:raw}rpc_client_responses_per_rpc_count{job=\"$job\"}[$__rate_interval]))",
-                "instant": false,
-                "legendFormat": "__auto",
-                "range": true,
-                "refId": "A"
-              }
-            ],
-            "title": "RPC client responses by GRPC status code (exporters)",
-            "type": "timeseries"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "$datasource"
-            },
-            "description": "",
-            "fieldConfig": {
-              "defaults": {
-                "custom": {
-                  "hideFrom": {
-                    "legend": false,
-                    "tooltip": false,
-                    "viz": false
-                  },
-                  "scaleDistribution": {
-                    "type": "linear"
-                  }
-                },
-                "links": []
-              },
-              "overrides": []
-            },
-            "gridPos": {
-              "h": 8,
-              "w": 12,
-              "x": 0,
-              "y": 98
-            },
-            "id": 72,
-            "interval": "$minstep",
-            "maxDataPoints": 50,
-            "options": {
-              "calculate": false,
-              "cellGap": 1,
-              "color": {
-                "exponent": 0.5,
-                "fill": "dark-orange",
-                "mode": "scheme",
-                "reverse": true,
-                "scale": "exponential",
-                "scheme": "Reds",
-                "steps": 25
-              },
-              "exemplars": {
-                "color": "rgba(255,0,255,0.7)"
-              },
-              "filterValues": {
-                "le": 1e-9
-              },
-              "legend": {
-                "show": true
-              },
-              "rowsFrame": {
-                "layout": "auto"
-              },
-              "tooltip": {
-                "mode": "single",
-                "showColorScale": false,
-                "yHistogram": false
-              },
-              "yAxis": {
-                "axisPlacement": "left",
-                "reverse": false,
-                "unit": "ms"
-              }
-            },
-            "pluginVersion": "11.3.1",
-            "targets": [
-              {
-                "datasource": {
-                  "type": "prometheus",
-                  "uid": "$datasource"
-                },
-                "editorMode": "code",
-                "exemplar": false,
-                "expr": "sum(increase(${prefix:raw}rpc_server_duration_bucket{job=\"$job\"}[$__rate_interval])) by (le)",
-                "format": "heatmap",
-                "hide": false,
-                "instant": false,
-                "interval": "$minstep",
-                "intervalFactor": 1,
-                "legendFormat": "{{le}}",
-                "refId": "B"
-              }
-            ],
-            "title": "RPC server duration (receivers)",
-            "type": "heatmap"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "$datasource"
-            },
-            "description": "",
-            "fieldConfig": {
-              "defaults": {
-                "custom": {
-                  "hideFrom": {
-                    "legend": false,
-                    "tooltip": false,
-                    "viz": false
-                  },
-                  "scaleDistribution": {
-                    "type": "linear"
-                  }
-                },
-                "links": []
-              },
-              "overrides": []
-            },
-            "gridPos": {
-              "h": 8,
-              "w": 12,
-              "x": 12,
-              "y": 98
-            },
-            "id": 74,
-            "interval": "$minstep",
-            "maxDataPoints": 50,
-            "options": {
-              "calculate": false,
-              "cellGap": 1,
-              "color": {
-                "exponent": 0.5,
-                "fill": "dark-orange",
-                "mode": "scheme",
-                "reverse": true,
-                "scale": "exponential",
-                "scheme": "Reds",
-                "steps": 25
-              },
-              "exemplars": {
-                "color": "rgba(255,0,255,0.7)"
-              },
-              "filterValues": {
-                "le": 1e-9
-              },
-              "legend": {
-                "show": true
-              },
-              "rowsFrame": {
-                "layout": "auto"
-              },
-              "tooltip": {
-                "mode": "single",
-                "showColorScale": false,
-                "yHistogram": false
-              },
-              "yAxis": {
-                "axisPlacement": "left",
-                "reverse": false,
-                "unit": "ms"
-              }
-            },
-            "pluginVersion": "11.3.1",
-            "targets": [
-              {
-                "datasource": {
-                  "type": "prometheus",
-                  "uid": "$datasource"
-                },
-                "editorMode": "code",
-                "exemplar": false,
-                "expr": "sum(increase(${prefix:raw}rpc_client_duration_bucket{job=\"$job\"}[$__rate_interval])) by (le)",
-                "format": "heatmap",
-                "hide": false,
-                "instant": false,
-                "interval": "$minstep",
-                "intervalFactor": 1,
-                "legendFormat": "{{le}}",
-                "refId": "B"
-              }
-            ],
-            "title": "RPC client duration (exporters)",
-            "type": "heatmap"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "$datasource"
-            },
-            "description": "",
-            "fieldConfig": {
-              "defaults": {
-                "custom": {
-                  "hideFrom": {
-                    "legend": false,
-                    "tooltip": false,
-                    "viz": false
-                  },
-                  "scaleDistribution": {
-                    "type": "linear"
-                  }
-                },
-                "links": []
-              },
-              "overrides": []
-            },
-            "gridPos": {
-              "h": 8,
-              "w": 12,
-              "x": 0,
-              "y": 106
-            },
-            "id": 73,
-            "interval": "$minstep",
-            "maxDataPoints": 50,
-            "options": {
-              "calculate": false,
-              "cellGap": 1,
-              "color": {
-                "exponent": 0.5,
-                "fill": "dark-orange",
-                "mode": "scheme",
-                "reverse": true,
-                "scale": "exponential",
-                "scheme": "Reds",
-                "steps": 25
-              },
-              "exemplars": {
-                "color": "rgba(255,0,255,0.7)"
-              },
-              "filterValues": {
-                "le": 0.1
-              },
-              "legend": {
-                "show": true
-              },
-              "rowsFrame": {
-                "layout": "auto"
-              },
-              "tooltip": {
-                "mode": "single",
-                "showColorScale": false,
-                "yHistogram": false
-              },
-              "yAxis": {
-                "axisPlacement": "left",
-                "reverse": false,
-                "unit": "bytes"
-              }
-            },
-            "pluginVersion": "11.3.1",
-            "targets": [
-              {
-                "datasource": {
-                  "type": "prometheus",
-                  "uid": "$datasource"
-                },
-                "editorMode": "code",
-                "exemplar": false,
-                "expr": "sum(increase(${prefix:raw}rpc_server_request_size_bucket{job=\"$job\"}[$__rate_interval])) by (le)",
-                "format": "heatmap",
-                "hide": false,
-                "instant": false,
-                "interval": "$minstep",
-                "intervalFactor": 1,
-                "legendFormat": "{{le}}",
-                "refId": "B"
-              }
-            ],
-            "title": "RPC server request size (receivers)",
-            "type": "heatmap"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "$datasource"
-            },
-            "description": "",
-            "fieldConfig": {
-              "defaults": {
-                "custom": {
-                  "hideFrom": {
-                    "legend": false,
-                    "tooltip": false,
-                    "viz": false
-                  },
-                  "scaleDistribution": {
-                    "type": "linear"
-                  }
-                },
-                "links": []
-              },
-              "overrides": []
-            },
-            "gridPos": {
-              "h": 8,
-              "w": 12,
-              "x": 12,
-              "y": 106
-            },
-            "id": 75,
-            "interval": "$minstep",
-            "maxDataPoints": 50,
-            "options": {
-              "calculate": false,
-              "cellGap": 1,
-              "color": {
-                "exponent": 0.5,
-                "fill": "dark-orange",
-                "mode": "scheme",
-                "reverse": true,
-                "scale": "exponential",
-                "scheme": "Reds",
-                "steps": 25
-              },
-              "exemplars": {
-                "color": "rgba(255,0,255,0.7)"
-              },
-              "filterValues": {
-                "le": 0.1
-              },
-              "legend": {
-                "show": true
-              },
-              "rowsFrame": {
-                "layout": "auto"
-              },
-              "tooltip": {
-                "mode": "single",
-                "showColorScale": false,
-                "yHistogram": false
-              },
-              "yAxis": {
-                "axisPlacement": "left",
-                "reverse": false,
-                "unit": "bytes"
-              }
-            },
-            "pluginVersion": "11.3.1",
-            "targets": [
-              {
-                "datasource": {
-                  "type": "prometheus",
-                  "uid": "$datasource"
-                },
-                "editorMode": "code",
-                "exemplar": false,
-                "expr": "sum(increase(${prefix:raw}rpc_client_request_size_bucket{job=\"$job\"}[$__rate_interval])) by (le)",
-                "format": "heatmap",
-                "hide": false,
-                "instant": false,
-                "interval": "$minstep",
-                "intervalFactor": 1,
-                "legendFormat": "{{le}}",
-                "refId": "B"
-              }
-            ],
-            "title": "RPC client request size (exporters)",
-            "type": "heatmap"
-          }
-        ],
-        "title": "RPC server/client",
-        "type": "row"
-      },
-      {
-        "collapsed": true,
-        "gridPos": {
-          "h": 1,
-          "w": 24,
-          "x": 0,
-          "y": 89
-        },
-        "id": 77,
-        "panels": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "$datasource"
-            },
-            "description": "",
-            "fieldConfig": {
-              "defaults": {
-                "custom": {
-                  "hideFrom": {
-                    "legend": false,
-                    "tooltip": false,
-                    "viz": false
-                  },
-                  "scaleDistribution": {
-                    "type": "linear"
-                  }
-                },
-                "links": []
-              },
-              "overrides": []
-            },
-            "gridPos": {
-              "h": 8,
-              "w": 12,
-              "x": 0,
-              "y": 383
-            },
-            "id": 76,
-            "interval": "$minstep",
-            "maxDataPoints": 50,
-            "options": {
-              "calculate": false,
-              "cellGap": 1,
-              "color": {
-                "exponent": 0.5,
-                "fill": "dark-orange",
-                "mode": "scheme",
-                "reverse": true,
-                "scale": "exponential",
-                "scheme": "Reds",
-                "steps": 25
-              },
-              "exemplars": {
-                "color": "rgba(255,0,255,0.7)"
-              },
-              "filterValues": {
-                "le": 1e-9
-              },
-              "legend": {
-                "show": true
-              },
-              "rowsFrame": {
-                "layout": "auto"
-              },
-              "tooltip": {
-                "mode": "single",
-                "showColorScale": false,
-                "yHistogram": false
-              },
-              "yAxis": {
-                "axisPlacement": "left",
-                "reverse": false,
-                "unit": "ms"
-              }
-            },
-            "pluginVersion": "11.3.1",
-            "targets": [
-              {
-                "datasource": {
-                  "type": "prometheus",
-                  "uid": "$datasource"
-                },
-                "editorMode": "code",
-                "exemplar": false,
-                "expr": "sum(increase(${prefix:raw}http_server_duration_bucket{job=\"$job\"}[$__rate_interval])) by (le)",
-                "format": "heatmap",
-                "hide": false,
-                "instant": false,
-                "interval": "$minstep",
-                "intervalFactor": 1,
-                "legendFormat": "__auto",
-                "refId": "B"
-              }
-            ],
-            "title": "HTTP server duration (receivers)",
-            "type": "heatmap"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "$datasource"
-            },
-            "description": "",
-            "fieldConfig": {
-              "defaults": {
-                "custom": {
-                  "hideFrom": {
-                    "legend": false,
-                    "tooltip": false,
-                    "viz": false
-                  },
-                  "scaleDistribution": {
-                    "type": "linear"
-                  }
-                },
-                "links": []
-              },
-              "overrides": []
-            },
-            "gridPos": {
-              "h": 8,
-              "w": 12,
-              "x": 12,
-              "y": 383
-            },
-            "id": 78,
-            "interval": "$minstep",
-            "maxDataPoints": 50,
-            "options": {
-              "calculate": false,
-              "cellGap": 1,
-              "color": {
-                "exponent": 0.5,
-                "fill": "dark-orange",
-                "mode": "scheme",
-                "reverse": true,
-                "scale": "exponential",
-                "scheme": "Reds",
-                "steps": 25
-              },
-              "exemplars": {
-                "color": "rgba(255,0,255,0.7)"
-              },
-              "filterValues": {
-                "le": 1e-9
-              },
-              "legend": {
-                "show": true
-              },
-              "rowsFrame": {
-                "layout": "auto"
-              },
-              "tooltip": {
-                "mode": "single",
-                "showColorScale": false,
-                "yHistogram": false
-              },
-              "yAxis": {
-                "axisPlacement": "left",
-                "reverse": false,
-                "unit": "ms"
-              }
-            },
-            "pluginVersion": "11.3.1",
-            "targets": [
-              {
-                "datasource": {
-                  "type": "prometheus",
-                  "uid": "$datasource"
-                },
-                "editorMode": "code",
-                "exemplar": false,
-                "expr": "sum(increase(${prefix:raw}http_client_duration_bucket{job=\"$job\"}[$__rate_interval])) by (le)",
-                "format": "heatmap",
-                "hide": false,
-                "instant": false,
-                "interval": "$minstep",
-                "intervalFactor": 1,
-                "legendFormat": "{{le}}",
-                "refId": "B"
-              }
-            ],
-            "title": "HTTP client duration (exporters)",
-            "type": "heatmap"
-          }
-        ],
-        "title": "HTTP server/client",
-        "type": "row"
-      },
-      {
-        "collapsed": true,
-        "gridPos": {
-          "h": 1,
-          "w": 24,
-          "x": 0,
-          "y": 90
-        },
-        "id": 63,
-        "panels": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "$datasource"
-            },
-            "description": "Added: Number of namespace add events received.\nUpdated: Number of namespace update events received.",
-            "fieldConfig": {
-              "defaults": {
-                "color": {
-                  "mode": "palette-classic"
-                },
-                "custom": {
-                  "axisBorderShow": false,
-                  "axisCenteredZero": false,
-                  "axisColorMode": "text",
-                  "axisLabel": "",
-                  "axisPlacement": "auto",
-                  "barAlignment": 0,
-                  "barWidthFactor": 0.6,
-                  "drawStyle": "line",
-                  "fillOpacity": 0,
-                  "gradientMode": "none",
-                  "hideFrom": {
-                    "legend": false,
-                    "tooltip": false,
-                    "viz": false
-                  },
-                  "insertNulls": false,
-                  "lineInterpolation": "linear",
-                  "lineWidth": 1,
-                  "pointSize": 5,
-                  "scaleDistribution": {
-                    "type": "linear"
-                  },
-                  "showPoints": "never",
-                  "spanNulls": true,
-                  "stacking": {
-                    "group": "A",
-                    "mode": "none"
-                  },
-                  "thresholdsStyle": {
-                    "mode": "off"
-                  }
-                },
-                "links": [],
-                "mappings": [],
-                "min": 0,
-                "thresholds": {
-                  "mode": "absolute",
-                  "steps": [
-                    {
-                      "color": "green"
-                    },
-                    {
-                      "color": "red",
-                      "value": 80
-                    }
-                  ]
-                },
-                "unit": "none"
-              },
-              "overrides": [
-                {
-                  "matcher": {
-                    "id": "byRegexp",
-                    "options": "/.*updated.*/"
-                  },
-                  "properties": [
-                    {
-                      "id": "color",
-                      "value": {
-                        "fixedColor": "blue",
-                        "mode": "fixed"
-                      }
-                    },
-                    {
-                      "id": "custom.axisPlacement",
-                      "value": "right"
-                    }
-                  ]
-                }
-              ]
-            },
-            "gridPos": {
-              "h": 8,
-              "w": 12,
-              "x": 0,
-              "y": 245
-            },
-            "id": 64,
-            "interval": "$minstep",
-            "options": {
-              "legend": {
-                "calcs": [
-                  "min",
-                  "max",
-                  "mean"
-                ],
-                "displayMode": "table",
-                "placement": "bottom",
-                "showLegend": true
-              },
-              "tooltip": {
-                "mode": "multi",
-                "sort": "none"
-              }
-            },
-            "pluginVersion": "11.3.1",
-            "targets": [
-              {
-                "datasource": {
-                  "type": "prometheus",
-                  "uid": "$datasource"
-                },
-                "editorMode": "code",
-                "exemplar": false,
-                "expr": "avg(otelcol_otelsvc_k8s_namespace_added${suffix_total}{job=\"$job\"}) by (job $grouping)",
-                "format": "time_series",
-                "hide": false,
-                "interval": "$minstep",
-                "intervalFactor": 1,
-                "legendFormat": "Added: {{transport}} {{service_instance_id}}{{service.instance.id}}",
-                "range": true,
-                "refId": "A"
-              },
-              {
-                "datasource": {
-                  "type": "prometheus",
-                  "uid": "$datasource"
-                },
-                "editorMode": "code",
-                "exemplar": false,
-                "expr": "avg(otelcol_otelsvc_k8s_namespace_updated${suffix_total}{job=\"$job\"}) by (job $grouping)",
-                "format": "time_series",
-                "hide": false,
-                "interval": "$minstep",
-                "intervalFactor": 1,
-                "legendFormat": "Updated: {{transport}} {{service_instance_id}}{{service.instance.id}}",
-                "range": true,
-                "refId": "B"
-              }
-            ],
-            "title": "Namespaces",
-            "type": "timeseries"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "$datasource"
-            },
-            "description": "Added: Number of pod add events received.\nUpdated: Number of pod update events received.\nDeleted: Number of pod delete events received.",
-            "fieldConfig": {
-              "defaults": {
-                "color": {
-                  "mode": "palette-classic"
-                },
-                "custom": {
-                  "axisBorderShow": false,
-                  "axisCenteredZero": false,
-                  "axisColorMode": "text",
-                  "axisLabel": "",
-                  "axisPlacement": "auto",
-                  "barAlignment": 0,
-                  "barWidthFactor": 0.6,
-                  "drawStyle": "line",
-                  "fillOpacity": 0,
-                  "gradientMode": "none",
-                  "hideFrom": {
-                    "legend": false,
-                    "tooltip": false,
-                    "viz": false
-                  },
-                  "insertNulls": false,
-                  "lineInterpolation": "linear",
-                  "lineWidth": 1,
-                  "pointSize": 5,
-                  "scaleDistribution": {
-                    "type": "linear"
-                  },
-                  "showPoints": "never",
-                  "spanNulls": true,
-                  "stacking": {
-                    "group": "A",
-                    "mode": "none"
-                  },
-                  "thresholdsStyle": {
-                    "mode": "off"
-                  }
-                },
-                "links": [],
-                "mappings": [],
-                "min": 0,
-                "thresholds": {
-                  "mode": "absolute",
-                  "steps": [
-                    {
-                      "color": "green"
-                    },
-                    {
-                      "color": "red",
-                      "value": 80
-                    }
-                  ]
-                },
-                "unit": "none"
-              },
-              "overrides": []
-            },
-            "gridPos": {
-              "h": 8,
-              "w": 12,
-              "x": 12,
-              "y": 245
-            },
-            "id": 65,
-            "interval": "$minstep",
-            "options": {
-              "legend": {
-                "calcs": [
-                  "min",
-                  "max",
-                  "mean"
-                ],
-                "displayMode": "table",
-                "placement": "bottom",
-                "showLegend": true
-              },
-              "tooltip": {
-                "mode": "multi",
-                "sort": "none"
-              }
-            },
-            "pluginVersion": "11.3.1",
-            "targets": [
-              {
-                "datasource": {
-                  "type": "prometheus",
-                  "uid": "$datasource"
-                },
-                "editorMode": "code",
-                "exemplar": false,
-                "expr": "sum(otelcol_otelsvc_k8s_pod_added${suffix_total}{job=\"$job\"}) by (job $grouping)",
-                "format": "time_series",
-                "hide": false,
-                "interval": "$minstep",
-                "intervalFactor": 1,
-                "legendFormat": "Added: {{transport}} {{service_instance_id}}{{service.instance.id}}",
-                "range": true,
-                "refId": "A"
-              },
-              {
-                "datasource": {
-                  "type": "prometheus",
-                  "uid": "$datasource"
-                },
-                "editorMode": "code",
-                "exemplar": false,
-                "expr": "sum(otelcol_otelsvc_k8s_pod_updated${suffix_total}{job=\"$job\"}) by (job $grouping)",
-                "format": "time_series",
-                "hide": false,
-                "interval": "$minstep",
-                "intervalFactor": 1,
-                "legendFormat": "Updated: {{transport}} {{service_instance_id}}{{service.instance.id}}",
-                "range": true,
-                "refId": "B"
-              },
-              {
-                "datasource": {
-                  "type": "prometheus",
-                  "uid": "$datasource"
-                },
-                "editorMode": "code",
-                "exemplar": false,
-                "expr": "sum(otelcol_otelsvc_k8s_pod_deleted${suffix_total}{job=\"$job\"}) by (job $grouping)",
-                "format": "time_series",
-                "hide": false,
-                "interval": "$minstep",
-                "intervalFactor": 1,
-                "legendFormat": "Deleted: {{transport}} {{service_instance_id}}{{service.instance.id}}",
-                "range": true,
-                "refId": "C"
-              }
-            ],
-            "title": "Pods",
-            "type": "timeseries"
-          }
-        ],
-        "title": "Kubernetes",
-        "type": "row"
-      },
-      {
-        "collapsed": false,
-        "gridPos": {
-          "h": 1,
-          "w": 24,
-          "x": 0,
-          "y": 91
-        },
-        "id": 66,
-        "panels": [],
-        "title": "Documentation",
-        "type": "row"
-      },
-      {
-        "gridPos": {
-          "h": 3,
-          "w": 24,
-          "x": 0,
-          "y": 92
-        },
-        "id": 45,
-        "options": {
-          "code": {
-            "language": "plaintext",
-            "showLineNumbers": false,
-            "showMiniMap": false
-          },
-          "content": "\u003ca href=\"http://www.monitoringartist.com\" target=\"_blank\" title=\"Dashboard maintained by Monitoring Artist - DevOps / Docker / Kubernetes / AWS ECS / Google GCP / Zabbix / Zenoss / Terraform / Monitoring\"\u003e\u003cimg src=\"https://monitoringartist.github.io/monitoring-artist-logo-grafana.png\" height=\"30px\" /\u003e\u003c/a\u003e | \n\u003ca target=\"_blank\" href=\"https://opentelemetry.io/docs/collector/troubleshooting/\"\u003eOTEL collector troubleshooting (how to enable telemetry metrics)\u003c/a\u003e | \n\u003ca target=\"_blank\" href=\"https://opentelemetry.io/docs/collector/scaling/\"\u003eScaling the Collector (metrics to watch)\u003c/a\u003e | \n\u003ca target=\"_blank\" href=\"https://opentelemetry.io/docs/collector/internal-telemetry/\"\u003eCollector internal telemetry\u003c/a\u003e | \n\u003ca target=\"_blank\" href=\"https://www.otelbin.io/\"\u003eOTelBin (OpenTelemetry collector configuration tool)\u003c/a\u003e | \n\u003ca target=\"_blank\" href=\"https://grafana.com/grafana/dashboards/15983-opentelemetry-collector/\"\u003eInstalled from Grafana.com dashboards\u003c/a\u003e",
-          "mode": "html"
-        },
-        "pluginVersion": "11.6.1",
-        "title": "Documentation",
-        "type": "text"
       }
     ],
+    "preload": false,
     "refresh": "",
-    "schemaVersion": 41,
+    "schemaVersion": 42,
     "tags": [
-      "opentelemetry",
-      "monitoringartist"
+      "opentelemetry"
     ],
     "templating": {
       "list": [
         {
-          "current": {},
+          "current": {
+            "text": "Thanos Querier",
+            "value": "PA5392E10C0F059AB"
+          },
           "includeAll": false,
           "label": "Datasource",
           "name": "datasource",
@@ -6004,7 +3943,10 @@
           "type": "datasource"
         },
         {
-          "current": {},
+          "current": {
+            "text": "/usr/share/elastic-agent/data/elastic-agent-dd9ee6/components/elastic-otel-collector",
+            "value": "/usr/share/elastic-agent/data/elastic-agent-dd9ee6/components/elastic-otel-collector"
+          },
           "datasource": {
             "type": "prometheus",
             "uid": "$datasource"
@@ -6029,8 +3971,8 @@
           "auto_count": 300,
           "auto_min": "10s",
           "current": {
-            "text": "$__auto",
-            "value": "$__auto"
+            "text": "1m",
+            "value": "1m"
           },
           "label": "Min step",
           "name": "minstep",
@@ -6046,7 +3988,7 @@
               "value": "30s"
             },
             {
-              "selected": false,
+              "selected": true,
               "text": "1m",
               "value": "1m"
             },
@@ -6085,7 +4027,10 @@
         },
         {
           "allValue": ".*",
-          "current": {},
+          "current": {
+            "text": "All",
+            "value": "$__all"
+          },
           "datasource": {
             "type": "prometheus",
             "uid": "$datasource"
@@ -6107,7 +4052,10 @@
         },
         {
           "allValue": ".*",
-          "current": {},
+          "current": {
+            "text": "All",
+            "value": "$__all"
+          },
           "datasource": {
             "type": "prometheus",
             "uid": "$datasource"
@@ -6129,7 +4077,10 @@
         },
         {
           "allValue": ".*",
-          "current": {},
+          "current": {
+            "text": "All",
+            "value": "$__all"
+          },
           "datasource": {
             "type": "prometheus",
             "uid": "$datasource"
@@ -6150,7 +4101,10 @@
           "type": "query"
         },
         {
-          "current": {},
+          "current": {
+            "text": "",
+            "value": ""
+          },
           "description": "Detailed metrics must be configured in the collector configuration. They add grouping by transport protocol (http/grpc) for receivers. ",
           "includeAll": false,
           "label": "Additional grouping",
@@ -6181,12 +4135,15 @@
           "type": "custom"
         },
         {
-          "current": {},
+          "current": {
+            "text": "_total",
+            "value": "_total"
+          },
           "datasource": {
             "type": "prometheus",
             "uid": "$datasource"
           },
-          "definition": "query_result({__name__=~\"otelcol_process_uptime.+\",job=\"$job\"})",
+          "definition": "query_result({__name__=~\"otelcol_process.+\",job=\"$job\"})",
           "description": "Some exporter(s) configuration(s) may add the metric suffix _total. This variable will detect this case.",
           "hide": 2,
           "includeAll": false,
@@ -6195,7 +4152,7 @@
           "options": [],
           "query": {
             "qryType": 3,
-            "query": "query_result({__name__=~\"otelcol_process_uptime.+\",job=\"$job\"})",
+            "query": "query_result({__name__=~\"otelcol_process.+\",job=\"$job\"})",
             "refId": "PrometheusVariableQueryEditor-VariableQuery"
           },
           "refresh": 1,
@@ -6203,12 +4160,15 @@
           "type": "query"
         },
         {
-          "current": {},
+          "current": {
+            "text": "",
+            "value": ""
+          },
           "datasource": {
             "type": "prometheus",
             "uid": "$datasource"
           },
-          "definition": "query_result({__name__=~\"otelcol_process_uptime.+\",job=\"$job\"})",
+          "definition": "query_result({__name__=~\"otelcol_process+\",job=\"$job\"})",
           "description": "Detect if _ or . is used as a divider in labels",
           "hide": 2,
           "includeAll": false,
@@ -6217,7 +4177,7 @@
           "options": [],
           "query": {
             "qryType": 3,
-            "query": "query_result({__name__=~\"otelcol_process_uptime.+\",job=\"$job\"})",
+            "query": "query_result({__name__=~\"otelcol_process+\",job=\"$job\"})",
             "refId": "PrometheusVariableQueryEditor-VariableQuery"
           },
           "refresh": 1,
@@ -6225,7 +4185,10 @@
           "type": "query"
         },
         {
-          "current": {},
+          "current": {
+            "text": "_seconds",
+            "value": "_seconds"
+          },
           "datasource": {
             "type": "prometheus",
             "uid": "$datasource"
@@ -6247,7 +4210,10 @@
           "type": "query"
         },
         {
-          "current": {},
+          "current": {
+            "text": "_bytes",
+            "value": "_bytes"
+          },
           "datasource": {
             "type": "prometheus",
             "uid": "$datasource"
@@ -6269,7 +4235,10 @@
           "type": "query"
         },
         {
-          "current": {},
+          "current": {
+            "text": "",
+            "value": ""
+          },
           "datasource": {
             "type": "prometheus",
             "uid": "$datasource"
@@ -6309,7 +4278,6 @@
     },
     "timepicker": {},
     "timezone": "",
-    "title": "OpenTelemetry Collector",
-    "weekStart": ""
+    "title": "OpenTelemetry Collector"
   }
 }

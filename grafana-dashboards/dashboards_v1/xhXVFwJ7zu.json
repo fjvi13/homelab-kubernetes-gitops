@@ -2,9 +2,11 @@
   "apiVersion": "dashboard.grafana.app/v1",
   "kind": "Dashboard",
   "metadata": {
-    "annotations": {},
+    "annotations": {
+      "grafana.app/folder": "efq2oxowa8t8gb"
+    },
     "labels": {},
-    "name": "xhXVFwJ7zu1",
+    "name": "xhXVFwJ7zu",
     "namespace": "default"
   },
   "spec": {
@@ -29,7 +31,7 @@
         }
       ]
     },
-    "description": "This dashboard provides a resource usage overview of the Thanos components Querier, Query-Frontend, Compactor, Store, Receive, Receive-Distributor and Ruler.\r\n\r\nIt includes CPU and Memory requests, limits and usage (filtered to Thanos pods only). In addition, the last termination reason is plotted and the cache hit ratio is available.",
+    "description": "This dashboard provides a resource usage overview of the ArgoCD components.\n\nIt includes CPU and Memory requests, limits and usage. In addition, the last termination reason is plotted and the cache hit ratio is available.",
     "editable": true,
     "fiscalYearStartMonth": 0,
     "graphTooltip": 0,
@@ -49,7 +51,7 @@
             "showLineNumbers": false,
             "showMiniMap": false
           },
-          "content": "![logo](https://repository-images.githubusercontent.com/109162639/97e49180-661b-11e9-9882-fdc44b74debd)",
+          "content": "![argoimage](https://icon.icepanel.io/Technology/svg/Argo-CD.svg)",
           "mode": "markdown"
         },
         "pluginVersion": "12.3.0",
@@ -76,7 +78,7 @@
           "overrides": []
         },
         "gridPos": {
-          "h": 5,
+          "h": 7,
           "w": 21,
           "x": 3,
           "y": 0
@@ -109,7 +111,7 @@
             },
             "editorMode": "code",
             "exemplar": true,
-            "expr": "\r\nsort_desc(\r\n  sum by (component) (\r\n    label_replace(\r\n      kube_pod_info{\r\n        pod=~\"thanos-(compactor|storegateway|ruler|receive(?:-distributor)?|query(?:-frontend)?).*\",\r\n        container!=\"\"\r\n      },\r\n      \"component\", \"$1\", \"pod\",\r\n      \"thanos-(compactor|storegateway|ruler|receive(?:-distributor)?|query(?:-frontend)?).*\"\r\n    )\r\n  )\r\n)\r\n",
+            "expr": "sort_desc(\r\n  sum by (component) (\r\n    label_replace(\r\n      kube_pod_info{\r\n        cluster=\"$cluster\",\r\n        pod=~\"argocd-(application-controller|applicationset-controller|dex-server|notifications|redis-ha-haproxy|redis-ha-server|repo-server|server).*\",\r\n        container!=\"\"\r\n      },\r\n      \"component\", \"$1\", \"pod\",\r\n      \"argocd-(application-controller|applicationset-controller|dex-server|notifications|redis-ha-haproxy|redis-ha-server|repo-server|server).*\"\r\n    )\r\n  )\r\n)",
             "instant": true,
             "interval": "",
             "legendFormat": "{{app_kubernetes_io_component}}",
@@ -120,16 +122,86 @@
         "type": "stat"
       },
       {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PA5392E10C0F059AB"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 2,
+          "w": 3,
+          "x": 0,
+          "y": 5
+        },
+        "id": 62,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/^version$/",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "max(argocd_info{cluster=\"$cluster\"}) by (version)",
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Version",
+        "transformations": [
+          {
+            "id": "labelsToFields",
+            "options": {}
+          }
+        ],
+        "type": "stat"
+      },
+      {
         "collapsed": false,
         "gridPos": {
           "h": 1,
           "w": 24,
           "x": 0,
-          "y": 5
+          "y": 7
         },
         "id": 8,
         "panels": [],
-        "title": "Thanos / Query",
+        "title": "ArgoCD / application-controller",
         "type": "row"
       },
       {
@@ -235,7 +307,7 @@
                 {
                   "id": "color",
                   "value": {
-                    "fixedColor": "#FADE2A",
+                    "fixedColor": "blue",
                     "mode": "fixed"
                   }
                 },
@@ -265,7 +337,7 @@
           "h": 8,
           "w": 10,
           "x": 0,
-          "y": 6
+          "y": 8
         },
         "id": 14,
         "interval": "1m",
@@ -294,11 +366,11 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "max(\r\n  sum by (pod) (\r\n    kube_pod_container_resource_limits{\r\n      resource=\"cpu\",\r\n      namespace=\"monitoring\",\r\n      pod=~\"thanos-query.*\",\r\n      pod!~\"thanos-query-frontend-.*\"\r\n    }\r\n  )\r\n)\r\n",
+            "expr": "max(\r\n  sum by (pod) (\r\n    kube_pod_container_resource_limits{\r\n      cluster=\"$cluster\",\r\n      resource=\"cpu\",\r\n      namespace=\"argocd\",\r\n      pod=~\"argocd-application-controller.*\"\r\n    }\r\n  )\r\n)",
             "interval": "",
             "legendFormat": "limit",
             "range": true,
-            "refId": "A"
+            "refId": "Limits"
           },
           {
             "datasource": {
@@ -306,26 +378,27 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "max by (pod) (\n  irate(\n    container_cpu_usage_seconds_total{\n      namespace=\"monitoring\",\n      container=\"query\",\n      pod=~\"thanos-query.*\",\n      pod!~\"thanos-query-frontend.*\"\n    }[$__rate_interval]\n  )\n)",
-            "interval": "",
-            "legendFormat": "{{pod}}",
-            "range": true,
-            "refId": "B"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "PA5392E10C0F059AB"
-            },
-            "editorMode": "code",
-            "expr": "max(\n  sum by (pod) (\n    kube_pod_container_resource_requests{\n      resource=\"cpu\",\n      namespace=\"monitoring\",\n      pod=~\"thanos-query.*\",\n      pod!~\"thanos-query-frontend.*\"\n    }\n  )\n)",
+            "expr": "max(\r\n  sum by (pod) (\r\n    kube_pod_container_resource_requests{\r\n      cluster=\"$cluster\",\r\n      resource=\"cpu\",\r\n      namespace=\"argocd\",\r\n      pod=~\"argocd-application-controller.*\"\r\n    }\r\n  )\r\n)",
+            "hide": false,
             "interval": "",
             "legendFormat": "request",
             "range": true,
-            "refId": "C"
+            "refId": "Requests"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "editorMode": "code",
+            "expr": "max by (pod) (\r\n  irate(container_cpu_usage_seconds_total{cluster=\"$cluster\", container=\"application-controller\"}[$__interval]))",
+            "interval": "",
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "B"
           }
         ],
-        "title": "CPU Core Usage vs. Request \u0026 Limit",
+        "title": "CPU Core Usage vs. Limit",
         "type": "timeseries"
       },
       {
@@ -431,7 +504,7 @@
                 {
                   "id": "color",
                   "value": {
-                    "fixedColor": "#FADE2A",
+                    "fixedColor": "blue",
                     "mode": "fixed"
                   }
                 },
@@ -461,7 +534,7 @@
           "h": 8,
           "w": 10,
           "x": 10,
-          "y": 6
+          "y": 8
         },
         "id": 12,
         "interval": "1m",
@@ -491,10 +564,24 @@
             },
             "editorMode": "code",
             "exemplar": true,
-            "expr": "\r\nmax(\r\n  max by (pod) (\r\n    kube_pod_container_resource_limits{\r\n      resource=\"memory\",\r\n      namespace=\"monitoring\",\r\n      pod=~\"^thanos-query(-.*)?$\",\r\n      pod!~\"^thanos-query-distributor(-.*)?$\"\r\n    }\r\n  )\r\n)\r\n",
+            "expr": "max(\r\n  max by (pod) (\r\n    kube_pod_container_resource_limits{\r\n      cluster=\"$cluster\",\r\n      resource=\"memory\",\r\n      namespace=\"argocd\",\r\n      pod=~\"argocd-application-controller.*\"\r\n    }\r\n  )\r\n)\r\n",
             "hide": false,
             "interval": "",
             "legendFormat": "limit",
+            "range": true,
+            "refId": "limit"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "editorMode": "code",
+            "exemplar": true,
+            "expr": "max(\r\n  max by (pod) (\r\n    kube_pod_container_resource_requests{\r\n      cluster=\"$cluster\",\r\n      resource=\"memory\",\r\n      namespace=\"argocd\",\r\n      pod=~\"argocd-application-controller.*\"\r\n    }\r\n  )\r\n)\r\n",
+            "hide": false,
+            "interval": "",
+            "legendFormat": "request",
             "range": true,
             "refId": "A"
           },
@@ -504,26 +591,14 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "sum by (pod) (\n  max_over_time(\n    container_memory_working_set_bytes{\n      namespace=\"monitoring\",\n      container=\"query\",\n      pod=~\"thanos-query.*\",\n      pod!~\"thanos-query-frontend.*\"\n    }[$__interval]\n  )\n)",
+            "expr": "sum(max_over_time(container_memory_working_set_bytes{cluster=\"$cluster\",container=\"application-controller\"}[$__interval])) by (pod)",
             "interval": "",
             "legendFormat": "{{pod}}",
             "range": true,
             "refId": "B"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "PA5392E10C0F059AB"
-            },
-            "editorMode": "code",
-            "expr": "max(\n  max by (pod) (\n    kube_pod_container_resource_requests{\n      resource=\"memory\",\n      namespace=\"monitoring\",\n      pod=~\"thanos-query.*\",\n      pod!~\"thanos-query-frontend.*\"\n    }\n  )\n)",
-            "interval": "",
-            "legendFormat": "request",
-            "range": true,
-            "refId": "C"
           }
         ],
-        "title": "Memory Usage vs. Request \u0026 Limit",
+        "title": "Memory Usage v. Limit",
         "type": "timeseries"
       },
       {
@@ -554,7 +629,7 @@
           "h": 8,
           "w": 4,
           "x": 20,
-          "y": 6
+          "y": 8
         },
         "id": 26,
         "options": {
@@ -583,7 +658,7 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "\r\nkube_pod_container_status_last_terminated_reason{\r\n  pod=~\"thanos-query.*\",\r\n  pod!~\"thanos-query-frontend.*\"\r\n} != 0\r\n",
+            "expr": "\r\nkube_pod_container_status_last_terminated_reason{\r\n  cluster=\"$cluster\",\r\n  pod=~\"application-controller.*\"\r\n} != 0\r\n",
             "interval": "",
             "legendFormat": "{{reason}} - {{pod}}",
             "range": true,
@@ -599,11 +674,11 @@
           "h": 1,
           "w": 24,
           "x": 0,
-          "y": 14
+          "y": 16
         },
         "id": 33,
         "panels": [],
-        "title": "Thanos / Query Frontend",
+        "title": "ArgoCD / applicationset-controller",
         "type": "row"
       },
       {
@@ -709,7 +784,7 @@
                 {
                   "id": "color",
                   "value": {
-                    "fixedColor": "#FADE2A",
+                    "fixedColor": "blue",
                     "mode": "fixed"
                   }
                 },
@@ -739,7 +814,7 @@
           "h": 8,
           "w": 10,
           "x": 0,
-          "y": 15
+          "y": 17
         },
         "id": 29,
         "interval": "1m",
@@ -768,11 +843,11 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "max(\r\n  sum by (pod) (\r\n    kube_pod_container_resource_limits{resource=\"cpu\", namespace=\"monitoring\", pod=~\"thanos-query-frontend.*\"}\r\n  )\r\n)\r\n",
+            "expr": "max(\r\n  sum by (pod) (\r\n    kube_pod_container_resource_limits{\r\n      cluster=\"$cluster\",\r\n      resource=\"cpu\",\r\n      namespace=\"argocd\",\r\n      pod=~\"argocd-applicationset-controller.*\"\r\n    }\r\n  )\r\n)",
             "interval": "",
             "legendFormat": "limit",
             "range": true,
-            "refId": "A"
+            "refId": "limit"
           },
           {
             "datasource": {
@@ -780,26 +855,27 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "max by (pod) (\n  irate(\n    container_cpu_usage_seconds_total{\n      namespace=\"monitoring\",\n      container=\"query-frontend\",\n      pod=~\"thanos-query-frontend.*\"\n    }[$__rate_interval]\n  )\n)",
-            "interval": "",
-            "legendFormat": "{{pod}}",
-            "range": true,
-            "refId": "B"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "PA5392E10C0F059AB"
-            },
-            "editorMode": "code",
-            "expr": "max(\n  sum by (pod) (\n    kube_pod_container_resource_requests{\n      resource=\"cpu\",\n      namespace=\"monitoring\",\n      pod=~\"thanos-query-frontend.*\"\n    }\n  )\n)",
+            "expr": "max(\r\n  sum by (pod) (\r\n    kube_pod_container_resource_requests{\r\n      cluster=\"$cluster\",\r\n      resource=\"cpu\",\r\n      namespace=\"argocd\",\r\n      pod=~\"argocd-applicationset-controller.*\"\r\n    }\r\n  )\r\n)",
+            "hide": false,
             "interval": "",
             "legendFormat": "request",
             "range": true,
-            "refId": "C"
+            "refId": "request"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "editorMode": "code",
+            "expr": "max by (pod) (\r\n  irate(container_cpu_usage_seconds_total{cluster=\"$cluster\", container=\"applicationset-controller\"}[$__interval]))",
+            "interval": "",
+            "legendFormat": "{{container}}",
+            "range": true,
+            "refId": "B"
           }
         ],
-        "title": "CPU Core Usage vs. Request \u0026 Limit",
+        "title": "CPU Core Usage vs. Limit",
         "type": "timeseries"
       },
       {
@@ -905,7 +981,7 @@
                 {
                   "id": "color",
                   "value": {
-                    "fixedColor": "#FADE2A",
+                    "fixedColor": "blue",
                     "mode": "fixed"
                   }
                 },
@@ -935,7 +1011,7 @@
           "h": 8,
           "w": 10,
           "x": 10,
-          "y": 15
+          "y": 17
         },
         "id": 30,
         "interval": "1m",
@@ -964,12 +1040,12 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "max(\r\n  max by (pod) (\r\n    kube_pod_container_resource_limits{resource=\"memory\", namespace=\"monitoring\", pod=~\"thanos-query-frontend.*\"}\r\n  )\r\n)\r\n",
+            "expr": "max(\r\n  max by (pod) (\r\n    kube_pod_container_resource_limits{\r\n      cluster=\"$cluster\",\r\n      resource=\"memory\",\r\n      namespace=\"argocd\",\r\n      pod=~\"argocd-applicationset-controller.*\"\r\n    }\r\n  )\r\n)\r\n",
             "hide": false,
             "interval": "",
             "legendFormat": "limit",
             "range": true,
-            "refId": "A"
+            "refId": "limit"
           },
           {
             "datasource": {
@@ -977,26 +1053,27 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "sum by (pod) (\n  max_over_time(\n    container_memory_working_set_bytes{\n      namespace=\"monitoring\",\n      container=\"query-frontend\",\n      pod=~\"thanos-query-frontend.*\"\n    }[$__interval]\n  )\n)",
+            "expr": "max(\r\n  max by (pod) (\r\n    kube_pod_container_resource_requests{\r\n      cluster=\"$cluster\",\r\n      resource=\"memory\",\r\n      namespace=\"argocd\",\r\n      pod=~\"argocd-applicationset-controller.*\"\r\n    }\r\n  )\r\n)\r\n",
+            "hide": false,
+            "interval": "",
+            "legendFormat": "request",
+            "range": true,
+            "refId": "request"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "editorMode": "code",
+            "expr": "sum(max_over_time(container_memory_working_set_bytes{cluster=\"$cluster\", container=~\"applicationset-controller.*\"}[$__interval])) by (pod)",
             "interval": "",
             "legendFormat": "{{pod}}",
             "range": true,
             "refId": "B"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "PA5392E10C0F059AB"
-            },
-            "editorMode": "code",
-            "expr": "max(\n  max by (pod) (\n    kube_pod_container_resource_requests{\n      resource=\"memory\",\n      namespace=\"monitoring\",\n      pod=~\"thanos-query-frontend.*\"\n    }\n  )\n)",
-            "interval": "",
-            "legendFormat": "request",
-            "range": true,
-            "refId": "C"
           }
         ],
-        "title": "Memory Usage vs. Request \u0026 Limit",
+        "title": "Memory Usage v. Limit",
         "type": "timeseries"
       },
       {
@@ -1028,7 +1105,7 @@
           "h": 8,
           "w": 4,
           "x": 20,
-          "y": 15
+          "y": 17
         },
         "id": 31,
         "options": {
@@ -1057,7 +1134,7 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "\r\nkube_pod_container_status_last_terminated_reason{\r\n  pod=~\"thanos-query-frontend.*\"\r\n} != 0\r\n",
+            "expr": "\r\nkube_pod_container_status_last_terminated_reason{\r\n  pod=~\"applicationset-controller.*\"\r\n} != 0\r\n",
             "interval": "",
             "legendFormat": "{{reason}} - {{pod}}",
             "range": true,
@@ -1073,11 +1150,11 @@
           "h": 1,
           "w": 24,
           "x": 0,
-          "y": 23
+          "y": 25
         },
         "id": 7,
         "panels": [],
-        "title": "Thanos / Compact",
+        "title": "ArgoCD / dex-server",
         "type": "row"
       },
       {
@@ -1183,7 +1260,7 @@
                 {
                   "id": "color",
                   "value": {
-                    "fixedColor": "#FADE2A",
+                    "fixedColor": "blue",
                     "mode": "fixed"
                   }
                 },
@@ -1213,7 +1290,7 @@
           "h": 8,
           "w": 10,
           "x": 0,
-          "y": 24
+          "y": 26
         },
         "id": 15,
         "interval": "1m",
@@ -1242,11 +1319,11 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "max(\r\n  sum by (pod) (\r\n    kube_pod_container_resource_limits{resource=\"cpu\", namespace=\"monitoring\", pod=~\"thanos-compactor.*\"}\r\n  )\r\n)\r\n",
+            "expr": "max(\r\n  sum by (pod) (\r\n    kube_pod_container_resource_limits{\r\n      cluster=\"$cluster\",\r\n      resource=\"cpu\",\r\n      namespace=\"argocd\",\r\n      pod=~\"argocd-dex-server.*\"\r\n    }\r\n  )\r\n)\r\n",
             "interval": "",
             "legendFormat": "limit",
             "range": true,
-            "refId": "A"
+            "refId": "limit"
           },
           {
             "datasource": {
@@ -1254,26 +1331,27 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "max by (pod) (\n  irate(\n    container_cpu_usage_seconds_total{\n      namespace=\"monitoring\",\n      container=\"compactor\",\n      pod=~\"thanos-compactor.*\"\n    }[$__rate_interval]\n  )\n)",
-            "interval": "",
-            "legendFormat": "{{pod}}",
-            "range": true,
-            "refId": "B"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "PA5392E10C0F059AB"
-            },
-            "editorMode": "code",
-            "expr": "max(\n  sum by (pod) (\n    kube_pod_container_resource_requests{\n      resource=\"cpu\",\n      namespace=\"monitoring\",\n      pod=~\"thanos-compactor.*\"\n    }\n  )\n)",
+            "expr": "max(\r\n  sum by (pod) (\r\n    kube_pod_container_resource_requests{\r\n      cluster=\"$cluster\",\r\n      resource=\"cpu\",\r\n      namespace=\"argocd\",\r\n      pod=~\"argocd-dex-server.*\"\r\n    }\r\n  )\r\n)\r\n",
+            "hide": false,
             "interval": "",
             "legendFormat": "request",
             "range": true,
-            "refId": "C"
+            "refId": "request"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "editorMode": "code",
+            "expr": "max by (pod) (\r\n  irate(container_cpu_usage_seconds_total{cluster=\"$cluster\", container=\"dex-server\"}[$__interval]))",
+            "interval": "",
+            "legendFormat": "{{container}}",
+            "range": true,
+            "refId": "B"
           }
         ],
-        "title": "CPU Core Usage vs. Request \u0026 Limit",
+        "title": "CPU Core Usage vs. Limit",
         "type": "timeseries"
       },
       {
@@ -1379,7 +1457,7 @@
                 {
                   "id": "color",
                   "value": {
-                    "fixedColor": "#FADE2A",
+                    "fixedColor": "blue",
                     "mode": "fixed"
                   }
                 },
@@ -1409,7 +1487,7 @@
           "h": 8,
           "w": 10,
           "x": 10,
-          "y": 24
+          "y": 26
         },
         "id": 16,
         "interval": "1m",
@@ -1438,12 +1516,12 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "max(\r\n  max by (pod) (\r\n    kube_pod_container_resource_limits{resource=\"memory\", namespace=\"monitoring\", pod=~\"thanos-compactor.*\"}\r\n  )\r\n)",
+            "expr": "max(\r\n  max by (pod) (\r\n    kube_pod_container_resource_limits{\r\n      cluster=\"$cluster\",\r\n      resource=\"memory\",\r\n      namespace=\"argocd\",\r\n      pod=~\"argocd-dex-server.*\"\r\n    }\r\n  )\r\n)\r\n",
             "hide": false,
             "interval": "",
             "legendFormat": "limit",
             "range": true,
-            "refId": "A"
+            "refId": "limit"
           },
           {
             "datasource": {
@@ -1451,26 +1529,27 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "sum by (pod) (\n  container_memory_working_set_bytes{\n    namespace=\"monitoring\",\n    container=\"compactor\",\n    pod=~\"thanos-compactor.*\"\n  }\n)",
+            "expr": "max(\r\n  max by (pod) (\r\n    kube_pod_container_resource_requests{\r\n      cluster=\"$cluster\",\r\n      resource=\"memory\",\r\n      namespace=\"argocd\",\r\n      pod=~\"argocd-dex-server.*\"\r\n    }\r\n  )\r\n)\r\n",
+            "hide": false,
+            "interval": "",
+            "legendFormat": "request",
+            "range": true,
+            "refId": "request"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "editorMode": "code",
+            "expr": "sum(container_memory_working_set_bytes{cluster=\"$cluster\", container=~\"dex-server\"}) by (pod)",
             "interval": "",
             "legendFormat": "{{pod}}",
             "range": true,
             "refId": "B"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "PA5392E10C0F059AB"
-            },
-            "editorMode": "code",
-            "expr": "max(\n  max by (pod) (\n    kube_pod_container_resource_requests{\n      resource=\"memory\",\n      namespace=\"monitoring\",\n      pod=~\"thanos-compactor.*\"\n    }\n  )\n)",
-            "interval": "",
-            "legendFormat": "request",
-            "range": true,
-            "refId": "C"
           }
         ],
-        "title": "Memory Usage vs. Request \u0026 Limit",
+        "title": "Memory Usage v. Limit",
         "type": "timeseries"
       },
       {
@@ -1501,7 +1580,7 @@
           "h": 8,
           "w": 4,
           "x": 20,
-          "y": 24
+          "y": 26
         },
         "id": 28,
         "options": {
@@ -1530,7 +1609,7 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "kube_pod_container_status_last_terminated_reason{pod=~\"thanos-compactor.*\"} != 0",
+            "expr": "kube_pod_container_status_last_terminated_reason{cluster=\"$cluster\", pod=~\"argocd-dex-server.*\"} != 0",
             "interval": "",
             "legendFormat": "{{reason}} - {{pod}}",
             "range": true,
@@ -1546,11 +1625,11 @@
           "h": 1,
           "w": 24,
           "x": 0,
-          "y": 32
+          "y": 34
         },
         "id": 6,
         "panels": [],
-        "title": "Thanos / Store",
+        "title": "ArgoCD / notifications-controller",
         "type": "row"
       },
       {
@@ -1656,7 +1735,7 @@
                 {
                   "id": "color",
                   "value": {
-                    "fixedColor": "#FADE2A",
+                    "fixedColor": "blue",
                     "mode": "fixed"
                   }
                 },
@@ -1686,7 +1765,7 @@
           "h": 8,
           "w": 10,
           "x": 0,
-          "y": 33
+          "y": 35
         },
         "id": 17,
         "interval": "1m",
@@ -1715,12 +1794,12 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "max(\r\n  sum by (pod) (\r\n    kube_pod_container_resource_limits{resource=\"cpu\", namespace=\"monitoring\", pod=~\"thanos-store.*\"}\r\n  )\r\n)\r\n",
+            "expr": "max(\r\n  sum by (pod) (\r\n    kube_pod_container_resource_limits{\r\n      cluster=\"$cluster\",\r\n      resource=\"cpu\",\r\n      namespace=\"argocd\",\r\n      pod=~\"argocd-notifications-controller.*\"\r\n    }\r\n  )\r\n)",
             "hide": false,
             "interval": "",
-            "legendFormat": "limit",
+            "legendFormat": "{{pod}} limit",
             "range": true,
-            "refId": "A"
+            "refId": "Limits"
           },
           {
             "datasource": {
@@ -1728,12 +1807,12 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "max by (pod) (\n  irate(\n    container_cpu_usage_seconds_total{\n      namespace=\"monitoring\",\n      container=\"storegateway\",\n      pod=~\"thanos-storegateway.*\"\n    }[$__rate_interval]\n  )\n)",
+            "expr": "max(\r\n  sum by (pod) (\r\n    kube_pod_container_resource_requests{\r\n      cluster=\"$cluster\",\r\n      resource=\"cpu\",\r\n      namespace=\"argocd\",\r\n      pod=~\"argocd-notifications-controller.*\"\r\n    }\r\n  )\r\n)\r\n",
             "hide": false,
-            "interval": "",
-            "legendFormat": "{{pod}}",
+            "instant": false,
+            "legendFormat": "{{pod}} request",
             "range": true,
-            "refId": "B"
+            "refId": "Requests"
           },
           {
             "datasource": {
@@ -1741,14 +1820,15 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "max(\n  sum by (pod) (\n    kube_pod_container_resource_requests{\n      resource=\"cpu\",\n      namespace=\"monitoring\",\n      pod=~\"thanos-storegateway.*\"\n    }\n  )\n)",
+            "expr": "max by (pod) (\r\n  irate(container_cpu_usage_seconds_total{cluster=\"$cluster\", container=\"notifications-controller\"}[$__interval]))",
+            "hide": false,
             "interval": "",
-            "legendFormat": "request",
+            "legendFormat": "{{container}}",
             "range": true,
-            "refId": "C"
+            "refId": "Usage"
           }
         ],
-        "title": "CPU Core Usage vs. Request \u0026 Limit",
+        "title": "CPU Core Usage vs. Limit",
         "type": "timeseries"
       },
       {
@@ -1854,7 +1934,7 @@
                 {
                   "id": "color",
                   "value": {
-                    "fixedColor": "#FADE2A",
+                    "fixedColor": "blue",
                     "mode": "fixed"
                   }
                 },
@@ -1884,9 +1964,9 @@
           "h": 8,
           "w": 10,
           "x": 10,
-          "y": 33
+          "y": 35
         },
-        "id": 18,
+        "id": 63,
         "interval": "1m",
         "options": {
           "legend": {
@@ -1913,12 +1993,12 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "max(\n  max by (pod) (\n    kube_pod_container_resource_limits{\n      resource=\"memory\",\n      namespace=\"monitoring\",\n      pod=~\"thanos-storegateway.*\"\n    }\n  )\n)",
+            "expr": "max(\r\n  max by (pod) (\r\n    kube_pod_container_resource_limits{\r\n      cluster=\"$cluster\",\r\n      resource=\"memory\",\r\n      namespace=\"argocd\",\r\n      pod=~\"argocd-notifications-controller.*\"\r\n    }\r\n  )\r\n)\r\n",
             "hide": false,
             "interval": "",
             "legendFormat": "limit",
             "range": true,
-            "refId": "A"
+            "refId": "limit"
           },
           {
             "datasource": {
@@ -1926,26 +2006,27 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "sum by (pod) (\n  container_memory_working_set_bytes{\n    namespace=\"monitoring\",\n    container=\"storegateway\",\n    pod=~\"thanos-storegateway.*\"\n  }\n)",
+            "expr": "max(\r\n  max by (pod) (\r\n    kube_pod_container_resource_requests{\r\n      cluster=\"$cluster\",\r\n      resource=\"memory\",\r\n      namespace=\"argocd\",\r\n      pod=~\"argocd-notifications-controller.*\"\r\n    }\r\n  )\r\n)\r\n",
+            "hide": false,
+            "interval": "",
+            "legendFormat": "request",
+            "range": true,
+            "refId": "request"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "editorMode": "code",
+            "expr": "sum(container_memory_working_set_bytes{cluster=\"$cluster\", container=~\"notifications-controller\"}) by (pod)",
             "interval": "",
             "legendFormat": "{{pod}}",
             "range": true,
             "refId": "B"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "PA5392E10C0F059AB"
-            },
-            "editorMode": "code",
-            "expr": "max(\n  max by (pod) (\n    kube_pod_container_resource_requests{\n      resource=\"memory\",\n      namespace=\"monitoring\",\n      pod=~\"thanos-storegateway.*\"\n    }\n  )\n)",
-            "interval": "",
-            "legendFormat": "request",
-            "range": true,
-            "refId": "C"
           }
         ],
-        "title": "Memory Usage vs. Request \u0026 Limit",
+        "title": "Memory Usage v. Limit",
         "type": "timeseries"
       },
       {
@@ -1976,7 +2057,7 @@
           "h": 8,
           "w": 4,
           "x": 20,
-          "y": 33
+          "y": 35
         },
         "id": 27,
         "options": {
@@ -2005,7 +2086,7 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "kube_pod_container_status_last_terminated_reason{pod=~\"thanos-storegateway.*\"} != 0",
+            "expr": "kube_pod_container_status_last_terminated_reason{cluster=\"$cluster\", pod=~\"argocd-notifications-controller.*\"} != 0",
             "interval": "",
             "legendFormat": "{{reason}} - {{pod}}",
             "range": true,
@@ -2016,315 +2097,16 @@
         "type": "stat"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "PA5392E10C0F059AB"
-        },
-        "description": "",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "barWidthFactor": 0.6,
-              "drawStyle": "line",
-              "fillOpacity": 10,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "linear",
-              "lineWidth": 1,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "never",
-              "showValues": false,
-              "spanNulls": true,
-              "stacking": {
-                "group": "A",
-                "mode": "normal"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            },
-            "unit": "percentunit"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 8,
-          "w": 8,
-          "x": 0,
-          "y": 41
-        },
-        "id": 37,
-        "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
-          }
-        },
-        "pluginVersion": "12.3.0",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "PA5392E10C0F059AB"
-            },
-            "editorMode": "code",
-            "expr": "sum(\n  rate(\n    thanos_store_index_cache_hits_total[$__rate_interval]\n  )\n)\n/\nsum(\n  rate(\n    thanos_store_index_cache_requests_total[$__rate_interval]\n  ) \n)",
-            "interval": "",
-            "legendFormat": "Hit Ratio",
-            "range": true,
-            "refId": "A"
-          }
-        ],
-        "title": "Cache Hit Ratio",
-        "type": "timeseries"
-      },
-      {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "PA5392E10C0F059AB"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "barWidthFactor": 0.6,
-              "drawStyle": "line",
-              "fillOpacity": 10,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "linear",
-              "lineWidth": 1,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "never",
-              "showValues": false,
-              "spanNulls": true,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            },
-            "unit": "short"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 8,
-          "w": 7,
-          "x": 8,
-          "y": 41
-        },
-        "id": 35,
-        "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
-          }
-        },
-        "pluginVersion": "12.3.0",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "PA5392E10C0F059AB"
-            },
-            "expr": "rate(thanos_store_index_cache_hits_total[5m])",
-            "interval": "",
-            "legendFormat": "{{item_type}} - {{kubernetes_pod_name}}",
-            "refId": "A"
-          }
-        ],
-        "title": "Cache Hits",
-        "type": "timeseries"
-      },
-      {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "PA5392E10C0F059AB"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "barWidthFactor": 0.6,
-              "drawStyle": "line",
-              "fillOpacity": 10,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "linear",
-              "lineWidth": 1,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "never",
-              "showValues": false,
-              "spanNulls": true,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            },
-            "unit": "s"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 8,
-          "w": 9,
-          "x": 15,
-          "y": 41
-        },
-        "id": 39,
-        "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
-          }
-        },
-        "pluginVersion": "12.3.0",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "PA5392E10C0F059AB"
-            },
-            "editorMode": "code",
-            "expr": "rate(thanos_bucket_store_series_fetch_duration_seconds_count[$__rate_interval])",
-            "interval": "",
-            "legendFormat": "{{kubernetes_pod_name}}",
-            "range": true,
-            "refId": "A"
-          }
-        ],
-        "title": "bucket_store_series_fetch_duration_seconds_count",
-        "type": "timeseries"
-      },
-      {
         "collapsed": false,
         "gridPos": {
           "h": 1,
           "w": 24,
           "x": 0,
-          "y": 49
+          "y": 43
         },
         "id": 40,
         "panels": [],
-        "title": "Thanos / Receive",
+        "title": "ArgoCD/ redis-ha-haproxy",
         "type": "row"
       },
       {
@@ -2430,7 +2212,7 @@
                 {
                   "id": "color",
                   "value": {
-                    "fixedColor": "#FADE2A",
+                    "fixedColor": "blue",
                     "mode": "fixed"
                   }
                 },
@@ -2460,9 +2242,9 @@
           "h": 8,
           "w": 10,
           "x": 0,
-          "y": 50
+          "y": 44
         },
-        "id": 41,
+        "id": 53,
         "interval": "1m",
         "options": {
           "legend": {
@@ -2489,12 +2271,11 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "max(\r\n  sum by (pod) (\r\n    kube_pod_container_resource_limits{\r\n      namespace=\"monitoring\",\r\n      resource=\"cpu\",\r\n      container=\"receive\",\r\n      pod=~\"^thanos-receive($|-[0-9]+)$\"\r\n    }\r\n  )\r\n)",
-            "hide": false,
+            "expr": "max(\r\n  sum by (pod) (\r\n    kube_pod_container_resource_limits{\r\n      cluster=\"$cluster\",\r\n      resource=\"cpu\",\r\n      namespace=\"argocd\",\r\n      pod=~\"argocd-redis-ha-haproxy.*\"\r\n    }\r\n  )\r\n)",
             "interval": "",
             "legendFormat": "limit",
             "range": true,
-            "refId": "A"
+            "refId": "Limits"
           },
           {
             "datasource": {
@@ -2502,26 +2283,27 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "\r\nmax by (pod) (\r\n  irate(\r\n    container_cpu_usage_seconds_total{\r\n      namespace=\"monitoring\",\r\n      pod=~\"^thanos-receive($|-[0-9]+$)\",\r\n      container!=\"\"\r\n    }[2m]\r\n  )\r\n)\r\n",
+            "expr": "max(\r\n  sum by (pod) (\r\n    kube_pod_container_resource_requests{\r\n      cluster=\"$cluster\",\r\n      resource=\"cpu\",\r\n      namespace=\"argocd\",\r\n      pod=~\"argocd-redis-ha-haproxy.*\"\r\n    }\r\n  )\r\n)",
+            "hide": false,
+            "interval": "",
+            "legendFormat": "request",
+            "range": true,
+            "refId": "Requests"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "editorMode": "code",
+            "expr": "max by (pod) (\r\n  irate(container_cpu_usage_seconds_total{cluster=\"$cluster\", container=\"haproxy\"}[$__interval]))",
             "interval": "",
             "legendFormat": "__auto",
             "range": true,
             "refId": "B"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "PA5392E10C0F059AB"
-            },
-            "editorMode": "code",
-            "expr": "max(\n  sum by (pod) (\n    kube_pod_container_resource_requests{\n      resource=\"cpu\",\n      namespace=\"monitoring\",\n      container=\"receive\",\n      pod=~\"^thanos-receive($|-[0-9]+)$\"\n    }\n  )\n)",
-            "interval": "",
-            "legendFormat": "request",
-            "range": true,
-            "refId": "C"
           }
         ],
-        "title": "CPU Core Usage vs. Request \u0026 Limit",
+        "title": "CPU Core Usage vs. Limit",
         "type": "timeseries"
       },
       {
@@ -2627,7 +2409,7 @@
                 {
                   "id": "color",
                   "value": {
-                    "fixedColor": "#FADE2A",
+                    "fixedColor": "blue",
                     "mode": "fixed"
                   }
                 },
@@ -2657,9 +2439,9 @@
           "h": 8,
           "w": 10,
           "x": 10,
-          "y": 50
+          "y": 44
         },
-        "id": 42,
+        "id": 54,
         "interval": "1m",
         "options": {
           "legend": {
@@ -2687,12 +2469,12 @@
             },
             "editorMode": "code",
             "exemplar": true,
-            "expr": "max(\r\n  max by (pod) (\r\n    kube_pod_container_resource_limits{\r\n      resource=\"memory\",\r\n      namespace=\"monitoring\",\r\n      pod=~\"thanos-receive.*\",\r\n      pod!~\"thanos-receive-distributor.*\"\r\n    }\r\n  )\r\n)\r\n",
+            "expr": "max(\r\n  max by (pod) (\r\n    kube_pod_container_resource_limits{\r\n      cluster=\"$cluster\",\r\n      resource=\"memory\",\r\n      namespace=\"argocd\",\r\n      pod=~\"argocd-redis-ha-haproxy.*\"\r\n    }\r\n  )\r\n)\r\n",
             "hide": false,
             "interval": "",
             "legendFormat": "limit",
             "range": true,
-            "refId": "A"
+            "refId": "limit"
           },
           {
             "datasource": {
@@ -2700,26 +2482,28 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "sum by (pod) (\n  container_memory_working_set_bytes{\n    namespace=\"monitoring\",\n    container=\"receive\",\n    pod=~\"thanos-receive.*\",\n    pod!~\"thanos-receive-distributor.*\"\n  }\n)",
+            "exemplar": true,
+            "expr": "max(\r\n  max by (pod) (\r\n    kube_pod_container_resource_requests{\r\n      cluster=\"$cluster\",\r\n      resource=\"memory\",\r\n      namespace=\"argocd\",\r\n      pod=~\"argocd-redis-ha-haproxy.*\"\r\n    }\r\n  )\r\n)\r\n",
+            "hide": false,
+            "interval": "",
+            "legendFormat": "request",
+            "range": true,
+            "refId": "request"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "editorMode": "code",
+            "expr": "sum(max_over_time(container_memory_working_set_bytes{cluster=\"$cluster\",container=\"haproxy\"}[$__interval])) by (pod)",
             "interval": "",
             "legendFormat": "{{pod}}",
             "range": true,
             "refId": "B"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "PA5392E10C0F059AB"
-            },
-            "editorMode": "code",
-            "expr": "max(\n  max by (pod) (\n    kube_pod_container_resource_requests{\n      resource=\"memory\",\n      namespace=\"monitoring\",\n      pod=~\"thanos-receive.*\",\n      pod!~\"thanos-receive-distributor.*\"\n    }\n  )\n)",
-            "interval": "",
-            "legendFormat": "request",
-            "range": true,
-            "refId": "C"
           }
         ],
-        "title": "Memory Usage vs. Request \u0026 Limit",
+        "title": "Memory Usage v. Limit",
         "type": "timeseries"
       },
       {
@@ -2750,7 +2534,7 @@
           "h": 8,
           "w": 4,
           "x": 20,
-          "y": 50
+          "y": 44
         },
         "id": 43,
         "options": {
@@ -2779,7 +2563,7 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "kube_pod_container_status_last_terminated_reason{pod=~\"thanos-receive.*\", pod!~\"thanos-receive-distributor.*\"} != 0",
+            "expr": "kube_pod_container_status_last_terminated_reason{cluster=\"$cluster\", pod=~\"argocd-redis-ha-haproxy.*\"} != 0",
             "interval": "",
             "legendFormat": "{{reason}} - {{pod}}",
             "range": true,
@@ -2795,11 +2579,11 @@
           "h": 1,
           "w": 24,
           "x": 0,
-          "y": 58
+          "y": 52
         },
         "id": 48,
         "panels": [],
-        "title": "Thanos / Receive Distributor",
+        "title": "ArgoCD / redis-ha-server",
         "type": "row"
       },
       {
@@ -2905,7 +2689,7 @@
                 {
                   "id": "color",
                   "value": {
-                    "fixedColor": "#FADE2A",
+                    "fixedColor": "blue",
                     "mode": "fixed"
                   }
                 },
@@ -2935,9 +2719,9 @@
           "h": 8,
           "w": 10,
           "x": 0,
-          "y": 59
+          "y": 53
         },
-        "id": 49,
+        "id": 60,
         "interval": "1m",
         "options": {
           "legend": {
@@ -2964,12 +2748,11 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "max(\r\n  sum by (pod) (\r\n    kube_pod_container_resource_limits{\r\n      namespace=\"monitoring\",\r\n      resource=\"cpu\",\r\n      container=\"receive\",\r\n      pod=~\"^thanos-receive-distributor.*\"\r\n    }\r\n  )\r\n)",
-            "hide": false,
+            "expr": "max(\r\n  sum by (pod) (\r\n    kube_pod_container_resource_limits{\r\n      cluster=\"$cluster\",\r\n      resource=\"cpu\",\r\n      namespace=\"argocd\",\r\n      pod=~\"argocd-redis-ha-server.*\"\r\n    }\r\n  )\r\n)",
             "interval": "",
             "legendFormat": "limit",
             "range": true,
-            "refId": "A"
+            "refId": "Limits"
           },
           {
             "datasource": {
@@ -2977,26 +2760,27 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "max by (pod) (\r\n  irate(\r\n    container_cpu_usage_seconds_total{\r\n      namespace=\"monitoring\",\r\n      pod=~\"^thanos-receive-distributor.*\"\r\n    }[$__rate_interval]\r\n  )\r\n)",
+            "expr": "max(\r\n  sum by (pod) (\r\n    kube_pod_container_resource_requests{\r\n      cluster=\"$cluster\",\r\n      resource=\"cpu\",\r\n      namespace=\"argocd\",\r\n      pod=~\"argocd-redis-ha-server.*\"\r\n    }\r\n  )\r\n)",
+            "hide": false,
+            "interval": "",
+            "legendFormat": "request",
+            "range": true,
+            "refId": "Requests"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "editorMode": "code",
+            "expr": "max by (pod) (\r\n  irate(container_cpu_usage_seconds_total{\r\n    cluster=\"$cluster\",\r\n    container=~\"redis|sentinel|split-brain-fix\"\r\n  }[$__interval])\r\n)\r\n",
             "interval": "",
             "legendFormat": "__auto",
             "range": true,
             "refId": "B"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "PA5392E10C0F059AB"
-            },
-            "editorMode": "code",
-            "expr": "max(\n  sum by (pod) (\n    kube_pod_container_resource_requests{\n      resource=\"cpu\",\n      namespace=\"monitoring\",\n      container=\"receive\",\n      pod=~\"thanos-receive-distributor.*\"\n    }\n  )\n)",
-            "interval": "",
-            "legendFormat": "request",
-            "range": true,
-            "refId": "C"
           }
         ],
-        "title": "CPU Core Usage vs. Request \u0026 Limit",
+        "title": "CPU Core Usage vs. Limit",
         "type": "timeseries"
       },
       {
@@ -3102,7 +2886,7 @@
                 {
                   "id": "color",
                   "value": {
-                    "fixedColor": "#FADE2A",
+                    "fixedColor": "blue",
                     "mode": "fixed"
                   }
                 },
@@ -3132,9 +2916,9 @@
           "h": 8,
           "w": 10,
           "x": 10,
-          "y": 59
+          "y": 53
         },
-        "id": 50,
+        "id": 61,
         "interval": "1m",
         "options": {
           "legend": {
@@ -3162,12 +2946,12 @@
             },
             "editorMode": "code",
             "exemplar": true,
-            "expr": "max(\r\n  max by (pod) (\r\n    kube_pod_container_resource_limits{\r\n      resource=\"memory\",\r\n      namespace=\"monitoring\",\r\n      pod=~\"thanos-receive-distributor.*\",\r\n    }\r\n  )\r\n)\r\n",
+            "expr": "max(\r\n  max by (pod) (\r\n    kube_pod_container_resource_limits{\r\n      cluster=\"$cluster\",\r\n      resource=\"memory\",\r\n      namespace=\"argocd\",\r\n      pod=~\"argocd-redis-ha-server.*\"\r\n    }\r\n  )\r\n)\r\n",
             "hide": false,
             "interval": "",
             "legendFormat": "limit",
             "range": true,
-            "refId": "A"
+            "refId": "limit"
           },
           {
             "datasource": {
@@ -3175,26 +2959,28 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "\r\n\r\n\r\nsum(container_memory_working_set_bytes{namespace=\"monitoring\",container=~\"receive\",pod=~\"thanos-receive-distributor.*\"}) by (pod)\r\n",
+            "exemplar": true,
+            "expr": "max(\r\n  max by (pod) (\r\n    kube_pod_container_resource_requests{\r\n      cluster=\"$cluster\",\r\n      resource=\"memory\",\r\n      namespace=\"argocd\",\r\n      pod=~\"argocd-redis-ha-server.*\"\r\n    }\r\n  )\r\n)\r\n",
+            "hide": false,
+            "interval": "",
+            "legendFormat": "request",
+            "range": true,
+            "refId": "request"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "editorMode": "code",
+            "expr": "sum(max_over_time(container_memory_working_set_bytes{cluster=\"$cluster\", container=~\"redis|sentinel|split-brain-fix\"}[$__interval])) by (pod)",
             "interval": "",
             "legendFormat": "{{pod}}",
             "range": true,
             "refId": "B"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "PA5392E10C0F059AB"
-            },
-            "editorMode": "code",
-            "expr": "max(\n  max by (pod) (\n    kube_pod_container_resource_requests{\n      resource=\"memory\",\n      namespace=\"monitoring\",\n      pod=~\"thanos-receive-distributor.*\"\n    }\n  )\n)",
-            "interval": "",
-            "legendFormat": "request",
-            "range": true,
-            "refId": "C"
           }
         ],
-        "title": "Memory Usage vs. Request \u0026 Limit",
+        "title": "Memory Usage v. Limit",
         "type": "timeseries"
       },
       {
@@ -3225,7 +3011,7 @@
           "h": 8,
           "w": 4,
           "x": 20,
-          "y": 59
+          "y": 53
         },
         "id": 51,
         "options": {
@@ -3254,7 +3040,7 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "kube_pod_container_status_last_terminated_reason{pod=~\"thanos-receive-distributor.*\"} != 0",
+            "expr": "kube_pod_container_status_last_terminated_reason{cluster=\"$cluster\", pod=~\"argocd-redis-ha-server.*\"} != 0",
             "interval": "",
             "legendFormat": "{{reason}} - {{pod}}",
             "range": true,
@@ -3270,11 +3056,11 @@
           "h": 1,
           "w": 24,
           "x": 0,
-          "y": 67
+          "y": 61
         },
         "id": 44,
         "panels": [],
-        "title": "Thanos / Ruler",
+        "title": "ArgoCD / repo-server",
         "type": "row"
       },
       {
@@ -3380,7 +3166,7 @@
                 {
                   "id": "color",
                   "value": {
-                    "fixedColor": "#FADE2A",
+                    "fixedColor": "blue",
                     "mode": "fixed"
                   }
                 },
@@ -3410,9 +3196,9 @@
           "h": 8,
           "w": 10,
           "x": 0,
-          "y": 68
+          "y": 62
         },
-        "id": 45,
+        "id": 58,
         "interval": "1m",
         "options": {
           "legend": {
@@ -3439,11 +3225,11 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "max(\r\n  sum by (pod) (\r\n    kube_pod_container_resource_limits{resource=\"cpu\", namespace=\"monitoring\", pod=~\"thanos-ruler.*\"}\r\n  )\r\n)",
+            "expr": "max(\r\n  sum by (pod) (\r\n    kube_pod_container_resource_limits{\r\n      cluster=\"$cluster\",\r\n      resource=\"cpu\",\r\n      namespace=\"argocd\",\r\n      pod=~\"argocd-repo-server.*\"\r\n    }\r\n  )\r\n)",
             "interval": "",
             "legendFormat": "limit",
             "range": true,
-            "refId": "A"
+            "refId": "Limits"
           },
           {
             "datasource": {
@@ -3451,26 +3237,27 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "max by (pod) (\n  irate(\n    container_cpu_usage_seconds_total{\n      namespace=\"monitoring\",\n      container=\"thanos-ruler\",\n      pod=~\"thanos-ruler.*\"\n    }[$__rate_interval]\n  )\n)",
-            "interval": "",
-            "legendFormat": "{{pod}}",
-            "range": true,
-            "refId": "B"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "PA5392E10C0F059AB"
-            },
-            "editorMode": "code",
-            "expr": "max(\n  sum by (pod) (\n    kube_pod_container_resource_requests{\n      resource=\"cpu\",\n      namespace=\"monitoring\",\n      pod=~\"thanos-ruler.*\"\n    }\n  )\n)",
+            "expr": "max(\r\n  sum by (pod) (\r\n    kube_pod_container_resource_requests{\r\n      cluster=\"$cluster\",\r\n      resource=\"cpu\",\r\n      namespace=\"argocd\",\r\n      pod=~\"argocd-repo-server.*\"\r\n    }\r\n  )\r\n)",
+            "hide": false,
             "interval": "",
             "legendFormat": "request",
             "range": true,
-            "refId": "C"
+            "refId": "Requests"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "editorMode": "code",
+            "expr": "max by (pod) (\r\n  irate(container_cpu_usage_seconds_total{cluster=\"$cluster\", container=\"repo-server\"}[$__interval]))",
+            "interval": "",
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "B"
           }
         ],
-        "title": "CPU Core Usage vs. Request \u0026 Limit",
+        "title": "CPU Core Usage vs. Limit",
         "type": "timeseries"
       },
       {
@@ -3576,7 +3363,7 @@
                 {
                   "id": "color",
                   "value": {
-                    "fixedColor": "#FADE2A",
+                    "fixedColor": "blue",
                     "mode": "fixed"
                   }
                 },
@@ -3606,9 +3393,9 @@
           "h": 8,
           "w": 10,
           "x": 10,
-          "y": 68
+          "y": 62
         },
-        "id": 46,
+        "id": 59,
         "interval": "1m",
         "options": {
           "legend": {
@@ -3636,10 +3423,24 @@
             },
             "editorMode": "code",
             "exemplar": true,
-            "expr": "max(\r\n  max by (pod) (\r\n    kube_pod_container_resource_limits{resource=\"memory\", namespace=\"monitoring\", pod=~\"thanos-ruler.*\"}\r\n  )\r\n)",
+            "expr": "max(\r\n  max by (pod) (\r\n    kube_pod_container_resource_limits{\r\n      cluster=\"$cluster\",\r\n      resource=\"memory\",\r\n      namespace=\"argocd\",\r\n      pod=~\"argocd-repo-server.*\"\r\n    }\r\n  )\r\n)\r\n",
             "hide": false,
             "interval": "",
             "legendFormat": "limit",
+            "range": true,
+            "refId": "limit"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "editorMode": "code",
+            "exemplar": true,
+            "expr": "max(\r\n  max by (pod) (\r\n    kube_pod_container_resource_requests{\r\n      cluster=\"$cluster\",\r\n      resource=\"memory\",\r\n      namespace=\"argocd\",\r\n      pod=~\"argocd-repo-server.*\"\r\n    }\r\n  )\r\n)\r\n",
+            "hide": false,
+            "interval": "",
+            "legendFormat": "request",
             "range": true,
             "refId": "A"
           },
@@ -3649,26 +3450,14 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "sum by (pod) (\n  max_over_time(\n    container_memory_working_set_bytes{\n      namespace=\"monitoring\",\n      container=\"thanos-ruler\",\n      pod=~\"thanos-ruler.*\"\n    }[$__interval]\n  )\n)",
+            "expr": "sum(max_over_time(container_memory_working_set_bytes{cluster=\"$cluster\",container=\"repo-server\"}[$__interval])) by (pod)",
             "interval": "",
             "legendFormat": "{{pod}}",
             "range": true,
             "refId": "B"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "PA5392E10C0F059AB"
-            },
-            "editorMode": "code",
-            "expr": "max(\n  max by (pod) (\n    kube_pod_container_resource_requests{\n      resource=\"memory\",\n      namespace=\"monitoring\",\n      pod=~\"thanos-ruler.*\"\n    }\n  )\n)",
-            "interval": "",
-            "legendFormat": "request",
-            "range": true,
-            "refId": "C"
           }
         ],
-        "title": "Memory Usage vs. Request \u0026 Limit",
+        "title": "Memory Usage v. Limit",
         "type": "timeseries"
       },
       {
@@ -3699,7 +3488,7 @@
           "h": 8,
           "w": 4,
           "x": 20,
-          "y": 68
+          "y": 62
         },
         "id": 47,
         "options": {
@@ -3728,7 +3517,484 @@
               "uid": "PA5392E10C0F059AB"
             },
             "editorMode": "code",
-            "expr": "kube_pod_container_status_last_terminated_reason{pod=~\"thanos-ruler.*\"} != 0",
+            "expr": "kube_pod_container_status_last_terminated_reason{cluster=\"$cluster\", pod=~\"repo-server.*\"} != 0",
+            "interval": "",
+            "legendFormat": "{{reason}} - {{pod}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Last Terminated Reason",
+        "type": "stat"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 70
+        },
+        "id": 52,
+        "panels": [],
+        "title": "ArgoCD / server",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PA5392E10C0F059AB"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": true,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": "/limit/"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#F2495C",
+                    "mode": "fixed"
+                  }
+                },
+                {
+                  "id": "custom.fillOpacity",
+                  "value": 0
+                },
+                {
+                  "id": "custom.lineWidth",
+                  "value": 2
+                },
+                {
+                  "id": "custom.lineStyle",
+                  "value": {
+                    "dash": [
+                      10,
+                      10
+                    ],
+                    "fill": "dash"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": "/request/"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "blue",
+                    "mode": "fixed"
+                  }
+                },
+                {
+                  "id": "custom.fillOpacity",
+                  "value": 0
+                },
+                {
+                  "id": "custom.lineWidth",
+                  "value": 2
+                },
+                {
+                  "id": "custom.lineStyle",
+                  "value": {
+                    "dash": [
+                      10,
+                      10
+                    ],
+                    "fill": "dash"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 10,
+          "x": 0,
+          "y": 71
+        },
+        "id": 55,
+        "interval": "1m",
+        "options": {
+          "legend": {
+            "calcs": [
+              "max",
+              "last",
+              "mean"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "editorMode": "code",
+            "expr": "max(\r\n  sum by (pod) (\r\n    kube_pod_container_resource_limits{\r\n      cluster=\"$cluster\",\r\n      resource=\"cpu\",\r\n      namespace=\"argocd\",\r\n      pod=~\"argocd-server.*\"\r\n    }\r\n  )\r\n)",
+            "interval": "",
+            "legendFormat": "limit",
+            "range": true,
+            "refId": "Limits"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "editorMode": "code",
+            "expr": "max(\r\n  sum by (pod) (\r\n    kube_pod_container_resource_requests{\r\n      cluster=\"$cluster\",\r\n      resource=\"cpu\",\r\n      namespace=\"argocd\",\r\n      pod=~\"argocd-server.*\"\r\n    }\r\n  )\r\n)",
+            "hide": false,
+            "interval": "",
+            "legendFormat": "request",
+            "range": true,
+            "refId": "Requests"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "editorMode": "code",
+            "expr": "max by (pod) (\r\n  irate(container_cpu_usage_seconds_total{cluster=\"$cluster\", container=\"server\"}[$__interval]))",
+            "interval": "",
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "B"
+          }
+        ],
+        "title": "CPU Core Usage vs. Limit",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PA5392E10C0F059AB"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": true,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "bytes"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": "/limit/"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#F2495C",
+                    "mode": "fixed"
+                  }
+                },
+                {
+                  "id": "custom.fillOpacity",
+                  "value": 0
+                },
+                {
+                  "id": "custom.lineWidth",
+                  "value": 2
+                },
+                {
+                  "id": "custom.lineStyle",
+                  "value": {
+                    "dash": [
+                      10,
+                      10
+                    ],
+                    "fill": "dash"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": "/request/"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "blue",
+                    "mode": "fixed"
+                  }
+                },
+                {
+                  "id": "custom.fillOpacity",
+                  "value": 0
+                },
+                {
+                  "id": "custom.lineWidth",
+                  "value": 2
+                },
+                {
+                  "id": "custom.lineStyle",
+                  "value": {
+                    "dash": [
+                      10,
+                      10
+                    ],
+                    "fill": "dash"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 10,
+          "x": 10,
+          "y": 71
+        },
+        "id": 56,
+        "interval": "1m",
+        "options": {
+          "legend": {
+            "calcs": [
+              "max",
+              "last",
+              "mean"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "editorMode": "code",
+            "exemplar": true,
+            "expr": "max(\r\n  max by (pod) (\r\n    kube_pod_container_resource_limits{\r\n      cluster=\"$cluster\",\r\n      resource=\"memory\",\r\n      namespace=\"argocd\",\r\n      pod=~\"argocd-server.*\"\r\n    }\r\n  )\r\n)\r\n",
+            "hide": false,
+            "interval": "",
+            "legendFormat": "limit",
+            "range": true,
+            "refId": "limit"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "editorMode": "code",
+            "exemplar": true,
+            "expr": "max(\r\n  max by (pod) (\r\n    kube_pod_container_resource_requests{\r\n      cluster=\"$cluster\",\r\n      resource=\"memory\",\r\n      namespace=\"argocd\",\r\n      pod=~\"argocd-server.*\"\r\n    }\r\n  )\r\n)\r\n",
+            "hide": false,
+            "interval": "",
+            "legendFormat": "request",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "editorMode": "code",
+            "expr": "sum(max_over_time(container_memory_working_set_bytes{cluster=\"$cluster\",container=\"server\"}[$__interval])) by (pod)",
+            "interval": "",
+            "legendFormat": "{{pod}}",
+            "range": true,
+            "refId": "B"
+          }
+        ],
+        "title": "Memory Usage v. Limit",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PA5392E10C0F059AB"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 4,
+          "x": 20,
+          "y": 71
+        },
+        "id": 57,
+        "options": {
+          "colorMode": "none",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "horizontal",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "text": {},
+          "textMode": "value_and_name",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PA5392E10C0F059AB"
+            },
+            "editorMode": "code",
+            "expr": "kube_pod_container_status_last_terminated_reason{cluster=\"$cluster\", pod=~\"server.*\"} != 0",
             "interval": "",
             "legendFormat": "{{reason}} - {{pod}}",
             "range": true,
@@ -3740,16 +4006,36 @@
       }
     ],
     "preload": false,
-    "refresh": "",
+    "refresh": "1m",
     "schemaVersion": 42,
     "tags": [
-      "thanos"
+      "argocd",
+      "iberdrola"
     ],
     "templating": {
-      "list": []
+      "list": [
+        {
+          "current": {
+            "text": "aks-kpescorpostarg-dev",
+            "value": "aks-kpescorpostarg-dev"
+          },
+          "definition": "label_values(kube_pod_info,cluster)",
+          "label": "cluster",
+          "name": "cluster",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(kube_pod_info,cluster)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": ".*arg|arl.*",
+          "type": "query"
+        }
+      ]
     },
     "time": {
-      "from": "now-5m",
+      "from": "now-1h",
       "to": "now"
     },
     "timepicker": {
@@ -3766,7 +4052,7 @@
       ]
     },
     "timezone": "",
-    "title": "Thanos Resources / Overview (+ Requests)",
+    "title": "ArgoCD Health (in progress)",
     "weekStart": ""
   }
 }

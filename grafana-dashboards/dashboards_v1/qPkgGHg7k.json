@@ -6,7 +6,7 @@
       "grafana.app/folder": "efq2oxowa8t8gb"
     },
     "labels": {},
-    "name": "qPkgGHg7k0",
+    "name": "qPkgGHg7k",
     "namespace": "default"
   },
   "spec": {
@@ -39,7 +39,7 @@
           "x": 0,
           "y": 0
         },
-        "id": 117,
+        "id": 68,
         "panels": [],
         "title": "Overview",
         "type": "row"
@@ -61,7 +61,7 @@
           "content": "![argoimage](https://avatars1.githubusercontent.com/u/30269780?s=110\u0026v=4)",
           "mode": "markdown"
         },
-        "pluginVersion": "12.3.0",
+        "pluginVersion": "12.2.2",
         "transparent": true,
         "type": "text"
       },
@@ -118,14 +118,14 @@
           "textMode": "auto",
           "wideLayout": true
         },
-        "pluginVersion": "12.3.0",
+        "pluginVersion": "12.2.2",
         "targets": [
           {
             "datasource": {
               "uid": "$datasource"
             },
             "editorMode": "code",
-            "expr": "time() - max(process_start_time_seconds{job=\"argocd-server-metrics\",namespace=~\"$namespace\",cluster=~\"$argocd_instance\"})",
+            "expr": "time() - min(process_start_time_seconds{ namespace=~\"$namespace\"})",
             "format": "time_series",
             "intervalFactor": 1,
             "range": true,
@@ -188,13 +188,14 @@
           "textMode": "auto",
           "wideLayout": true
         },
-        "pluginVersion": "12.3.0",
+        "pluginVersion": "12.2.2",
         "targets": [
           {
             "datasource": {
               "uid": "$datasource"
             },
-            "expr": "count(count by (server) (argocd_cluster_info{namespace=~\"$namespace\",cluster=~\"$argocd_instance\"}))",
+            "editorMode": "code",
+            "expr": "count(count by (server) (argocd_cluster_info{namespace=~\"$namespace\"}))",
             "format": "time_series",
             "instant": false,
             "intervalFactor": 1,
@@ -257,13 +258,13 @@
           "textMode": "auto",
           "wideLayout": true
         },
-        "pluginVersion": "12.3.0",
+        "pluginVersion": "12.2.2",
         "targets": [
           {
             "datasource": {
               "uid": "$datasource"
             },
-            "expr": "sum(argocd_app_info{namespace=~\"$namespace\",cluster=~\"$argocd_instance\",dest_server=~\"$cluster\",health_status=~\"$health_status\",sync_status=~\"$sync_status\"})",
+            "expr": "sum(argocd_app_info{namespace=~\"$namespace\",dest_server=~\"$cluster\",health_status=~\"$health_status\",sync_status=~\"$sync_status\"})",
             "format": "time_series",
             "instant": false,
             "intervalFactor": 1,
@@ -326,13 +327,13 @@
           "textMode": "auto",
           "wideLayout": true
         },
-        "pluginVersion": "12.3.0",
+        "pluginVersion": "12.2.2",
         "targets": [
           {
             "datasource": {
               "uid": "$datasource"
             },
-            "expr": "count(count by (repo) (argocd_app_info{namespace=~\"$namespace\",cluster=~\"$argocd_instance\"}))",
+            "expr": "count(count by (repo) (argocd_app_info{namespace=~\"$namespace\"}))",
             "format": "time_series",
             "instant": false,
             "intervalFactor": 1,
@@ -402,13 +403,13 @@
           "sizing": "auto",
           "text": {}
         },
-        "pluginVersion": "12.3.0",
+        "pluginVersion": "12.2.2",
         "targets": [
           {
             "datasource": {
               "uid": "$datasource"
             },
-            "expr": "sum(argocd_app_info{namespace=~\"$namespace\",cluster=~\"$argocd_instance\",dest_server=~\"$cluster\",operation!=\"\"})",
+            "expr": "sum(argocd_app_info{namespace=~\"$namespace\",dest_server=~\"$cluster\",operation!=\"\"})",
             "format": "time_series",
             "instant": true,
             "intervalFactor": 1,
@@ -520,46 +521,6 @@
                   }
                 }
               ]
-            },
-            {
-              "matcher": {
-                "id": "byValue",
-                "options": {
-                  "op": "gte",
-                  "reducer": "allIsZero",
-                  "value": 0
-                }
-              },
-              "properties": [
-                {
-                  "id": "custom.hideFrom",
-                  "value": {
-                    "legend": true,
-                    "tooltip": true,
-                    "viz": false
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byValue",
-                "options": {
-                  "op": "gte",
-                  "reducer": "allIsNull",
-                  "value": 0
-                }
-              },
-              "properties": [
-                {
-                  "id": "custom.hideFrom",
-                  "value": {
-                    "legend": true,
-                    "tooltip": true,
-                    "viz": false
-                  }
-                }
-              ]
             }
           ]
         },
@@ -586,13 +547,13 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.3.0",
+        "pluginVersion": "12.2.2",
         "targets": [
           {
             "datasource": {
               "uid": "$datasource"
             },
-            "expr": "sum(argocd_app_info{namespace=~\"$namespace\",cluster=~\"$argocd_instance\",dest_server=~\"$cluster\",health_status=~\"$health_status\",sync_status=~\"$sync_status\"}) by (namespace)",
+            "expr": "sum(argocd_app_info{namespace=~\"$namespace\",dest_server=~\"$cluster\",health_status=~\"$health_status\",sync_status=~\"$sync_status\"}) by (namespace)",
             "format": "time_series",
             "instant": false,
             "intervalFactor": 1,
@@ -766,96 +727,6 @@
                   }
                 }
               ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Degraded"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "semi-dark-red",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Healthy"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "green",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Missing"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "semi-dark-purple",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Progressing"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "semi-dark-blue",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Suspended"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "semi-dark-orange",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Unknown"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "rgb(255, 255, 255)",
-                    "mode": "fixed"
-                  }
-                }
-              ]
             }
           ]
         },
@@ -882,13 +753,13 @@
             "sort": "desc"
           }
         },
-        "pluginVersion": "12.3.0",
+        "pluginVersion": "12.2.2",
         "targets": [
           {
             "datasource": {
               "uid": "$datasource"
             },
-            "expr": "sum(argocd_app_info{namespace=~\"$namespace\",cluster=~\"$argocd_instance\",dest_server=~\"$cluster\",health_status=~\"$health_status\",sync_status=~\"$sync_status\",health_status!=\"\"}) by (health_status)",
+            "expr": "sum(argocd_app_info{namespace=~\"$namespace\",dest_server=~\"$cluster\",health_status=~\"$health_status\",sync_status=~\"$sync_status\",health_status!=\"\"}) by (health_status)",
             "format": "time_series",
             "instant": false,
             "intervalFactor": 1,
@@ -1079,126 +950,6 @@
                   }
                 }
               ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Degraded"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "semi-dark-red",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Healthy"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "green",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Missing"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "semi-dark-purple",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "OutOfSync"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "semi-dark-yellow",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Progressing"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "semi-dark-blue",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Suspended"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "semi-dark-orange",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Synced"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "semi-dark-green",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Unknown"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "rgb(255, 255, 255)",
-                    "mode": "fixed"
-                  }
-                }
-              ]
             }
           ]
         },
@@ -1225,13 +976,13 @@
             "sort": "desc"
           }
         },
-        "pluginVersion": "12.3.0",
+        "pluginVersion": "12.2.2",
         "targets": [
           {
             "datasource": {
               "uid": "$datasource"
             },
-            "expr": "sum(argocd_app_info{namespace=~\"$namespace\",cluster=~\"$argocd_instance\",dest_server=~\"$cluster\",health_status=~\"$health_status\",sync_status=~\"$sync_status\",health_status!=\"\"}) by (sync_status)",
+            "expr": "sum(argocd_app_info{namespace=~\"$namespace\",dest_server=~\"$cluster\",health_status=~\"$health_status\",sync_status=~\"$sync_status\",health_status!=\"\"}) by (sync_status)",
             "format": "time_series",
             "instant": false,
             "intervalFactor": 1,
@@ -1356,46 +1107,6 @@
                   }
                 }
               ]
-            },
-            {
-              "matcher": {
-                "id": "byValue",
-                "options": {
-                  "op": "gte",
-                  "reducer": "allIsZero",
-                  "value": 0
-                }
-              },
-              "properties": [
-                {
-                  "id": "custom.hideFrom",
-                  "value": {
-                    "legend": true,
-                    "tooltip": true,
-                    "viz": false
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byValue",
-                "options": {
-                  "op": "gte",
-                  "reducer": "allIsNull",
-                  "value": 0
-                }
-              },
-              "properties": [
-                {
-                  "id": "custom.hideFrom",
-                  "value": {
-                    "legend": true,
-                    "tooltip": true,
-                    "viz": false
-                  }
-                }
-              ]
             }
           ]
         },
@@ -1423,13 +1134,13 @@
             "sort": "desc"
           }
         },
-        "pluginVersion": "12.3.0",
+        "pluginVersion": "12.2.2",
         "targets": [
           {
             "datasource": {
               "uid": "$datasource"
             },
-            "expr": "sum(round(increase(argocd_app_sync_total{namespace=~\"$namespace\",cluster=~\"$argocd_instance\",dest_server=~\"$cluster\"}[$interval]))) by ($grouping)",
+            "expr": "sum(round(increase(argocd_app_sync_total{namespace=~\"$namespace\",dest_server=~\"$cluster\"}[$interval]))) by ($grouping)",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "{{$grouping}}",
@@ -1520,26 +1231,6 @@
                   }
                 }
               ]
-            },
-            {
-              "matcher": {
-                "id": "byValue",
-                "options": {
-                  "op": "gte",
-                  "reducer": "allIsNull",
-                  "value": 0
-                }
-              },
-              "properties": [
-                {
-                  "id": "custom.hideFrom",
-                  "value": {
-                    "legend": true,
-                    "tooltip": true,
-                    "viz": false
-                  }
-                }
-              ]
             }
           ]
         },
@@ -1566,13 +1257,13 @@
             "sort": "desc"
           }
         },
-        "pluginVersion": "12.3.0",
+        "pluginVersion": "12.2.2",
         "targets": [
           {
             "datasource": {
               "uid": "$datasource"
             },
-            "expr": "sum(round(increase(argocd_app_sync_total{namespace=~\"$namespace\",cluster=~\"$argocd_instance\",phase=~\"Error|Failed\",dest_server=~\"$cluster\"}[$interval]))) by ($grouping, phase)",
+            "expr": "sum(round(increase(argocd_app_sync_total{namespace=~\"$namespace\",phase=~\"Error|Failed\",dest_server=~\"$cluster\"}[$interval]))) by ($grouping, phase)",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "{{phase}}: {{$grouping}}",
@@ -1613,7 +1304,7 @@
               "barAlignment": 0,
               "barWidthFactor": 0.6,
               "drawStyle": "line",
-              "fillOpacity": 0,
+              "fillOpacity": 10,
               "gradientMode": "none",
               "hideFrom": {
                 "legend": false,
@@ -1627,7 +1318,7 @@
               "scaleDistribution": {
                 "type": "linear"
               },
-              "showPoints": "auto",
+              "showPoints": "never",
               "showValues": false,
               "spanNulls": false,
               "stacking": {
@@ -1651,7 +1342,8 @@
                   "value": 80
                 }
               ]
-            }
+            },
+            "unit": "short"
           },
           "overrides": []
         },
@@ -1665,9 +1357,14 @@
         "options": {
           "dataLinks": [],
           "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
+            "calcs": [
+              "mean",
+              "lastNotNull",
+              "max",
+              "sum"
+            ],
+            "displayMode": "table",
+            "placement": "right",
             "showLegend": true
           },
           "tooltip": {
@@ -1676,13 +1373,13 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.3.0",
+        "pluginVersion": "12.2.2",
         "targets": [
           {
             "datasource": {
               "uid": "$datasource"
             },
-            "expr": "sum(increase(argocd_app_reconcile_count{namespace=~\"$namespace\",cluster=~\"$argocd_instance\",dest_server=~\"$cluster\"}[$interval])) by ($grouping)",
+            "expr": "sum(increase(argocd_app_reconcile_count{namespace=~\"$namespace\",dest_server=~\"$cluster\"}[$interval])) by ($grouping)",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "{{$grouping}}",
@@ -1719,17 +1416,19 @@
         },
         "id": 60,
         "options": {
-          "calculate": true,
+          "calculate": false,
           "calculation": {},
           "cellGap": 2,
-          "cellValues": {},
+          "cellValues": {
+            "decimals": 0
+          },
           "color": {
             "exponent": 0.5,
-            "fill": "dark-orange",
+            "fill": "#b4ff00",
             "mode": "scheme",
             "reverse": false,
             "scale": "exponential",
-            "scheme": "Oranges",
+            "scheme": "Spectral",
             "steps": 128
           },
           "exemplars": {
@@ -1739,29 +1438,30 @@
             "le": 1e-9
           },
           "legend": {
-            "show": false
+            "show": true
           },
           "rowsFrame": {
             "layout": "auto"
           },
           "showValue": "never",
           "tooltip": {
-            "mode": "none",
+            "mode": "single",
             "showColorScale": false,
-            "yHistogram": false
+            "yHistogram": true
           },
           "yAxis": {
             "axisPlacement": "left",
-            "reverse": false
+            "reverse": false,
+            "unit": "short"
           }
         },
-        "pluginVersion": "12.3.0",
+        "pluginVersion": "12.2.2",
         "targets": [
           {
             "datasource": {
               "uid": "$datasource"
             },
-            "expr": "sum(increase(argocd_app_reconcile_bucket{namespace=~\"$namespace\",cluster=~\"$argocd_instance\"}[$interval])) by (le)",
+            "expr": "sum(increase(argocd_app_reconcile_bucket{namespace=~\"$namespace\"}[$interval])) by (le)",
             "format": "heatmap",
             "instant": false,
             "intervalFactor": 10,
@@ -1790,7 +1490,7 @@
               "barAlignment": 0,
               "barWidthFactor": 0.6,
               "drawStyle": "line",
-              "fillOpacity": 0,
+              "fillOpacity": 10,
               "gradientMode": "none",
               "hideFrom": {
                 "legend": false,
@@ -1804,7 +1504,7 @@
               "scaleDistribution": {
                 "type": "linear"
               },
-              "showPoints": "auto",
+              "showPoints": "never",
               "showValues": false,
               "spanNulls": false,
               "stacking": {
@@ -1828,9 +1528,51 @@
                   "value": 80
                 }
               ]
-            }
+            },
+            "unit": "short"
           },
-          "overrides": []
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byValue",
+                "options": {
+                  "op": "gte",
+                  "reducer": "allIsZero",
+                  "value": 0
+                }
+              },
+              "properties": [
+                {
+                  "id": "custom.hideFrom",
+                  "value": {
+                    "legend": true,
+                    "tooltip": true,
+                    "viz": false
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byValue",
+                "options": {
+                  "op": "gte",
+                  "reducer": "allIsNull",
+                  "value": 0
+                }
+              },
+              "properties": [
+                {
+                  "id": "custom.hideFrom",
+                  "value": {
+                    "legend": true,
+                    "tooltip": true,
+                    "viz": false
+                  }
+                }
+              ]
+            }
+          ]
         },
         "gridPos": {
           "h": 6,
@@ -1842,24 +1584,27 @@
         "options": {
           "dataLinks": [],
           "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
+            "calcs": [
+              "mean",
+              "lastNotNull"
+            ],
+            "displayMode": "table",
+            "placement": "right",
             "showLegend": true
           },
           "tooltip": {
             "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
+            "mode": "multi",
+            "sort": "desc"
           }
         },
-        "pluginVersion": "12.3.0",
+        "pluginVersion": "12.2.2",
         "targets": [
           {
             "datasource": {
               "uid": "$datasource"
             },
-            "expr": "sum(increase(argocd_app_k8s_request_total{namespace=~\"$namespace\",cluster=~\"$argocd_instance\",server=~\"$cluster\"}[$interval])) by (verb, resource_kind)",
+            "expr": "sum(increase(argocd_app_k8s_request_total{namespace=~\"$namespace\",server=~\"$cluster\"}[$interval])) by (verb, resource_kind)",
             "format": "time_series",
             "instant": false,
             "intervalFactor": 1,
@@ -1888,7 +1633,7 @@
               "barAlignment": 0,
               "barWidthFactor": 0.6,
               "drawStyle": "line",
-              "fillOpacity": 0,
+              "fillOpacity": 10,
               "gradientMode": "none",
               "hideFrom": {
                 "legend": false,
@@ -1902,7 +1647,7 @@
               "scaleDistribution": {
                 "type": "linear"
               },
-              "showPoints": "auto",
+              "showPoints": "never",
               "showValues": false,
               "spanNulls": false,
               "stacking": {
@@ -1914,6 +1659,7 @@
               }
             },
             "mappings": [],
+            "min": 0,
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -1926,9 +1672,31 @@
                   "value": 80
                 }
               ]
-            }
+            },
+            "unit": "short"
           },
-          "overrides": []
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byValue",
+                "options": {
+                  "op": "gte",
+                  "reducer": "allIsZero",
+                  "value": 0
+                }
+              },
+              "properties": [
+                {
+                  "id": "custom.hideFrom",
+                  "value": {
+                    "legend": true,
+                    "tooltip": true,
+                    "viz": false
+                  }
+                }
+              ]
+            }
+          ]
         },
         "gridPos": {
           "h": 7,
@@ -1940,24 +1708,28 @@
         "options": {
           "dataLinks": [],
           "legend": {
-            "calcs": [],
-            "displayMode": "list",
+            "calcs": [
+              "mean",
+              "lastNotNull",
+              "max"
+            ],
+            "displayMode": "table",
             "placement": "bottom",
             "showLegend": true
           },
           "tooltip": {
             "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
+            "mode": "multi",
+            "sort": "desc"
           }
         },
-        "pluginVersion": "12.3.0",
+        "pluginVersion": "12.2.2",
         "targets": [
           {
             "datasource": {
               "uid": "$datasource"
             },
-            "expr": "sum(workqueue_depth{namespace=~\"$namespace\",cluster=~\"$argocd_instance\",name=~\"app_.*\"}) by (name)",
+            "expr": "sum(workqueue_depth{namespace=~\"$namespace\",name=~\"app_.*\"}) by (name)",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "{{name}}",
@@ -1985,7 +1757,7 @@
               "barAlignment": 0,
               "barWidthFactor": 0.6,
               "drawStyle": "line",
-              "fillOpacity": 0,
+              "fillOpacity": 10,
               "gradientMode": "none",
               "hideFrom": {
                 "legend": false,
@@ -1999,7 +1771,7 @@
               "scaleDistribution": {
                 "type": "linear"
               },
-              "showPoints": "auto",
+              "showPoints": "never",
               "showValues": false,
               "spanNulls": false,
               "stacking": {
@@ -2010,7 +1782,9 @@
                 "mode": "off"
               }
             },
+            "decimals": 0,
             "mappings": [],
+            "min": 0,
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -2023,7 +1797,8 @@
                   "value": 80
                 }
               ]
-            }
+            },
+            "unit": "short"
           },
           "overrides": []
         },
@@ -2037,24 +1812,28 @@
         "options": {
           "dataLinks": [],
           "legend": {
-            "calcs": [],
-            "displayMode": "list",
+            "calcs": [
+              "mean",
+              "lastNotNull",
+              "max"
+            ],
+            "displayMode": "table",
             "placement": "bottom",
             "showLegend": true
           },
           "tooltip": {
             "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
+            "mode": "multi",
+            "sort": "desc"
           }
         },
-        "pluginVersion": "12.3.0",
+        "pluginVersion": "12.2.2",
         "targets": [
           {
             "datasource": {
               "uid": "$datasource"
             },
-            "expr": "sum(argocd_kubectl_exec_pending{namespace=~\"$namespace\",cluster=~\"$argocd_instance\"}) by (command)",
+            "expr": "sum(argocd_kubectl_exec_pending{namespace=~\"$namespace\"}) by (command)",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "{{command}}",
@@ -2095,7 +1874,7 @@
               "barAlignment": 0,
               "barWidthFactor": 0.6,
               "drawStyle": "line",
-              "fillOpacity": 0,
+              "fillOpacity": 10,
               "gradientMode": "none",
               "hideFrom": {
                 "legend": false,
@@ -2109,9 +1888,9 @@
               "scaleDistribution": {
                 "type": "linear"
               },
-              "showPoints": "auto",
+              "showPoints": "never",
               "showValues": false,
-              "spanNulls": false,
+              "spanNulls": true,
               "stacking": {
                 "group": "A",
                 "mode": "none"
@@ -2148,9 +1927,13 @@
         "options": {
           "dataLinks": [],
           "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
+            "calcs": [
+              "mean",
+              "lastNotNull",
+              "max"
+            ],
+            "displayMode": "table",
+            "placement": "right",
             "showLegend": true
           },
           "tooltip": {
@@ -2159,18 +1942,16 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.3.0",
+        "pluginVersion": "12.2.2",
         "targets": [
           {
             "datasource": {
               "uid": "$datasource"
             },
-            "editorMode": "code",
-            "expr": "sum(go_memstats_heap_alloc_bytes{container=\"application-controller\",namespace=~\"$namespace\",cluster=~\"$argocd_instance\"}) by (pod)",
+            "expr": "go_memstats_heap_alloc_bytes{job=\"argocd-metrics\",namespace=~\"$namespace\"}",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "{{namespace}}",
-            "range": true,
             "refId": "A"
           }
         ],
@@ -2195,7 +1976,7 @@
               "barAlignment": 0,
               "barWidthFactor": 0.6,
               "drawStyle": "line",
-              "fillOpacity": 0,
+              "fillOpacity": 10,
               "gradientMode": "none",
               "hideFrom": {
                 "legend": false,
@@ -2209,9 +1990,9 @@
               "scaleDistribution": {
                 "type": "linear"
               },
-              "showPoints": "auto",
+              "showPoints": "never",
               "showValues": false,
-              "spanNulls": false,
+              "spanNulls": true,
               "stacking": {
                 "group": "A",
                 "mode": "none"
@@ -2220,6 +2001,7 @@
                 "mode": "off"
               }
             },
+            "decimals": 1,
             "mappings": [],
             "thresholds": {
               "mode": "absolute",
@@ -2233,9 +2015,51 @@
                   "value": 80
                 }
               ]
-            }
+            },
+            "unit": "none"
           },
-          "overrides": []
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byValue",
+                "options": {
+                  "op": "gte",
+                  "reducer": "allIsZero",
+                  "value": 0
+                }
+              },
+              "properties": [
+                {
+                  "id": "custom.hideFrom",
+                  "value": {
+                    "legend": true,
+                    "tooltip": true,
+                    "viz": false
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byValue",
+                "options": {
+                  "op": "gte",
+                  "reducer": "allIsNull",
+                  "value": 0
+                }
+              },
+              "properties": [
+                {
+                  "id": "custom.hideFrom",
+                  "value": {
+                    "legend": true,
+                    "tooltip": true,
+                    "viz": false
+                  }
+                }
+              ]
+            }
+          ]
         },
         "gridPos": {
           "h": 7,
@@ -2247,9 +2071,13 @@
         "options": {
           "dataLinks": [],
           "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
+            "calcs": [
+              "mean",
+              "lastNotNull",
+              "max"
+            ],
+            "displayMode": "table",
+            "placement": "right",
             "showLegend": true
           },
           "tooltip": {
@@ -2258,18 +2086,16 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.3.0",
+        "pluginVersion": "12.2.2",
         "targets": [
           {
             "datasource": {
               "uid": "$datasource"
             },
-            "editorMode": "code",
-            "expr": "sum(irate(process_cpu_seconds_total{container=\"application-controller\",namespace=~\"$namespace\",cluster=~\"$argocd_instance\"}[1m]) ) by (pod)",
+            "expr": "irate(process_cpu_seconds_total{job=\"argocd-metrics\",namespace=~\"$namespace\"}[1m])",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "{{namespace}}",
-            "range": true,
             "refId": "A"
           }
         ],
@@ -2294,7 +2120,7 @@
               "barAlignment": 0,
               "barWidthFactor": 0.6,
               "drawStyle": "line",
-              "fillOpacity": 0,
+              "fillOpacity": 10,
               "gradientMode": "none",
               "hideFrom": {
                 "legend": false,
@@ -2308,7 +2134,7 @@
               "scaleDistribution": {
                 "type": "linear"
               },
-              "showPoints": "auto",
+              "showPoints": "never",
               "showValues": false,
               "spanNulls": false,
               "stacking": {
@@ -2332,7 +2158,8 @@
                   "value": 80
                 }
               ]
-            }
+            },
+            "unit": "short"
           },
           "overrides": []
         },
@@ -2346,9 +2173,13 @@
         "options": {
           "dataLinks": [],
           "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
+            "calcs": [
+              "mean",
+              "lastNotNull",
+              "max"
+            ],
+            "displayMode": "table",
+            "placement": "right",
             "showLegend": true
           },
           "tooltip": {
@@ -2357,18 +2188,16 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.3.0",
+        "pluginVersion": "12.2.2",
         "targets": [
           {
             "datasource": {
               "uid": "$datasource"
             },
-            "editorMode": "code",
-            "expr": "sum(go_goroutines{container=\"application-controller\",namespace=~\"$namespace\",cluster=~\"$argocd_instance\"}) by (pod)",
+            "expr": "go_goroutines{job=\"argocd-metrics\",namespace=~\"$namespace\"}",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "{{namespace}}",
-            "range": true,
             "refId": "A"
           }
         ],
@@ -2406,7 +2235,7 @@
               "barAlignment": 0,
               "barWidthFactor": 0.6,
               "drawStyle": "line",
-              "fillOpacity": 0,
+              "fillOpacity": 10,
               "gradientMode": "none",
               "hideFrom": {
                 "legend": false,
@@ -2420,7 +2249,7 @@
               "scaleDistribution": {
                 "type": "linear"
               },
-              "showPoints": "auto",
+              "showPoints": "never",
               "showValues": false,
               "spanNulls": false,
               "stacking": {
@@ -2444,7 +2273,8 @@
                   "value": 80
                 }
               ]
-            }
+            },
+            "unit": "short"
           },
           "overrides": []
         },
@@ -2458,9 +2288,11 @@
         "options": {
           "dataLinks": [],
           "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
+            "calcs": [
+              "lastNotNull"
+            ],
+            "displayMode": "table",
+            "placement": "right",
             "showLegend": true
           },
           "tooltip": {
@@ -2469,13 +2301,13 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.3.0",
+        "pluginVersion": "12.2.2",
         "targets": [
           {
             "datasource": {
               "uid": "$datasource"
             },
-            "expr": "sum(argocd_cluster_api_resource_objects{namespace=~\"$namespace\",cluster=~\"$argocd_instance\",server=~\"$cluster\"}) by (server)",
+            "expr": "sum(argocd_cluster_api_resource_objects{namespace=~\"$namespace\",server=~\"$cluster\"}) by (server)",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "{{server}}",
@@ -2503,7 +2335,7 @@
               "barAlignment": 0,
               "barWidthFactor": 0.6,
               "drawStyle": "line",
-              "fillOpacity": 0,
+              "fillOpacity": 10,
               "gradientMode": "none",
               "hideFrom": {
                 "legend": false,
@@ -2517,7 +2349,7 @@
               "scaleDistribution": {
                 "type": "linear"
               },
-              "showPoints": "auto",
+              "showPoints": "never",
               "showValues": false,
               "spanNulls": false,
               "stacking": {
@@ -2541,9 +2373,31 @@
                   "value": 80
                 }
               ]
-            }
+            },
+            "unit": "short"
           },
-          "overrides": []
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byValue",
+                "options": {
+                  "op": "gte",
+                  "reducer": "allIsNull",
+                  "value": 0
+                }
+              },
+              "properties": [
+                {
+                  "id": "custom.hideFrom",
+                  "value": {
+                    "legend": true,
+                    "tooltip": true,
+                    "viz": false
+                  }
+                }
+              ]
+            }
+          ]
         },
         "gridPos": {
           "h": 6,
@@ -2555,9 +2409,11 @@
         "options": {
           "dataLinks": [],
           "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
+            "calcs": [
+              "lastNotNull"
+            ],
+            "displayMode": "table",
+            "placement": "right",
             "showLegend": true
           },
           "tooltip": {
@@ -2566,13 +2422,13 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.3.0",
+        "pluginVersion": "12.2.2",
         "targets": [
           {
             "datasource": {
               "uid": "$datasource"
             },
-            "expr": "  sum(argocd_cluster_api_resources{namespace=~\"$namespace\",cluster=~\"$argocd_instance\",server=~\"$cluster\"}) by (server)",
+            "expr": "  sum(argocd_cluster_api_resources{namespace=~\"$namespace\",server=~\"$cluster\"}) by (server)",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "{{server}}",
@@ -2586,62 +2442,6 @@
         "datasource": {
           "uid": "$datasource"
         },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "barWidthFactor": 0.6,
-              "drawStyle": "line",
-              "fillOpacity": 0,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "linear",
-              "lineWidth": 1,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "auto",
-              "showValues": false,
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            }
-          },
-          "overrides": []
-        },
         "gridPos": {
           "h": 7,
           "w": 24,
@@ -2650,26 +2450,14 @@
         },
         "id": 86,
         "options": {
-          "dataLinks": [],
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
-          }
+          "dataLinks": []
         },
-        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
               "uid": "$datasource"
             },
-            "expr": "sum(increase(argocd_cluster_events_total{namespace=~\"$namespace\",cluster=~\"$argocd_instance\",server=~\"$cluster\"}[$interval])) by (server)",
+            "expr": "sum(increase(argocd_cluster_events_total{namespace=~\"$namespace\",server=~\"$cluster\"}[$interval])) by (server)",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "{{server}}",
@@ -2710,7 +2498,7 @@
               "barAlignment": 0,
               "barWidthFactor": 0.6,
               "drawStyle": "line",
-              "fillOpacity": 0,
+              "fillOpacity": 10,
               "gradientMode": "none",
               "hideFrom": {
                 "legend": false,
@@ -2724,7 +2512,7 @@
               "scaleDistribution": {
                 "type": "linear"
               },
-              "showPoints": "auto",
+              "showPoints": "never",
               "showValues": false,
               "spanNulls": false,
               "stacking": {
@@ -2748,7 +2536,8 @@
                   "value": 80
                 }
               ]
-            }
+            },
+            "unit": "short"
           },
           "overrides": []
         },
@@ -2765,21 +2554,21 @@
             "calcs": [],
             "displayMode": "list",
             "placement": "bottom",
-            "showLegend": true
+            "showLegend": false
           },
           "tooltip": {
             "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
+            "mode": "multi",
+            "sort": "desc"
           }
         },
-        "pluginVersion": "12.3.0",
+        "pluginVersion": "12.2.2",
         "targets": [
           {
             "datasource": {
               "uid": "$datasource"
             },
-            "expr": "sum(increase(argocd_git_request_total{request_type=\"ls-remote\", namespace=~\"$namespace\",cluster=~\"$argocd_instance\"}[10m])) by (namespace)",
+            "expr": "sum(increase(argocd_git_request_total{request_type=\"ls-remote\", namespace=~\"$namespace\"}[10m])) by (namespace)",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "{{namespace}}",
@@ -2807,7 +2596,7 @@
               "barAlignment": 0,
               "barWidthFactor": 0.6,
               "drawStyle": "line",
-              "fillOpacity": 0,
+              "fillOpacity": 10,
               "gradientMode": "none",
               "hideFrom": {
                 "legend": false,
@@ -2821,7 +2610,7 @@
               "scaleDistribution": {
                 "type": "linear"
               },
-              "showPoints": "auto",
+              "showPoints": "never",
               "showValues": false,
               "spanNulls": false,
               "stacking": {
@@ -2845,7 +2634,8 @@
                   "value": 80
                 }
               ]
-            }
+            },
+            "unit": "short"
           },
           "overrides": []
         },
@@ -2862,21 +2652,21 @@
             "calcs": [],
             "displayMode": "list",
             "placement": "bottom",
-            "showLegend": true
+            "showLegend": false
           },
           "tooltip": {
             "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
+            "mode": "multi",
+            "sort": "desc"
           }
         },
-        "pluginVersion": "12.3.0",
+        "pluginVersion": "12.2.2",
         "targets": [
           {
             "datasource": {
               "uid": "$datasource"
             },
-            "expr": "sum(increase(argocd_git_request_total{request_type=\"fetch\", namespace=~\"$namespace\",cluster=~\"$argocd_instance\"}[10m])) by (namespace)",
+            "expr": "sum(increase(argocd_git_request_total{request_type=\"fetch\", namespace=~\"$namespace\"}[10m])) by (namespace)",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "{{namespace}}",
@@ -2890,21 +2680,6 @@
         "datasource": {
           "uid": "$datasource"
         },
-        "fieldConfig": {
-          "defaults": {
-            "custom": {
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "scaleDistribution": {
-                "type": "linear"
-              }
-            }
-          },
-          "overrides": []
-        },
         "gridPos": {
           "h": 8,
           "w": 12,
@@ -2912,50 +2687,12 @@
           "y": 103
         },
         "id": 114,
-        "options": {
-          "calculate": true,
-          "calculation": {},
-          "cellGap": 2,
-          "cellValues": {},
-          "color": {
-            "exponent": 0.5,
-            "fill": "dark-orange",
-            "mode": "scheme",
-            "reverse": false,
-            "scale": "exponential",
-            "scheme": "Oranges",
-            "steps": 128
-          },
-          "exemplars": {
-            "color": "rgba(255,0,255,0.7)"
-          },
-          "filterValues": {
-            "le": 1e-9
-          },
-          "legend": {
-            "show": false
-          },
-          "rowsFrame": {
-            "layout": "auto"
-          },
-          "showValue": "never",
-          "tooltip": {
-            "mode": "none",
-            "showColorScale": false,
-            "yHistogram": false
-          },
-          "yAxis": {
-            "axisPlacement": "left",
-            "reverse": false
-          }
-        },
-        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
               "uid": "$datasource"
             },
-            "expr": "sum(increase(argocd_git_request_duration_seconds_bucket{request_type=\"fetch\", namespace=~\"$namespace\",cluster=~\"$argocd_instance\"}[$interval])) by (le)",
+            "expr": "sum(increase(argocd_git_request_duration_seconds_bucket{request_type=\"fetch\", namespace=~\"$namespace\"}[$interval])) by (le)",
             "format": "heatmap",
             "intervalFactor": 10,
             "legendFormat": "{{le}}",
@@ -2969,21 +2706,6 @@
         "datasource": {
           "uid": "$datasource"
         },
-        "fieldConfig": {
-          "defaults": {
-            "custom": {
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "scaleDistribution": {
-                "type": "linear"
-              }
-            }
-          },
-          "overrides": []
-        },
         "gridPos": {
           "h": 8,
           "w": 12,
@@ -2991,50 +2713,12 @@
           "y": 103
         },
         "id": 116,
-        "options": {
-          "calculate": true,
-          "calculation": {},
-          "cellGap": 2,
-          "cellValues": {},
-          "color": {
-            "exponent": 0.5,
-            "fill": "dark-orange",
-            "mode": "scheme",
-            "reverse": false,
-            "scale": "exponential",
-            "scheme": "Oranges",
-            "steps": 128
-          },
-          "exemplars": {
-            "color": "rgba(255,0,255,0.7)"
-          },
-          "filterValues": {
-            "le": 1e-9
-          },
-          "legend": {
-            "show": false
-          },
-          "rowsFrame": {
-            "layout": "auto"
-          },
-          "showValue": "never",
-          "tooltip": {
-            "mode": "none",
-            "showColorScale": false,
-            "yHistogram": false
-          },
-          "yAxis": {
-            "axisPlacement": "left",
-            "reverse": false
-          }
-        },
-        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
               "uid": "$datasource"
             },
-            "expr": "sum(increase(argocd_git_request_duration_seconds_bucket{request_type=\"ls-remote\", namespace=~\"$namespace\",cluster=~\"$argocd_instance\"}[$interval])) by (le)",
+            "expr": "sum(increase(argocd_git_request_duration_seconds_bucket{request_type=\"ls-remote\", namespace=~\"$namespace\"}[$interval])) by (le)",
             "format": "heatmap",
             "intervalFactor": 10,
             "legendFormat": "{{le}}",
@@ -3048,63 +2732,6 @@
         "datasource": {
           "uid": "$datasource"
         },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "barWidthFactor": 0.6,
-              "drawStyle": "line",
-              "fillOpacity": 0,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "linear",
-              "lineWidth": 1,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "auto",
-              "showValues": false,
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            },
-            "unit": "bytes"
-          },
-          "overrides": []
-        },
         "gridPos": {
           "h": 8,
           "w": 24,
@@ -3113,96 +2740,26 @@
         },
         "id": 71,
         "options": {
-          "dataLinks": [],
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
-          }
+          "dataLinks": []
         },
-        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
               "uid": "$datasource"
             },
-            "editorMode": "code",
-            "expr": "sum(go_memstats_heap_alloc_bytes{container=\"repo-server\",namespace=~\"$namespace\",cluster=~\"$argocd_instance\"} )by (pod)",
+            "expr": "go_memstats_heap_alloc_bytes{job=\"argocd-repo-server\",namespace=~\"$namespace\"}",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "{{pod}}",
-            "range": true,
             "refId": "A"
           }
         ],
-        "title": "Memory Usage",
+        "title": "Memory Used",
         "type": "timeseries"
       },
       {
         "datasource": {
           "uid": "$datasource"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "barWidthFactor": 0.6,
-              "drawStyle": "line",
-              "fillOpacity": 0,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "linear",
-              "lineWidth": 1,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "auto",
-              "showValues": false,
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            }
-          },
-          "overrides": []
         },
         "gridPos": {
           "h": 7,
@@ -3212,31 +2769,17 @@
         },
         "id": 72,
         "options": {
-          "dataLinks": [],
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
-          }
+          "dataLinks": []
         },
-        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
               "uid": "$datasource"
             },
-            "editorMode": "code",
-            "expr": "sum(go_goroutines{container=\"repo-server\",namespace=~\"$namespace\",cluster=~\"$argocd_instance\"}) by (pod)",
+            "expr": "go_goroutines{job=\"argocd-repo-server\",namespace=~\"$namespace\"}",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "{{pod}}",
-            "range": true,
             "refId": "A"
           }
         ],
@@ -3274,7 +2817,7 @@
               "barAlignment": 0,
               "barWidthFactor": 0.6,
               "drawStyle": "line",
-              "fillOpacity": 0,
+              "fillOpacity": 10,
               "gradientMode": "none",
               "hideFrom": {
                 "legend": false,
@@ -3288,9 +2831,9 @@
               "scaleDistribution": {
                 "type": "linear"
               },
-              "showPoints": "auto",
+              "showPoints": "never",
               "showValues": false,
-              "spanNulls": false,
+              "spanNulls": true,
               "stacking": {
                 "group": "A",
                 "mode": "none"
@@ -3300,6 +2843,7 @@
               }
             },
             "mappings": [],
+            "min": 0,
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -3312,7 +2856,8 @@
                   "value": 80
                 }
               ]
-            }
+            },
+            "unit": "bytes"
           },
           "overrides": []
         },
@@ -3328,21 +2873,21 @@
             "calcs": [],
             "displayMode": "list",
             "placement": "bottom",
-            "showLegend": true
+            "showLegend": false
           },
           "tooltip": {
             "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
+            "mode": "multi",
+            "sort": "desc"
           }
         },
-        "pluginVersion": "12.3.0",
+        "pluginVersion": "12.2.2",
         "targets": [
           {
             "datasource": {
               "uid": "$datasource"
             },
-            "expr": "go_memstats_heap_alloc_bytes{job=\"argocd-server-metrics\",namespace=~\"$namespace\",cluster=~\"$argocd_instance\"}",
+            "expr": "go_memstats_heap_alloc_bytes{job=\"argocd-server-metrics\",namespace=~\"$namespace\"}",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "{{pod}}",
@@ -3356,62 +2901,6 @@
         "datasource": {
           "uid": "$datasource"
         },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "barWidthFactor": 0.6,
-              "drawStyle": "line",
-              "fillOpacity": 0,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "linear",
-              "lineWidth": 1,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "auto",
-              "showValues": false,
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            }
-          },
-          "overrides": []
-        },
         "gridPos": {
           "h": 9,
           "w": 24,
@@ -3419,26 +2908,12 @@
           "y": 135
         },
         "id": 36,
-        "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
-          }
-        },
-        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
               "uid": "$datasource"
             },
-            "expr": "go_goroutines{job=\"argocd-server-metrics\",namespace=~\"$namespace\",cluster=~\"$argocd_instance\"}",
+            "expr": "go_goroutines{job=\"argocd-server-metrics\",namespace=~\"$namespace\"}",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "{{pod}}",
@@ -3452,62 +2927,6 @@
         "datasource": {
           "uid": "$datasource"
         },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "barWidthFactor": 0.6,
-              "drawStyle": "line",
-              "fillOpacity": 0,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "linear",
-              "lineWidth": 1,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "auto",
-              "showValues": false,
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            }
-          },
-          "overrides": []
-        },
         "gridPos": {
           "h": 9,
           "w": 24,
@@ -3515,31 +2934,15 @@
           "y": 144
         },
         "id": 38,
-        "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
-          }
-        },
-        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
               "uid": "$datasource"
             },
-            "editorMode": "code",
-            "expr": "go_gc_duration_seconds{container=\"repo-server\", quantile=\"1.0\", namespace=~\"$namespace\",cluster=~\"$argocd_instance\"}",
+            "expr": "go_gc_duration_seconds{job=\"argocd-server-metrics\", quantile=\"1\", namespace=~\"$namespace\"}",
             "format": "time_series",
             "intervalFactor": 2,
             "legendFormat": "{{pod}}",
-            "range": true,
             "refId": "A"
           }
         ],
@@ -3554,78 +2957,12 @@
           "y": 153
         },
         "id": 54,
-        "options": {
-          "code": {
-            "language": "plaintext",
-            "showLineNumbers": false,
-            "showMiniMap": false
-          },
-          "content": "# Title\n\nFor markdown syntax help: [commonmark.org/help](https://commonmark.org/help/)",
-          "mode": "markdown"
-        },
-        "pluginVersion": "12.3.0",
         "transparent": true,
         "type": "text"
       },
       {
         "datasource": {
           "uid": "$datasource"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "barWidthFactor": 0.6,
-              "drawStyle": "line",
-              "fillOpacity": 0,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "linear",
-              "lineWidth": 1,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "auto",
-              "showValues": false,
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            }
-          },
-          "overrides": []
         },
         "gridPos": {
           "h": 9,
@@ -3634,26 +2971,12 @@
           "y": 155
         },
         "id": 40,
-        "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
-          }
-        },
-        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
               "uid": "$datasource"
             },
-            "expr": "sum(increase(grpc_server_handled_total{job=\"argocd-server-metrics\",grpc_service=\"application.ApplicationService\",namespace=~\"$namespace\",cluster=~\"$argocd_instance\"}[$interval])) by (grpc_code, grpc_method)",
+            "expr": "sum(increase(grpc_server_handled_total{job=\"argocd-server-metrics\",grpc_service=\"application.ApplicationService\",namespace=~\"$namespace\"}[$interval])) by (grpc_code, grpc_method)",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "{{grpc_code}},{{grpc_method}}",
@@ -3667,62 +2990,6 @@
         "datasource": {
           "uid": "$datasource"
         },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "barWidthFactor": 0.6,
-              "drawStyle": "line",
-              "fillOpacity": 0,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "linear",
-              "lineWidth": 1,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "auto",
-              "showValues": false,
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            }
-          },
-          "overrides": []
-        },
         "gridPos": {
           "h": 9,
           "w": 12,
@@ -3730,26 +2997,12 @@
           "y": 155
         },
         "id": 42,
-        "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
-          }
-        },
-        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
               "uid": "$datasource"
             },
-            "expr": "sum(increase(grpc_server_handled_total{job=\"argocd-server-metrics\",grpc_service=\"cluster.ClusterService\",namespace=~\"$namespace\",cluster=~\"$argocd_instance\"}[$interval])) by (grpc_code, grpc_method)",
+            "expr": "sum(increase(grpc_server_handled_total{job=\"argocd-server-metrics\",grpc_service=\"cluster.ClusterService\",namespace=~\"$namespace\"}[$interval])) by (grpc_code, grpc_method)",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "{{grpc_code}},{{grpc_method}}",
@@ -3763,62 +3016,6 @@
         "datasource": {
           "uid": "$datasource"
         },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "barWidthFactor": 0.6,
-              "drawStyle": "line",
-              "fillOpacity": 0,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "linear",
-              "lineWidth": 1,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "auto",
-              "showValues": false,
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            }
-          },
-          "overrides": []
-        },
         "gridPos": {
           "h": 9,
           "w": 12,
@@ -3826,26 +3023,12 @@
           "y": 164
         },
         "id": 44,
-        "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
-          }
-        },
-        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
               "uid": "$datasource"
             },
-            "expr": "sum(increase(grpc_server_handled_total{job=\"argocd-server-metrics\",grpc_service=\"project.ProjectService\",namespace=~\"$namespace\",cluster=~\"$argocd_instance\"}[$interval])) by (grpc_code, grpc_method)",
+            "expr": "sum(increase(grpc_server_handled_total{job=\"argocd-server-metrics\",grpc_service=\"project.ProjectService\",namespace=~\"$namespace\"}[$interval])) by (grpc_code, grpc_method)",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "{{grpc_code}},{{grpc_method}}",
@@ -3859,62 +3042,6 @@
         "datasource": {
           "uid": "$datasource"
         },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "barWidthFactor": 0.6,
-              "drawStyle": "line",
-              "fillOpacity": 0,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "linear",
-              "lineWidth": 1,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "auto",
-              "showValues": false,
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            }
-          },
-          "overrides": []
-        },
         "gridPos": {
           "h": 9,
           "w": 12,
@@ -3922,26 +3049,12 @@
           "y": 164
         },
         "id": 46,
-        "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
-          }
-        },
-        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
               "uid": "$datasource"
             },
-            "expr": "sum(increase(grpc_server_handled_total{job=\"argocd-server-metrics\",grpc_service=\"repository.RepositoryService\",namespace=~\"$namespace\",cluster=~\"$argocd_instance\"}[$interval])) by (grpc_code, grpc_method)",
+            "expr": "sum(increase(grpc_server_handled_total{job=\"argocd-server-metrics\",grpc_service=\"repository.RepositoryService\",namespace=~\"$namespace\"}[$interval])) by (grpc_code, grpc_method)",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "{{grpc_code}},{{grpc_method}}",
@@ -3955,62 +3068,6 @@
         "datasource": {
           "uid": "$datasource"
         },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "barWidthFactor": 0.6,
-              "drawStyle": "line",
-              "fillOpacity": 0,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "linear",
-              "lineWidth": 1,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "auto",
-              "showValues": false,
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            }
-          },
-          "overrides": []
-        },
         "gridPos": {
           "h": 9,
           "w": 12,
@@ -4018,26 +3075,12 @@
           "y": 173
         },
         "id": 48,
-        "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
-          }
-        },
-        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
               "uid": "$datasource"
             },
-            "expr": "sum(increase(grpc_server_handled_total{job=\"argocd-server-metrics\",grpc_service=\"session.SessionService\",namespace=~\"$namespace\",cluster=~\"$argocd_instance\"}[$interval])) by (grpc_code, grpc_method)",
+            "expr": "sum(increase(grpc_server_handled_total{job=\"argocd-server-metrics\",grpc_service=\"session.SessionService\",namespace=~\"$namespace\"}[$interval])) by (grpc_code, grpc_method)",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "{{grpc_code}},{{grpc_method}}",
@@ -4051,62 +3094,6 @@
         "datasource": {
           "uid": "$datasource"
         },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "barWidthFactor": 0.6,
-              "drawStyle": "line",
-              "fillOpacity": 0,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "linear",
-              "lineWidth": 1,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "auto",
-              "showValues": false,
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            }
-          },
-          "overrides": []
-        },
         "gridPos": {
           "h": 9,
           "w": 12,
@@ -4114,26 +3101,12 @@
           "y": 173
         },
         "id": 49,
-        "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
-          }
-        },
-        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
               "uid": "$datasource"
             },
-            "expr": "sum(increase(grpc_server_handled_total{job=\"argocd-server-metrics\",grpc_service=\"version.VersionService\",namespace=~\"$namespace\",cluster=~\"$argocd_instance\"}[$interval])) by (grpc_code, grpc_method)",
+            "expr": "sum(increase(grpc_server_handled_total{job=\"argocd-server-metrics\",grpc_service=\"version.VersionService\",namespace=~\"$namespace\"}[$interval])) by (grpc_code, grpc_method)",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "{{grpc_code}},{{grpc_method}}",
@@ -4147,62 +3120,6 @@
         "datasource": {
           "uid": "$datasource"
         },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "barWidthFactor": 0.6,
-              "drawStyle": "line",
-              "fillOpacity": 0,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "linear",
-              "lineWidth": 1,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "auto",
-              "showValues": false,
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            }
-          },
-          "overrides": []
-        },
         "gridPos": {
           "h": 9,
           "w": 12,
@@ -4210,26 +3127,12 @@
           "y": 182
         },
         "id": 50,
-        "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
-          }
-        },
-        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
               "uid": "$datasource"
             },
-            "expr": "sum(increase(grpc_server_handled_total{job=\"argocd-server-metrics\",grpc_service=\"account.AccountService\",namespace=~\"$namespace\",cluster=~\"$argocd_instance\"}[$interval])) by (grpc_code, grpc_method)",
+            "expr": "sum(increase(grpc_server_handled_total{job=\"argocd-server-metrics\",grpc_service=\"account.AccountService\",namespace=~\"$namespace\"}[$interval])) by (grpc_code, grpc_method)",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "{{grpc_code}},{{grpc_method}}",
@@ -4243,62 +3146,6 @@
         "datasource": {
           "uid": "$datasource"
         },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "barWidthFactor": 0.6,
-              "drawStyle": "line",
-              "fillOpacity": 0,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "linear",
-              "lineWidth": 1,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "auto",
-              "showValues": false,
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            }
-          },
-          "overrides": []
-        },
         "gridPos": {
           "h": 9,
           "w": 12,
@@ -4306,26 +3153,12 @@
           "y": 182
         },
         "id": 99,
-        "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
-          }
-        },
-        "pluginVersion": "12.3.0",
         "targets": [
           {
             "datasource": {
               "uid": "$datasource"
             },
-            "expr": "sum(increase(grpc_server_handled_total{job=\"argocd-server-metrics\",grpc_service=\"settings.SettingsService\",namespace=~\"$namespace\",cluster=~\"$argocd_instance\"}[$interval])) by (grpc_code, grpc_method)",
+            "expr": "sum(increase(grpc_server_handled_total{job=\"argocd-server-metrics\",grpc_service=\"settings.SettingsService\",namespace=~\"$namespace\"}[$interval])) by (grpc_code, grpc_method)",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "{{grpc_code}},{{grpc_method}}",
@@ -4367,7 +3200,7 @@
               "barAlignment": 0,
               "barWidthFactor": 0.6,
               "drawStyle": "line",
-              "fillOpacity": 0,
+              "fillOpacity": 10,
               "gradientMode": "none",
               "hideFrom": {
                 "legend": false,
@@ -4381,7 +3214,7 @@
               "scaleDistribution": {
                 "type": "linear"
               },
-              "showPoints": "auto",
+              "showPoints": "never",
               "showValues": false,
               "spanNulls": false,
               "stacking": {
@@ -4405,7 +3238,8 @@
                   "value": 80
                 }
               ]
-            }
+            },
+            "unit": "short"
           },
           "overrides": []
         },
@@ -4426,18 +3260,18 @@
           },
           "tooltip": {
             "hideZeros": false,
-            "mode": "single",
+            "mode": "multi",
             "sort": "none"
           }
         },
-        "pluginVersion": "12.3.0",
+        "pluginVersion": "12.2.2",
         "targets": [
           {
             "datasource": {
               "type": "prometheus",
               "uid": "PA5392E10C0F059AB"
             },
-            "expr": "sum(increase(argocd_redis_request_total{namespace=~\"$namespace\",cluster=~\"$argocd_instance\"}[$interval])) by (failed)",
+            "expr": "sum(increase(argocd_redis_request_total{namespace=~\"$namespace\"}[$interval])) by (failed)",
             "refId": "A"
           }
         ],
@@ -4448,10 +3282,7 @@
     "preload": false,
     "refresh": "",
     "schemaVersion": 42,
-    "tags": [
-      "argocd",
-      "iberdrola"
-    ],
+    "tags": [],
     "templating": {
       "list": [
         {
@@ -4473,7 +3304,9 @@
             "text": "All",
             "value": "$__all"
           },
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "definition": "label_values(kube_pod_info, namespace)",
           "includeAll": true,
           "name": "namespace",
@@ -4569,44 +3402,21 @@
           "type": "custom"
         },
         {
-          "allowCustomValue": false,
-          "current": {
-            "text": "All",
-            "value": "$__all"
-          },
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
-          "definition": "label_values({cluster=~\"aks-kpescorpostarg-dev|aks-kpescorpostarg-pre|aks-kpescorpostarg-pro|aks-kpescorpostarl-dev|aks-kpesitmstarg-pro\"},cluster)",
-          "includeAll": true,
-          "name": "argocd_instance",
-          "options": [],
-          "query": {
-            "qryType": 1,
-            "query": "label_values({cluster=~\"aks-kpescorpostarg-dev|aks-kpescorpostarg-pre|aks-kpescorpostarg-pro|aks-kpescorpostarl-dev|aks-kpesitmstarg-pro\"},cluster)",
-            "refId": "PrometheusVariableQueryEditor-VariableQuery"
-          },
-          "refresh": 1,
-          "regex": "",
-          "type": "query"
-        },
-        {
           "allValue": ".*",
           "current": {
             "text": "All",
             "value": "$__all"
           },
-          "datasource": "$datasource",
-          "definition": "label_values(argocd_cluster_info{cluster=~\"$argocd_instance\"},server)",
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "definition": "label_values(argocd_cluster_info, server)",
           "includeAll": true,
-          "multi": true,
           "name": "cluster",
           "options": [],
           "query": {
-            "qryType": 1,
-            "query": "label_values(argocd_cluster_info{cluster=~\"$argocd_instance\"},server)",
-            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+            "query": "label_values(argocd_cluster_info, server)",
+            "refId": "Prometheus-cluster-Variable-Query"
           },
           "refresh": 1,
           "regex": "",
@@ -4692,7 +3502,7 @@
     },
     "timepicker": {},
     "timezone": "",
-    "title": "ArgoCD v2",
+    "title": "ArgoCD",
     "weekStart": ""
   }
 }

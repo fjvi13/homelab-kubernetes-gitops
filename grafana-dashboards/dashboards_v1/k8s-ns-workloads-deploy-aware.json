@@ -1,5 +1,5 @@
 {
-  "apiVersion": "dashboard.grafana.app/v0alpha1",
+  "apiVersion": "dashboard.grafana.app/v1",
   "kind": "Dashboard",
   "metadata": {
     "annotations": {},
@@ -1083,8 +1083,8 @@
         {
           "allValue": ".*",
           "current": {
-            "text": "aks-kpescorpostarg-dev",
-            "value": "aks-kpescorpostarg-dev"
+            "text": "All",
+            "value": "$__all"
           },
           "datasource": {
             "type": "prometheus",
@@ -1100,8 +1100,8 @@
         },
         {
           "current": {
-            "text": "app-routing-system",
-            "value": "app-routing-system"
+            "text": "",
+            "value": ""
           },
           "datasource": {
             "type": "prometheus",
