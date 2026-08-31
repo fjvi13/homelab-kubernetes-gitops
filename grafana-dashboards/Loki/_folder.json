@@ -1,0 +1,10 @@
+{
+  "kind": "Folder",
+  "apiVersion": "folder.grafana.app/v1",
+  "metadata": {
+    "name": "efwu0dp3tbg8wd"
+  },
+  "spec": {
+    "title": "Loki"
+  }
+}
