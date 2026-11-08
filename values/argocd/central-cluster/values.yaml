@@ -1,4 +1,3 @@
-
 global:
   domain: argocd.lab
   revisionHistoryLimit: 1
@@ -304,7 +303,7 @@ server:
         kind: Gateway
         name: lab-gateway
         namespace: istio-system
-        sectionName: http
+        sectionName: https
     # -- List of hostnames for the HTTPRoute
     # @default -- `[]` (See [values.yaml])
     hostnames:
