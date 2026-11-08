@@ -342,7 +342,7 @@ route:
         kind: Gateway
         name: lab-gateway
         namespace: istio-system
-        sectionName: http
+        sectionName: https
 
     matches:
       - path:
