@@ -167,7 +167,9 @@ lvmd:
 
   # lvmd.tolerations -- Specify tolerations.
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/
-  tolerations: []
+  tolerations:
+    - key: node-role.kubernetes.io/control-plane
+      effect: NoSchedule
 
   # lvmd.nodeSelector -- Specify nodeSelector.
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
@@ -345,7 +347,9 @@ node:
 
   # node.tolerations -- Specify tolerations.
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/
-  tolerations: []
+  tolerations:
+    - key: node-role.kubernetes.io/control-plane
+      effect: NoSchedule
 
   # node.nodeSelector -- Specify nodeSelector.
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
@@ -427,7 +431,7 @@ node:
 # CSI controller service
 controller:
   # controller.replicaCount -- Number of replicas for CSI controller service.
-  replicaCount: 2
+  replicaCount: 1
 
   # controller.args -- Arguments to be passed to the command.
   args: []

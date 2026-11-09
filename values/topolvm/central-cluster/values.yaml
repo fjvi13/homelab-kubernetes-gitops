@@ -427,7 +427,7 @@ node:
 # CSI controller service
 controller:
   # controller.replicaCount -- Number of replicas for CSI controller service.
-  replicaCount: 2
+  replicaCount: 1
 
   # controller.args -- Arguments to be passed to the command.
   args: []
