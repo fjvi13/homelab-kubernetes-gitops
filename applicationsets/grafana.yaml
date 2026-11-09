@@ -31,7 +31,7 @@ spec:
       annotations:
         argocd.argoproj.io/manifest-generate-paths: "/values/grafana/{{ .name }}"
     spec:
-      project: addons
+      project: monitoring
       sources:
         - repoURL: '{{ .values.chartRepository}}'
           targetRevision: '{{ .values.chartVersion}}'
