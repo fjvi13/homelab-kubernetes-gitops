@@ -132,7 +132,7 @@ collectors:
   #  Cluster is a K8s deployment EDOT collector focused on gathering telemetry
   #  at the cluster level (Kubernetes Events and cluster metrics).
   cluster:
-    enabled: true
+    enabled: false
     revisionHistoryLimit: 1
     fullnameOverride: "opentelemetry-kube-stack-cluster-stats"
     # elastic-agent 9.4.2's embedded SDK doesn't disambiguate the new per-component
@@ -340,7 +340,7 @@ collectors:
   #  node level and exposing an OTLP endpoint for data ingestion.
   #  Auto-instrumentation SDKs will use this endpoint.
   daemon:
-    enabled: true
+    enabled: false
     fullnameOverride: "opentelemetry-kube-stack-daemon"
     # See cluster collector: workaround for duplicate component-telemetry metrics in EDOT 9.4.2.
     args:
@@ -808,6 +808,7 @@ collectors:
   #  Gateway is a K8s deployment EDOT collector focused on processing and
   #  forwarding telemetry to an Elasticsearch endpoint.
   gateway:
+    enabled: false
     fullnameOverride: "opentelemetry-kube-stack-gateway"
     # See cluster collector: workaround for duplicate component-telemetry metrics in EDOT 9.4.2.
     args:
@@ -827,7 +828,6 @@ collectors:
         memory: 500Mi
     suffix: gateway
     replicas: 1
-    enabled: true
     env:
       - name: ELASTIC_AGENT_OTEL
         # Plain "true" (no embedded quotes): the image entrypoint does a literal
