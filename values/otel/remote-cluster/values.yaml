@@ -1260,52 +1260,52 @@ collectors:
     #     mountPath: /var/lib/otelcol-loki-checkpoints
     # TEMPORAL - sidecar de depuracion. La imagen del collector es distroless (sin shell),
     # asi que `kubectl exec` no sirve para mirar los checkpoints de file_storage.
-    additionalContainers:
-    - name: debug-netshoot
-      # Image must contain sh + curl + nc (the collector-contrib image has none of these).
-      image: nicolaka/netshoot:v0.16
-      imagePullPolicy: IfNotPresent
-      command: ["/bin/sh", "-c"]
-      args:
-        - |
-          while true; do
-            echo "===== $(date) ====="
-            echo "--- env ---"
-            env
-            echo "--- env grep NO_PROXY ---"
-            env | grep NO_PROXY
-            echo "--- L4: nc short:80 ---"
-            nc -zv opentelemetry-kube-stack-prometheus-targetallocator 80 || true
-            echo "--- L7: curl short /scrape_configs ---"
-            curl -sv http://opentelemetry-kube-stack-prometheus-targetallocator:80/scrape_configs || true
-            echo "--- L7: curl fqdn /scrape_configs ---"
-            curl -sv http://opentelemetry-kube-stack-prometheus-targetallocator.monitoring.svc.cluster.local:80/scrape_configs || true
-            echo "--- L7: curl short /jobs ---"
-            curl -sv http://opentelemetry-kube-stack-prometheus-targetallocator:80/jobs || true
-            sleep 30
-          done
-      resources:
-        limits:
-          cpu: 50m
-          memory: 32Mi
-        requests:
-          cpu: 10m
-          memory: 16Mi
-    - name: debug
-      image: busybox:1.37
-      imagePullPolicy: IfNotPresent
-      command: ["/bin/sh", "-c", "while true; do sleep 3600; done"]
-      resources:
-        limits:
-          cpu: 50m
-          memory: 32Mi
-        requests:
-          cpu: 10m
-          memory: 16Mi
-      volumeMounts:
-        - mountPath: /var/lib/otelcol-loki-checkpoints
-          name: varlibotelcolloki
-          readOnly: true
+    # additionalContainers:
+    # - name: debug-netshoot
+    #   # Image must contain sh + curl + nc (the collector-contrib image has none of these).
+    #   image: nicolaka/netshoot:v0.16
+    #   imagePullPolicy: IfNotPresent
+    #   command: ["/bin/sh", "-c"]
+    #   args:
+    #     - |
+    #       while true; do
+    #         echo "===== $(date) ====="
+    #         echo "--- env ---"
+    #         env
+    #         echo "--- env grep NO_PROXY ---"
+    #         env | grep NO_PROXY
+    #         echo "--- L4: nc short:80 ---"
+    #         nc -zv opentelemetry-kube-stack-prometheus-targetallocator 80 || true
+    #         echo "--- L7: curl short /scrape_configs ---"
+    #         curl -sv http://opentelemetry-kube-stack-prometheus-targetallocator:80/scrape_configs || true
+    #         echo "--- L7: curl fqdn /scrape_configs ---"
+    #         curl -sv http://opentelemetry-kube-stack-prometheus-targetallocator.monitoring.svc.cluster.local:80/scrape_configs || true
+    #         echo "--- L7: curl short /jobs ---"
+    #         curl -sv http://opentelemetry-kube-stack-prometheus-targetallocator:80/jobs || true
+    #         sleep 30
+    #       done
+    #   resources:
+    #     limits:
+    #       cpu: 50m
+    #       memory: 32Mi
+    #     requests:
+    #       cpu: 10m
+    #       memory: 16Mi
+    # - name: debug
+    #   image: busybox:1.37
+    #   imagePullPolicy: IfNotPresent
+    #   command: ["/bin/sh", "-c", "while true; do sleep 3600; done"]
+    #   resources:
+    #     limits:
+    #       cpu: 50m
+    #       memory: 32Mi
+    #     requests:
+    #       cpu: 10m
+    #       memory: 16Mi
+    #   volumeMounts:
+    #     - mountPath: /var/lib/otelcol-loki-checkpoints
+    #       name: varlibotelcolloki
+    #       readOnly: true
     # # UID/GID por defecto de la imagen otel/opentelemetry-collector-contrib (User: 10001:10001).
     # # Explicito a proposito: si securityContext queda vacio y storeCheckpoints pasa a true,
     # # el chart fuerza runAsUser 0.
