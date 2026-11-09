@@ -31,7 +31,7 @@ spec:
     metadata:
       name: "prometheus-{{.name}}"
     spec:
-      project: addons
+      project: monitoring
       sources:
         - repoURL: '{{ .values.chartRepository}}'
           targetRevision: '{{ .values.chartVersion}}'
