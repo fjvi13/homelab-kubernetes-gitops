@@ -541,7 +541,7 @@ route:
         kind: Gateway
         name: lab-gateway
         namespace: istio-system
-        sectionName: http
+        sectionName: https
     # -- Additional rules to prepend before the generated path-routing rules.
     # Each entry is rendered into spec.rules as written (templating is supported),
     # so any HTTPRoute/GRPCRoute rule shape is accepted — including filter-only rules

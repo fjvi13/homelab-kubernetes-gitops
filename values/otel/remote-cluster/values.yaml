@@ -1173,9 +1173,9 @@ collectors:
           verbosity: basic
         # [Prometheus Remote Write exporter](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/exporter/prometheusremotewriteexporter)
         prometheusremotewrite/thanos:
-          endpoint: "http://receiver.lab/api/v1/receive"
+          endpoint: "https://receiver.lab/api/v1/receive"
           tls:
-            insecure: true
+            insecure_skip_verify: true
           timeout: 10s
           # Preserve metric names verbatim — no _total/_seconds suffix munging.
           add_metric_suffixes: false
@@ -1227,6 +1227,9 @@ collectors:
       requests:
         cpu: 200m
         memory: 256Mi
+    tolerations:
+      - effect: NoSchedule
+        operator: Exists
     volumes:
     - name: varlibotelcolloki
       hostPath:
@@ -1373,8 +1376,10 @@ collectors:
           override: false
       exporters:
         otlp_http/loki:
-          endpoint: http://loki.lab/otlp
+          endpoint: https://loki.lab/otlp
           force_attempt_http2: false
+          tls:
+            insecure_skip_verify: true
           retry_on_failure:
             enabled: true
             initial_interval: 5s
