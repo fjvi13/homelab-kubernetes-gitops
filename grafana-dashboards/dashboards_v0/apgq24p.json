@@ -1,677 +1,984 @@
 {
-  "apiVersion": "dashboard.grafana.app/v1",
+  "apiVersion": "dashboard.grafana.app/v2",
   "kind": "Dashboard",
   "metadata": {
-    "annotations": {},
-    "labels": {},
-    "name": "apgq24p",
-    "namespace": "default"
+    "name": "apgq24p"
   },
   "spec": {
-    "annotations": {
-      "list": [
-        {
-          "builtIn": 1,
-          "datasource": {
-            "type": "grafana",
-            "uid": "-- Grafana --"
-          },
+    "annotations": [
+      {
+        "kind": "AnnotationQuery",
+        "spec": {
+          "builtIn": true,
           "enable": true,
           "hide": true,
           "iconColor": "rgba(0, 211, 255, 1)",
           "name": "Annotations \u0026 Alerts",
-          "type": "dashboard"
+          "query": {
+            "datasource": {
+              "name": "-- Grafana --"
+            },
+            "group": "grafana",
+            "kind": "DataQuery",
+            "spec": {},
+            "version": "v0"
+          }
         }
-      ]
-    },
-    "editable": true,
-    "fiscalYearStartMonth": 0,
-    "graphTooltip": 0,
-    "links": [],
-    "panels": [
-      {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "PA5392E10C0F059AB"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "barWidthFactor": 0.6,
-              "drawStyle": "line",
-              "fillOpacity": 0,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "linear",
-              "lineWidth": 1,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "auto",
-              "showValues": false,
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            }
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 10,
-          "w": 20,
-          "x": 0,
-          "y": 0
-        },
-        "id": 2,
-        "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
-          }
-        },
-        "pluginVersion": "12.3.0",
-        "targets": [
-          {
-            "editorMode": "code",
-            "expr": "count(count by (cluster) (up{job=\"prometheus-kube-prometheus-prometheus\", namespace=\"monitoring\"} == 1) or count by (cluster) (up{pod=~\"opentelemetry-kube-stack-prometheus-collector-.*\", namespace=\"monitoring\"}))",
-            "legendFormat": "Total of clusters",
-            "range": true,
-            "refId": "A"
-          }
-        ],
-        "title": "Total Number of Clusters Writing Metrics",
-        "type": "timeseries"
-      },
-      {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "PA5392E10C0F059AB"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            }
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 10,
-          "w": 4,
-          "x": 20,
-          "y": 0
-        },
-        "id": 3,
-        "options": {
-          "colorMode": "none",
-          "graphMode": "none",
-          "justifyMode": "auto",
-          "orientation": "auto",
-          "percentChangeColorMode": "standard",
-          "reduceOptions": {
-            "calcs": [
-              "last"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "showPercentChange": false,
-          "textMode": "value",
-          "wideLayout": true
-        },
-        "pluginVersion": "12.3.0",
-        "targets": [
-          {
-            "editorMode": "code",
-            "expr": "count(count by (cluster) (up{job=\"prometheus-kube-prometheus-prometheus\", namespace=\"monitoring\"} == 1) or count by (cluster) (up{pod=~\"opentelemetry-kube-stack-prometheus-collector-.*\", namespace=\"monitoring\"}))",
-            "legendFormat": "__auto",
-            "range": true,
-            "refId": "A"
-          }
-        ],
-        "type": "stat"
-      },
-      {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "PA5392E10C0F059AB"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              }
-            },
-            "mappings": []
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 7,
-          "w": 6,
-          "x": 0,
-          "y": 10
-        },
-        "id": 4,
-        "options": {
-          "displayLabels": [
-            "value"
-          ],
-          "legend": {
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "pieType": "pie",
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "sort": "desc",
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
-          }
-        },
-        "pluginVersion": "12.3.0",
-        "targets": [
-          {
-            "editorMode": "code",
-            "exemplar": false,
-            "expr": "count(count by (cluster) (up{job=\"prometheus-kube-prometheus-prometheus\", namespace=\"monitoring\", cluster=~\".*eks.*\"} == 1) or count by (cluster) (up{pod=~\"opentelemetry-kube-stack-prometheus-collector-.*\", namespace=\"monitoring\", cluster=~\".*eks.*\"}))",
-            "instant": true,
-            "legendFormat": "EKS Clusters",
-            "range": false,
-            "refId": "A"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "PA5392E10C0F059AB"
-            },
-            "editorMode": "code",
-            "exemplar": false,
-            "expr": "count(count by (cluster) (up{job=\"prometheus-kube-prometheus-prometheus\", namespace=\"monitoring\", cluster=~\".*aks.*\"} == 1) or count by (cluster) (up{pod=~\"opentelemetry-kube-stack-prometheus-collector-.*\", namespace=\"monitoring\", cluster=~\".*aks.*\"}))",
-            "hide": false,
-            "instant": true,
-            "legendFormat": "AKS Clusters",
-            "range": false,
-            "refId": "B"
-          }
-        ],
-        "title": "EKS and AKS Clusters",
-        "type": "piechart"
-      },
-      {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "PA5392E10C0F059AB"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              }
-            },
-            "mappings": []
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 7,
-          "w": 6,
-          "x": 6,
-          "y": 10
-        },
-        "id": 5,
-        "options": {
-          "displayLabels": [
-            "value"
-          ],
-          "legend": {
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "pieType": "pie",
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "sort": "desc",
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
-          }
-        },
-        "pluginVersion": "12.3.0",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "PA5392E10C0F059AB"
-            },
-            "editorMode": "code",
-            "exemplar": false,
-            "expr": "count(count by (cluster) (up{job=\"prometheus-kube-prometheus-prometheus\", namespace=\"monitoring\", cluster=~\".*-dev$\"} == 1) or count by (cluster) (up{pod=~\"opentelemetry-kube-stack-prometheus-collector-.*\", namespace=\"monitoring\", cluster=~\".*-dev$\"}))",
-            "hide": false,
-            "instant": true,
-            "legendFormat": "DEV Clusters",
-            "range": false,
-            "refId": "B"
-          },
-          {
-            "editorMode": "code",
-            "exemplar": false,
-            "expr": "count(count by (cluster) (up{job=\"prometheus-kube-prometheus-prometheus\", namespace=\"monitoring\", cluster=~\".*-pro$\"} == 1) or count by (cluster) (up{pod=~\"opentelemetry-kube-stack-prometheus-collector-.*\", namespace=\"monitoring\", cluster=~\".*-pro$\"}))",
-            "instant": true,
-            "legendFormat": "PRO Clusters",
-            "range": false,
-            "refId": "A"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "PA5392E10C0F059AB"
-            },
-            "editorMode": "code",
-            "exemplar": false,
-            "expr": "count(count by (cluster) (up{job=\"prometheus-kube-prometheus-prometheus\", namespace=\"monitoring\", cluster=~\".*-pre$\"} == 1) or count by (cluster) (up{pod=~\"opentelemetry-kube-stack-prometheus-collector-.*\", namespace=\"monitoring\", cluster=~\".*-pre$\"}))",
-            "hide": false,
-            "instant": true,
-            "legendFormat": "PRE Clusters",
-            "range": false,
-            "refId": "D"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "PA5392E10C0F059AB"
-            },
-            "editorMode": "code",
-            "exemplar": false,
-            "expr": "count(count by (cluster) (up{job=\"prometheus-kube-prometheus-prometheus\", namespace=\"monitoring\", cluster=~\".*-int$\"} == 1) or count by (cluster) (up{pod=~\"opentelemetry-kube-stack-prometheus-collector-.*\", namespace=\"monitoring\", cluster=~\".*-int$\"}))",
-            "hide": false,
-            "instant": true,
-            "legendFormat": "INT Clusters",
-            "range": false,
-            "refId": "C"
-          }
-        ],
-        "title": "Dev | Pro | Pre | Int Clusters",
-        "type": "piechart"
-      },
-      {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "PA5392E10C0F059AB"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              }
-            },
-            "mappings": []
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 7,
-          "w": 6,
-          "x": 12,
-          "y": 10
-        },
-        "id": 7,
-        "options": {
-          "displayLabels": [
-            "value"
-          ],
-          "legend": {
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "pieType": "pie",
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "sort": "desc",
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
-          }
-        },
-        "pluginVersion": "12.3.0",
-        "targets": [
-          {
-            "editorMode": "code",
-            "exemplar": false,
-            "expr": "count(count by (cluster) (up{job=\"prometheus-kube-prometheus-prometheus\", namespace=\"monitoring\", cluster=~\".*op.*\"} == 1) or count by (cluster) (up{pod=~\"opentelemetry-kube-stack-prometheus-collector-.*\", namespace=\"monitoring\", cluster=~\".*op.*\"}))",
-            "instant": true,
-            "legendFormat": "OP Clusters",
-            "range": false,
-            "refId": "A"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "PA5392E10C0F059AB"
-            },
-            "editorMode": "code",
-            "exemplar": false,
-            "expr": "count(count by (cluster) (up{job=\"prometheus-kube-prometheus-prometheus\", namespace=\"monitoring\", cluster=~\".*(kp|4p).*\"} == 1) or count by (cluster) (up{pod=~\"opentelemetry-kube-stack-prometheus-collector-.*\", namespace=\"monitoring\", cluster=~\".*(kp|4p).*\"}))",
-            "hide": false,
-            "instant": true,
-            "legendFormat": "Package Clusters",
-            "range": false,
-            "refId": "B"
-          }
-        ],
-        "title": "EKS and AKS Clusters",
-        "type": "piechart"
-      },
-      {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "PA5392E10C0F059AB"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              }
-            },
-            "mappings": []
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 7,
-          "w": 6,
-          "x": 18,
-          "y": 10
-        },
-        "id": 8,
-        "options": {
-          "displayLabels": [
-            "value"
-          ],
-          "legend": {
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "pieType": "pie",
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "sort": "desc",
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
-          }
-        },
-        "pluginVersion": "12.3.0",
-        "targets": [
-          {
-            "editorMode": "code",
-            "exemplar": false,
-            "expr": "count by (version) (\r\n  max by (cluster, version) (\r\n    label_replace(\r\n      kube_node_info,\r\n      \"version\", \"$1\",\r\n      \"kubelet_version\", \"^(v[0-9.]+).*\"\r\n    )\r\n  )\r\n)",
-            "format": "time_series",
-            "instant": true,
-            "legendFormat": "__auto",
-            "range": false,
-            "refId": "A"
-          }
-        ],
-        "title": "K8S versions",
-        "type": "piechart"
-      },
-      {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "PA5392E10C0F059AB"
-        },
-        "description": "This table displays the current status (UP/DOWN) of all clusters that have been active in the last 5 days. If a cluster stops sending metrics for more than 5 days, It will disappear from the list.",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "custom": {
-              "align": "center",
-              "cellOptions": {
-                "type": "auto"
-              },
-              "filterable": false,
-              "footer": {
-                "reducers": []
-              },
-              "inspect": false,
-              "wrapHeaderText": false,
-              "wrapText": false
-            },
-            "fieldMinMax": false,
-            "mappings": [
-              {
-                "options": {
-                  "0": {
-                    "color": "red",
-                    "index": 1,
-                    "text": "DOWN"
-                  },
-                  "1": {
-                    "color": "green",
-                    "index": 0,
-                    "text": "UP"
-                  }
-                },
-                "type": "value"
-              }
-            ],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                }
-              ]
-            }
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 30,
-          "w": 24,
-          "x": 0,
-          "y": 17
-        },
-        "id": 6,
-        "options": {
-          "cellHeight": "md",
-          "enablePagination": true,
-          "showHeader": false
-        },
-        "pluginVersion": "12.3.0",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "PA5392E10C0F059AB"
-            },
-            "editorMode": "code",
-            "expr": "sort(\n  max by (cluster) (\n    up{job=\"prometheus-kube-prometheus-prometheus\", namespace=\"monitoring\"}\n    or\n    up{pod=~\"opentelemetry-kube-stack-prometheus-collector-.*\", namespace=\"monitoring\"}\n  )\n  or\n  (\n    max by (cluster) (\n      max_over_time(up{job=\"prometheus-kube-prometheus-prometheus\", namespace=\"monitoring\"}[5d])\n      or\n      max_over_time(up{pod=~\"opentelemetry-kube-stack-prometheus-collector-.*\", namespace=\"monitoring\"}[5d])\n    ) * 0\n  )\n)",
-            "format": "table",
-            "hide": false,
-            "instant": true,
-            "legendFormat": "__auto",
-            "refId": "U"
-          }
-        ],
-        "title": "Cluster Status List",
-        "transformations": [
-          {
-            "id": "joinByField",
-            "options": {
-              "byField": "wk",
-              "mode": "outer"
-            }
-          },
-          {
-            "id": "organize",
-            "options": {
-              "excludeByName": {
-                "Time": true,
-                "Time 3": true,
-                "Value #R": false,
-                "wk": true,
-                "workload 2": true,
-                "workload 3": true,
-                "workload_kind 2": true,
-                "workload_kind 3": true
-              },
-              "includeByName": {},
-              "indexByName": {
-                "limits": 4,
-                "request": 3,
-                "used": 2,
-                "workload": 1,
-                "workload_kind": 0
-              },
-              "renameByName": {
-                "Value #L": "limits",
-                "Value #R": "request",
-                "Value #U": "used"
-              }
-            }
-          }
-        ],
-        "type": "table"
       }
     ],
-    "preload": false,
-    "schemaVersion": 42,
-    "tags": [],
-    "templating": {
-      "list": [
-        {
-          "baseFilters": [],
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PA5392E10C0F059AB"
+    "cursorSync": "Off",
+    "editable": true,
+    "elements": {
+      "panel-2": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "PA5392E10C0F059AB"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "count(count by (cluster) (up{job=\"prometheus-kube-prometheus-prometheus\", namespace=\"monitoring\"} == 1) or count by (cluster) (up{pod=~\"opentelemetry-kube-stack-prometheus-collector-.*\", namespace=\"otel-system\"}))",
+                        "legendFormat": "Total of clusters",
+                        "range": true
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
           },
-          "filters": [],
-          "name": "Filters",
-          "type": "adhoc"
+          "description": "",
+          "id": 2,
+          "links": [],
+          "title": "Total Number of Clusters Writing Metrics",
+          "vizConfig": {
+            "group": "timeseries",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 0,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              }
+            },
+            "version": "13.2.0"
+          }
         }
-      ]
+      },
+      "panel-3": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "PA5392E10C0F059AB"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "count(count by (cluster) (up{job=\"prometheus-kube-prometheus-prometheus\", namespace=\"monitoring\"} == 1) or count by (cluster) (up{pod=~\"opentelemetry-kube-stack-prometheus-collector-.*\", namespace=\"otel-system\"}))",
+                        "legendFormat": "__auto",
+                        "range": true
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "",
+          "id": 3,
+          "links": [],
+          "title": "",
+          "vizConfig": {
+            "group": "stat",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "colorMode": "none",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "last"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "value",
+                "wideLayout": true
+              }
+            },
+            "version": "13.2.0"
+          }
+        }
+      },
+      "panel-4": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "PA5392E10C0F059AB"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": false,
+                        "expr": "count(count by (cluster) (up{job=\"prometheus-kube-prometheus-prometheus\", namespace=\"monitoring\", cluster=~\".*eks.*\"} == 1) or count by (cluster) (up{pod=~\"opentelemetry-kube-stack-prometheus-collector-.*\", namespace=\"monitoring\", cluster=~\".*eks.*\"}))",
+                        "instant": true,
+                        "legendFormat": "EKS Clusters",
+                        "range": false
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "PA5392E10C0F059AB"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": false,
+                        "expr": "count(count by (cluster) (up{job=\"prometheus-kube-prometheus-prometheus\", namespace=\"monitoring\", cluster=~\".*aks.*\"} == 1) or count by (cluster) (up{pod=~\"opentelemetry-kube-stack-prometheus-collector-.*\", namespace=\"monitoring\", cluster=~\".*aks.*\"}))",
+                        "instant": true,
+                        "legendFormat": "AKS Clusters",
+                        "range": false
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "B"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "",
+          "id": 4,
+          "links": [],
+          "title": "EKS and AKS Clusters",
+          "vizConfig": {
+            "group": "piechart",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "fixedColor": "#73BF69",
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    }
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "displayLabels": [
+                  "value"
+                ],
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "pieType": "pie",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "sort": "desc",
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              }
+            },
+            "version": "13.2.0"
+          }
+        }
+      },
+      "panel-5": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "PA5392E10C0F059AB"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": false,
+                        "expr": "count(count by (cluster) (up{job=\"prometheus-kube-prometheus-prometheus\", namespace=\"monitoring\", cluster=~\".*-dev$\"} == 1) or count by (cluster) (up{pod=~\"opentelemetry-kube-stack-prometheus-collector-.*\", namespace=\"monitoring\", cluster=~\".*-dev$\"}))",
+                        "instant": true,
+                        "legendFormat": "DEV Clusters",
+                        "range": false
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "B"
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "PA5392E10C0F059AB"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": false,
+                        "expr": "count(count by (cluster) (up{job=\"prometheus-kube-prometheus-prometheus\", namespace=\"monitoring\", cluster=~\".*-pro$\"} == 1) or count by (cluster) (up{pod=~\"opentelemetry-kube-stack-prometheus-collector-.*\", namespace=\"monitoring\", cluster=~\".*-pro$\"}))",
+                        "instant": true,
+                        "legendFormat": "PRO Clusters",
+                        "range": false
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "PA5392E10C0F059AB"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": false,
+                        "expr": "count(count by (cluster) (up{job=\"prometheus-kube-prometheus-prometheus\", namespace=\"monitoring\", cluster=~\".*-pre$\"} == 1) or count by (cluster) (up{pod=~\"opentelemetry-kube-stack-prometheus-collector-.*\", namespace=\"monitoring\", cluster=~\".*-pre$\"}))",
+                        "instant": true,
+                        "legendFormat": "PRE Clusters",
+                        "range": false
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "D"
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "PA5392E10C0F059AB"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": false,
+                        "expr": "count(count by (cluster) (up{job=\"prometheus-kube-prometheus-prometheus\", namespace=\"monitoring\", cluster=~\".*-int$\"} == 1) or count by (cluster) (up{pod=~\"opentelemetry-kube-stack-prometheus-collector-.*\", namespace=\"monitoring\", cluster=~\".*-int$\"}))",
+                        "instant": true,
+                        "legendFormat": "INT Clusters",
+                        "range": false
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "C"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "",
+          "id": 5,
+          "links": [],
+          "title": "Dev | Pro | Pre | Int Clusters",
+          "vizConfig": {
+            "group": "piechart",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "fixedColor": "#73BF69",
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    }
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "displayLabels": [
+                  "value"
+                ],
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "pieType": "pie",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "sort": "desc",
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              }
+            },
+            "version": "13.2.0"
+          }
+        }
+      },
+      "panel-6": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "PA5392E10C0F059AB"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "sort(\n  max by (cluster) (\n    up{job=\"prometheus-kube-prometheus-prometheus\", namespace=\"monitoring\"}\n    or\n    up{pod=~\"opentelemetry-kube-stack-prometheus-collector-.*\", namespace=\"otel-system\"}\n  )\n  or\n  (\n    max by (cluster) (\n      max_over_time(up{job=\"prometheus-kube-prometheus-prometheus\", namespace=\"monitoring\"}[5d])\n      or\n      max_over_time(up{pod=~\"opentelemetry-kube-stack-prometheus-collector-.*\", namespace=\"otel-system\"}[5d])\n    ) * 0\n  )\n)",
+                        "format": "table",
+                        "instant": true,
+                        "legendFormat": "__auto"
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "U"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": [
+                {
+                  "group": "joinByField",
+                  "kind": "Transformation",
+                  "spec": {
+                    "options": {
+                      "byField": "wk",
+                      "mode": "outer"
+                    }
+                  }
+                },
+                {
+                  "group": "organize",
+                  "kind": "Transformation",
+                  "spec": {
+                    "options": {
+                      "excludeByName": {
+                        "Time": true,
+                        "Time 3": true,
+                        "Value #R": false,
+                        "wk": true,
+                        "workload 2": true,
+                        "workload 3": true,
+                        "workload_kind 2": true,
+                        "workload_kind 3": true
+                      },
+                      "includeByName": {},
+                      "indexByName": {
+                        "limits": 4,
+                        "request": 3,
+                        "used": 2,
+                        "workload": 1,
+                        "workload_kind": 0
+                      },
+                      "renameByName": {
+                        "Value #L": "limits",
+                        "Value #R": "request",
+                        "Value #U": "used"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "description": "This table displays the current status (UP/DOWN) of all clusters that have been active in the last 5 days. If a cluster stops sending metrics for more than 5 days, It will disappear from the list.",
+          "id": 6,
+          "links": [],
+          "title": "Cluster Status List",
+          "vizConfig": {
+            "group": "table",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "center",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "filterable": false,
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false,
+                    "wrapHeaderText": false,
+                    "wrapText": false
+                  },
+                  "fieldMinMax": false,
+                  "mappings": [
+                    {
+                      "options": {
+                        "0": {
+                          "color": "red",
+                          "index": 1,
+                          "text": "DOWN"
+                        },
+                        "1": {
+                          "color": "green",
+                          "index": 0,
+                          "text": "UP"
+                        }
+                      },
+                      "type": "value"
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "cellHeight": "md",
+                "enablePagination": true,
+                "showHeader": false
+              }
+            },
+            "version": "13.2.0"
+          }
+        }
+      },
+      "panel-7": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "PA5392E10C0F059AB"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": false,
+                        "expr": "count(count by (cluster) (up{job=\"prometheus-kube-prometheus-prometheus\", namespace=\"monitoring\", cluster=~\".*op.*\"} == 1) or count by (cluster) (up{pod=~\"opentelemetry-kube-stack-prometheus-collector-.*\", namespace=\"monitoring\", cluster=~\".*op.*\"}))",
+                        "instant": true,
+                        "legendFormat": "OP Clusters",
+                        "range": false
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "PA5392E10C0F059AB"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": false,
+                        "expr": "count(count by (cluster) (up{job=\"prometheus-kube-prometheus-prometheus\", namespace=\"monitoring\", cluster=~\".*(kp|4p).*\"} == 1) or count by (cluster) (up{pod=~\"opentelemetry-kube-stack-prometheus-collector-.*\", namespace=\"monitoring\", cluster=~\".*(kp|4p).*\"}))",
+                        "instant": true,
+                        "legendFormat": "Package Clusters",
+                        "range": false
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "B"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "",
+          "id": 7,
+          "links": [],
+          "title": "EKS and AKS Clusters",
+          "vizConfig": {
+            "group": "piechart",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "fixedColor": "#73BF69",
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    }
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "displayLabels": [
+                  "value"
+                ],
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "pieType": "pie",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "sort": "desc",
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              }
+            },
+            "version": "13.2.0"
+          }
+        }
+      },
+      "panel-8": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "PA5392E10C0F059AB"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": false,
+                        "expr": "count by (version) (\r\n  max by (cluster, version) (\r\n    label_replace(\r\n      kube_node_info,\r\n      \"version\", \"$1\",\r\n      \"kubelet_version\", \"^(v[0-9.]+).*\"\r\n    )\r\n  )\r\n)",
+                        "format": "time_series",
+                        "instant": true,
+                        "legendFormat": "__auto",
+                        "range": false
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "",
+          "id": 8,
+          "links": [],
+          "title": "K8S versions",
+          "vizConfig": {
+            "group": "piechart",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "fixedColor": "#73BF69",
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    }
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "displayLabels": [
+                  "value"
+                ],
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "pieType": "pie",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "sort": "desc",
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              }
+            },
+            "version": "13.2.0"
+          }
+        }
+      }
     },
-    "time": {
+    "layout": {
+      "kind": "GridLayout",
+      "spec": {
+        "items": [
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-2"
+              },
+              "height": 10,
+              "width": 20,
+              "x": 0,
+              "y": 0
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-3"
+              },
+              "height": 10,
+              "width": 4,
+              "x": 20,
+              "y": 0
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-4"
+              },
+              "height": 7,
+              "width": 6,
+              "x": 0,
+              "y": 10
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-5"
+              },
+              "height": 7,
+              "width": 6,
+              "x": 6,
+              "y": 10
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-7"
+              },
+              "height": 7,
+              "width": 6,
+              "x": 12,
+              "y": 10
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-8"
+              },
+              "height": 7,
+              "width": 6,
+              "x": 18,
+              "y": 10
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-6"
+              },
+              "height": 30,
+              "width": 24,
+              "x": 0,
+              "y": 17
+            }
+          }
+        ]
+      }
+    },
+    "links": [],
+    "liveNow": false,
+    "preload": false,
+    "tags": [],
+    "timeSettings": {
+      "autoRefresh": "",
+      "autoRefreshIntervals": [
+        "5s",
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ],
+      "fiscalYearStartMonth": 0,
       "from": "now-5m",
+      "hideTimepicker": false,
+      "timezone": "browser",
       "to": "now"
     },
-    "timepicker": {},
-    "timezone": "browser",
     "title": "Clusters Status",
-    "weekStart": ""
+    "variables": [
+      {
+        "datasource": {
+          "name": "PA5392E10C0F059AB"
+        },
+        "group": "prometheus",
+        "kind": "AdhocVariable",
+        "spec": {
+          "allowCustomValue": true,
+          "baseFilters": [],
+          "defaultKeys": [],
+          "enableGroupBy": false,
+          "filters": [],
+          "hide": "dontHide",
+          "name": "Filters",
+          "skipUrlSync": false
+        }
+      }
+    ]
   }
 }
